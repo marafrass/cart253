@@ -15,6 +15,10 @@ let squareX;
 let squareY;
 let squareSize = 100;
 
+// The current position of the second square, added by Martin
+let newSquareX;
+let newSquareY;
+let newSquareSize = 90;
 
 // preload()
 //
@@ -42,6 +46,12 @@ function setup() {
   // We divide the size by two because we're drawing from the center
   squareX = width + squareSize/2;
   squareY = height + squareSize/2;
+
+  //Starting the second square on the left, halfway down the canvas (We don't touch X since we want it at 0)
+  //We continue to divide by two since rectangles are set to draw from center
+  // Height is divided by two to place it in the middle
+  newSquareX = -newSquareSize/2;
+  newSquareY = height/2;
 
   // We'll draw rectangles from the center
   rectMode(CENTER);
@@ -73,4 +83,12 @@ function draw() {
   fill(0,0,255,10);
   // Display the square
   rect(squareX,squareY,squareSize,squareSize);
+
+  //Move new square from left to right
+  newSquareX += 1;
+  //Make the new square transparent green
+  fill(0,255,0,10);
+  //Display the new square
+  rect(newSquareX,newSquareY,newSquareSize,newSquareSize);
+
 }
