@@ -25,7 +25,6 @@ let graphX;
 let graphY;
 let graphSize = 10;
 
-let img;
 
 // preload()
 //
