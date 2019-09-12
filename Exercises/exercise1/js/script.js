@@ -15,10 +15,15 @@ let squareX;
 let squareY;
 let squareSize = 100;
 
-// The current position of the second square, added by Martin
+// The current position and size of the second square, added by Martin
 let newSquareX;
 let newSquareY;
 let newSquareSize = 90;
+
+//The current position of the "graph"
+let graphX;
+let graphY;
+let graphSize = 10;
 
 // preload()
 //
@@ -53,6 +58,11 @@ function setup() {
   newSquareX = -newSquareSize/2;
   newSquareY = height/2;
 
+  //Set the starting location of the "graph" to the middle of the right side
+  //Size divided because of rectMode(CENTER)
+  graphX = width + graphSize/2;
+  graphY = height/2;
+
   // We'll draw rectangles from the center
   rectMode(CENTER);
   // We won't have a stroke in this
@@ -62,8 +72,8 @@ function setup() {
 
 // draw()
 //
-// Change the circle and square's positions so they move
-// Draw the circle and square on screen
+// Change the circle, two square's, mouse dot and graph positions so they move
+// Draw the shapes on screen
 
 function draw() {
   // We don't fill the background so we get a drawing effect
@@ -92,12 +102,25 @@ function draw() {
   rect(newSquareX,newSquareY,newSquareSize,newSquareSize);
 
 
-  //CREATE BLACK DOT TO FOLLOW THE MOUSE
+  //CREATE BLACK DOT MOUSE TRAIL
+
   //Set color of dot to black
   fill(0);
   //Make the dot jitter around to make it more interesting
-  let mouseJitter = random(-5,5);
+  let randomNumber = random(-5,5);
   // Draw a small, black ellipse that follows the mouse
-  ellipse(mouseX + mouseJitter,mouseY + mouseJitter,10,10);
+  ellipse(mouseX + randomNumber,mouseY + randomNumber,10,10);
+
+  //MOVEMENT OF GRAPH
+
+  //Set color of graph to yellow
+  fill(255, 255, 0);
+  //Move graph from right to left
+  //Horizontal movement is constant, but add random value to Y to give effect of graph
+  graphX -= 1;
+  graphY -= randomNumber;
+  //Draw graph
+  rect(graphX,graphY,graphSize,graphSize);
+
 
 }
