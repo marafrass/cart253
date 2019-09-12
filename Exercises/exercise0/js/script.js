@@ -45,7 +45,7 @@ function setup() {
   // Draw the nose
 
   // Nose colour
-  fill(255,150,150);
+  fill(255,100,100);
   // Main nose part
   ellipse(250,250,50,100);
   // The two nostril areas
