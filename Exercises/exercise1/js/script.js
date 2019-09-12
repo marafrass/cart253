@@ -25,9 +25,11 @@ let graphX;
 let graphY;
 let graphSize = 10;
 
+let img;
+
 // preload()
 //
-// Nothing here
+//
 
 function preload() {
 
@@ -111,6 +113,8 @@ function draw() {
   // Draw a small, black ellipse that follows the mouse
   ellipse(mouseX + randomNumber,mouseY + randomNumber,10,10);
 
+
+
   //MOVEMENT OF GRAPH
 
   //Set color of graph to yellow
@@ -121,6 +125,7 @@ function draw() {
   graphY -= randomNumber;
   //Draw graph
   rect(graphX,graphY,graphSize,graphSize);
+
 
 
 }
