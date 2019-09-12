@@ -91,4 +91,13 @@ function draw() {
   //Display the new square
   rect(newSquareX,newSquareY,newSquareSize,newSquareSize);
 
+
+  //CREATE BLACK DOT TO FOLLOW THE MOUSE
+  //Set color of dot to black
+  fill(0);
+  //Make the dot jitter around to make it more interesting
+  let mouseJitter = random(-5,5);
+  // Draw a small, black ellipse that follows the mouse
+  ellipse(mouseX + mouseJitter,mouseY + mouseJitter,10,10);
+
 }
