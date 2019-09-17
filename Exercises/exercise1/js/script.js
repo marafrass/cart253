@@ -25,12 +25,26 @@ let graphX;
 let graphY;
 let graphSize = 10;
 
+//The current position and dominating presence of Frog
+let frogX;
+let frogY;
+let frogSize = 200;
+let frog;
 
-// preload()
-//
-//
+//The current position and timid imposing of Fly
+let flyX;
+let flyY;
+let flySize = 150;
+let fly;
+
+
+
+//Preload both images of Frog and Fly for quick deployment on the field of battle
 
 function preload() {
+
+ frog = loadImage('assets/images/Froggy.jpg');
+ fly = loadImage('assets/images/Fly.jpg');
 
 }
 
@@ -64,20 +78,33 @@ function setup() {
   graphX = width + graphSize/2;
   graphY = height/2;
 
+  //Set Frog to the bottom left, pushed out of view
+  frogX = 0 - frogSize;
+  frogY = height - frogSize;
+  //Set Fly to bottom right, pushed out of view
+  flyX = width;
+  flyY = height - flySize;
+
+
   // We'll draw rectangles from the center
   rectMode(CENTER);
   // We won't have a stroke in this
   noStroke();
+
+
 }
 
 
 // draw()
 //
-// Change the circle, two square's, mouse dot and graph positions so they move
+// Change the circle, two square's, mouse dot,graph and image positions so they move
 // Draw the shapes on screen
 
 function draw() {
   // We don't fill the background so we get a drawing effect
+  //NOTE: I kinda wanted to add a background to make the picture seem smoother,
+  //so I added it later on while still retaining the trail and drawing effects.
+
 
   // Move circle up and to the right
   circleX += 1;
@@ -106,11 +133,12 @@ function draw() {
   //CREATE BLACK DOT MOUSE TRAIL
 
   //Set color of dot to black
-  fill(0);
+  fill(0,0,0,20);
   //Make the dot jitter around to make it more interesting
   let randomNumber = random(-5,5);
-  // Draw a small, black ellipse that follows the mouse
+  // Draw a small, black ellipse (symbolic fly?) that follows the mouse
   ellipse(mouseX + randomNumber,mouseY + randomNumber,10,10);
+
 
 
 
@@ -125,6 +153,31 @@ function draw() {
   //Draw graph
   rect(graphX,graphY,graphSize,graphSize);
 
+  //TENSION
+
+  //Set movement(speed) of Frog
+  frogX += 0.3;
+  //Set movement(speed) of Fly
+  flyX -= 0.225;
+
+//draw Frog up until the whole glory of frog is showing, and then stop
+if(frogX <= 0){
+  image(frog,frogX,frogY,frogSize,frogSize);
+  }
+
+//draw Fly until he is dangerously far out in the open, and then stop
+//ADDITIONALLY, add slightly transparent background to make image clearer
+if (flyX >= width - flySize){
+ image(fly,flyX,flyY,flySize,flySize);
+   background(255,255,255,2);
+}
+//If Fly has finished moving, add "tension" to the screen and stop updating background
+else {
+  fill(0);
+  textSize(30);
+  textAlign(CENTER);
+  text('"tension"', width/2, height*0.85);
+}
 
 
 }
