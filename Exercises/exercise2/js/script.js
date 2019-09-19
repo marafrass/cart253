@@ -201,6 +201,7 @@ function draw() {
     enemyY = random(0,height);
     // Make enemy move faster each time the player successfully DODGES
     enemySpeed += 0.2;
+    displayedText = "";
   }
 
   // // Display the number of successful dodges in the console
