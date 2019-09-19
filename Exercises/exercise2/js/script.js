@@ -175,8 +175,9 @@ function draw() {
     enemySpeed += 0.2;
   }
 
-  // Display the number of successful dodges in the console
-  console.log(dodges);
+  // // Display the number of successful dodges in the console
+  // console.log(dodges);
+
 
 
   // ORIGINAL CODE DISPLAYING PLAYER AS A BLACK CIRCLE
