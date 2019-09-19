@@ -234,7 +234,7 @@ function draw() {
   textSize(20);
   text(displayedScore, 390,480);
 
-  text("Use left shift to speed up!", 10,20);
+  text("Use Left Shift to speed up!", 10,20);
 
 
 }
