@@ -13,8 +13,10 @@ let avatarY;
 let avatarSize = 50;
 let avatarShip;
 
-// The speed and velocity of our avatar
-let avatarSpeed = 10;
+// The different speeds and velocity of our avatar
+let boostedSpeed = 12;
+let startingSpeed = 8;
+let avatarSpeed = 8;
 let avatarVX = 0;
 let avatarVY = 0;
 
@@ -35,8 +37,12 @@ let dodges = 0;
 let displayedText;
 let displayedScore;
 
-//Set background image
+//Set background image, dimensions and locations of the two versions
 let backgroundSpace;
+let bg1x;
+let bg2x;
+let backGroundSizeX = 700;
+let backGroundSizeY = 500;
 
 
 
@@ -71,7 +77,11 @@ function setup() {
   //Set starting text
   displayedText = "Good luck!";
 
-  //Set enemy ship and player ship
+  //Set starting positions of background
+  bg1x = 0;
+  bg2x = -700;
+
+
 
 
 }
@@ -85,8 +95,19 @@ function draw() {
   // A pink background
   background(255,220,220);
 
-  // Draw space background
-  image(backgroundSpace,0,0,700,500);
+  // Draw space backgrounds and scroll
+  image(backgroundSpace,bg1x,0,backGroundSizeX,backGroundSizeY);
+  image(backgroundSpace,bg2x,0,700,500);
+  bg1x +=2;
+  bg2x +=2;
+
+  //Move backgrounds over to the left, off screen
+  if (bg1x >= width){
+    bg1x = -backGroundSizeX;
+  }
+  if (bg2x >= width){
+    bg2x = -backGroundSizeX;
+  }
 
   // Default the avatar's velocity to 0 in case no key is pressed this frame
   avatarVX = 0;
@@ -110,6 +131,13 @@ function draw() {
   }
   else if (keyIsDown(DOWN_ARROW)) {
     avatarVY = avatarSpeed;
+  }
+
+  if (keyIsDown(SHIFT)) {
+    avatarSpeed = boostedSpeed;
+  }
+  else {
+    avatarSpeed = startingSpeed;
   }
 
   // Move the avatar according to its calculated velocity
@@ -204,6 +232,8 @@ function draw() {
   //Added score (number of dodges in current run) on lower RIGHT
   textSize(20);
   text(displayedScore, 390,480);
+
+  text("Use left shift to speed up!", 10,20);
 
 
 }
