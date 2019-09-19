@@ -44,6 +44,8 @@ let bg2x;
 let backGroundSizeX = 700;
 let backGroundSizeY = 500;
 
+//Set foreground variable
+let foreGround;
 
 
 function preload(){
@@ -51,8 +53,8 @@ function preload(){
   //preload avatar and enemy ship
   enemyShip = loadImage('assets/images/enemyShip.png');
   avatarShip = loadImage('assets/images/avatarShip.png');
-  backgroundSpace = loadImage('assets/images/spaceBackground.gif')
-
+  backgroundSpace = loadImage('assets/images/spaceBackground.gif');
+  foreGround = loadImage('assets/images/foreGround.png');
 
 }
 
@@ -81,6 +83,10 @@ function setup() {
   bg1x = 0;
   bg2x = -700;
 
+  //set starting positions of foreground
+  fg1x = 0;
+  fg2x = -700;
+
 
 
 
@@ -107,6 +113,20 @@ function draw() {
   }
   if (bg2x >= width){
     bg2x = -backGroundSizeX;
+  }
+
+  //draw and move foregrounds in same manner
+  image(foreGround,fg1x,0,backGroundSizeX,backGroundSizeY);
+  image(foreGround,fg2x,0,700,500);
+  fg1x +=4;
+  fg2x +=4;
+
+  //Move backgrounds over to the left, off screen
+  if (fg1x >= width){
+    fg1x = -backGroundSizeX;
+  }
+  if (fg2x >= width){
+    fg2x = -backGroundSizeX;
   }
 
   // Default the avatar's velocity to 0 in case no key is pressed this frame
