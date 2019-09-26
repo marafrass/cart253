@@ -47,6 +47,9 @@ let backGroundSizeY = 500;
 //Set foreground variable
 let foreGround;
 
+//Set starting screen and on/off bool
+let startScreen;
+let showIntro = true;
 
 function preload(){
 
@@ -55,7 +58,7 @@ function preload(){
   avatarShip = loadImage('assets/images/avatarShip.png');
   backgroundSpace = loadImage('assets/images/spaceBackground.gif');
   foreGround = loadImage('assets/images/foreGround.png');
-
+  startScreen = loadImage('assets/images/startingScreen.png');
 }
 
 // setup()
@@ -77,7 +80,7 @@ function setup() {
   noStroke();
 
   //Set starting text
-  displayedText = "Good luck!";
+  displayedText = "Have a nice space day, commander.";
 
   //Set starting positions of background
   bg1x = 0;
@@ -180,7 +183,7 @@ function draw() {
     // Tell the player they lost
     //Originally logged to console, now in the lower left text item
     //console.log("YOU LOSE!");
-    displayedText = "Try again!"
+    displayedText = "Damn you, space rascals!"
     // Reset the enemy's position
     enemyX = 0;
     enemyY = random(0,height);
@@ -198,7 +201,8 @@ function draw() {
     // If they went off the screen they lose in the same way as above.
     //Originally logged in console, now displayed on bottom left
     //console.log("Don't try to run!");
-    displayedText = "Don't try to run!"
+
+    displayedText = "Please remain within the designated space zone."
     enemyX = 0;
     enemyY = random(0,height);
     avatarX = width/2;
@@ -247,14 +251,32 @@ function draw() {
 
   //Added text on the bottom left (moved console logs here)
   fill(255);
-  textSize(30);
+  textSize(15);
   text(displayedText,10,480);
 
   //Added score (number of dodges in current run) on lower RIGHT
-  textSize(20);
+  textSize(15);
   text(displayedScore, 390,480);
 
-  text("Use Left Shift to speed up!", 10,20);
+ //Upper left corner instructions
+  text("Use arrows to move and left shift to speed up, commander.", 10,20);
 
 
+//If we still havent clicked past the intro, prevent the game from running
+//If intro hasnt been shown yet, show it! flaunt it! display it for all the world to see!
+  if (showIntro){
+    image(startScreen, 0,0);
+    noLoop();
+  }
+
+}
+
+
+//When we click to continue, the game starts to run again
+function mousePressed() {
+  showIntro = false;
+  loop();
+
+
+//wait do I even need the boolean here
 }
