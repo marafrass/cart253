@@ -36,6 +36,8 @@ let numDecoys = 100;
 // Keep track of whether they've won
 let gameOver = false;
 
+let onEndScreen = false;
+
 // preload()
 //
 // Loads the target and decoy images before the program starts
@@ -59,59 +61,11 @@ function preload() {
 // Creates the canvas, sets basic modes, draws correct number
 // of decoys in random positions, then the target
 function setup() {
-  createCanvas(windowWidth,windowHeight);
-  background("#ffff00");
-  imageMode(CENTER);
 
-  // Use a for loop to draw as many decoys as we need
-  for (let i = 0; i < numDecoys; i++) {
-    // Choose a random location on the canvas for this decoy
-    let x = random(0,width);
-    let y = random(0,height);
-    // Generate a random number we can use for probability
-    let r = random();
-    // Use the random number to display one of the ten decoy
-    // images, each with a 10% chance of being shown
-    // We'll talk more about this nice quality of random soon enough.
-    // But basically each "if" and "else if" has a 10% chance of being true
-    if (r < 0.1) {
-      image(decoyImage1,x,y);
-    }
-    else if (r < 0.2) {
-      image(decoyImage2,x,y);
-    }
-    else if (r < 0.3) {
-      image(decoyImage3,x,y);
-    }
-    else if (r < 0.4) {
-      image(decoyImage4,x,y);
-    }
-    else if (r < 0.5) {
-      image(decoyImage5,x,y);
-    }
-    else if (r < 0.6) {
-      image(decoyImage6,x,y);
-    }
-    else if (r < 0.7) {
-      image(decoyImage7,x,y);
-    }
-    else if (r < 0.8) {
-      image(decoyImage8,x,y);
-    }
-    else if (r < 0.9) {
-      image(decoyImage9,x,y);
-    }
-    else if (r < 1.0) {
-      image(decoyImage10,x,y);
-    }
-  }
+  setUpGame();
 
-  // Once we've displayed all decoys, we choose a random location for the target
-  targetX = random(0,width);
-  targetY = random(0,height);
 
-  // And draw it (because it's the last thing drawn, it will always be on top)
-  image(targetImage,targetX,targetY);
+
 }
 
 
@@ -123,13 +77,16 @@ function draw() {
   if (gameOver) {
     // Prepare our typography
     textFont("Helvetica");
-    textSize(128);
+
     textAlign(CENTER,CENTER);
     noStroke();
     fill(random(255));
 
     // Tell them they won!
+    textSize(128);
     text("YOU WINNED!",width/2,height/2);
+    textSize(50);
+    text("Click to start over!", width/2, height/2+80);
 
     // Draw a circle around the sausage dog to show where it is (even though
     // they already know because they found it!)
@@ -144,6 +101,10 @@ function draw() {
 //
 // Checks if the player clicked on the target and if so tells them they won
 function mousePressed() {
+
+  if (onEndScreen === true){
+    setUpGame();
+    }
   // The mouse was clicked!
   // Check if the cursor is in the x range of the target
   // (We're subtracting the image's width/2 because we're using imageMode(CENTER) -
@@ -153,6 +114,81 @@ function mousePressed() {
     // i.e. check if it's within the top and bottom of the image
     if (mouseY > targetY - targetImage.height/2 && mouseY < targetY + targetImage.height/2) {
       gameOver = true;
+      onEndScreen = true;
     }
   }
+
+
+
+}
+
+function setUpGame() {
+    gameOver = false;
+    onEndScreen = false;
+
+
+    createCanvas(windowWidth,windowHeight);
+    background("#ffff00");
+    imageMode(CENTER);
+
+    // Use a for loop to draw as many decoys as we need
+    for (let i = 0; i < numDecoys; i++) {
+      // Choose a random location on the canvas for this decoy
+      let x = random(0,width);
+      let y = random(0,height);
+      // Generate a random number we can use for probability
+      let r = random();
+      // Use the random number to display one of the ten decoy
+      // images, each with a 10% chance of being shown
+      // We'll talk more about this nice quality of random soon enough.
+      // But basically each "if" and "else if" has a 10% chance of being true
+      if (r < 0.1) {
+        image(decoyImage1,x,y);
+      }
+      else if (r < 0.2) {
+        image(decoyImage2,x,y);
+      }
+      else if (r < 0.3) {
+        image(decoyImage3,x,y);
+      }
+      else if (r < 0.4) {
+        image(decoyImage4,x,y);
+      }
+      else if (r < 0.5) {
+        image(decoyImage5,x,y);
+      }
+      else if (r < 0.6) {
+        image(decoyImage6,x,y);
+      }
+      else if (r < 0.7) {
+        image(decoyImage7,x,y);
+      }
+      else if (r < 0.8) {
+        image(decoyImage8,x,y);
+      }
+      else if (r < 0.9) {
+        image(decoyImage9,x,y);
+      }
+      else if (r < 1.0) {
+        image(decoyImage10,x,y);
+      }
+    }
+    // Once we've displayed all decoys, we choose a random location for the target
+    targetX = random(0,width);
+    targetY = random(0,height);
+
+    // And draw it (because it's the last thing drawn, it will always be on top)
+    image(targetImage,targetX,targetY);
+
+    //Draw dog on rectangle, with text, in top right CORNER
+    noStroke();
+    fill(227, 160, 5);
+    rect(width-136,0,136,160);
+    fill(0);
+    textStyle(CENTER);
+    textSize(12);
+    text("RELEASE ME FROM \n THIS NIGHTMARE", width - 128,128);
+
+    image(targetImage, width-64,64);
+
 }
