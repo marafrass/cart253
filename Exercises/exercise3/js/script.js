@@ -29,14 +29,23 @@ let decoyImage8;
 let decoyImage9;
 let decoyImage10;
 
+//Set image size
+let imageSize = 128;
+
 // The number of decoys to show on the screen, randomly
 // chosen from the decoy images
 let numDecoys = 100;
 
 // Keep track of whether they've won
 let gameOver = false;
-
+//Keeps track of whether you can click to reset or not
 let onEndScreen = false;
+
+// Set positions of celestial dog
+let godDogY;
+//Set height of celestial beam
+let beamHeight = 1000;
+
 
 // preload()
 //
@@ -61,10 +70,8 @@ function preload() {
 // Creates the canvas, sets basic modes, draws correct number
 // of decoys in random positions, then the target
 function setup() {
-
+  //sets up the playing board
   setUpGame();
-
-
 
 }
 
@@ -75,6 +82,16 @@ function setup() {
 // otherwise nothing (all the gameplay stuff is in mousePressed())
 function draw() {
   if (gameOver) {
+
+    //Create celestial tractor beam
+    fill(255);
+    rect(targetX,targetY-(beamHeight/2),imageSize,beamHeight);
+    ellipse(targetX,targetY,imageSize,imageSize);
+    //Animate dog into the heavens
+    image(targetImage,targetX,godDogY,imageSize,imageSize);
+    godDogY--;
+
+
     // Prepare our typography
     textFont("Helvetica");
 
@@ -83,17 +100,17 @@ function draw() {
     fill(random(255));
 
     // Tell them they won!
-    textSize(128);
-    text("YOU WINNED!",width/2,height/2);
-    textSize(50);
-    text("Click to start over!", width/2, height/2+80);
+    textSize(120);
+    text("DOG HAS ASCENDED",width/2,height/2);
+    textSize(80);
+    text("CLICK TO RELIVE THE HORROR", width/2, height/2+80);
 
     // Draw a circle around the sausage dog to show where it is (even though
     // they already know because they found it!)
     noFill();
     stroke(random(255));
     strokeWeight(10);
-    ellipse(targetX,targetY,targetImage.width,targetImage.height);
+    ellipse(targetX,targetY,imageSize,imageSize);
   }
 }
 
@@ -102,6 +119,7 @@ function draw() {
 // Checks if the player clicked on the target and if so tells them they won
 function mousePressed() {
 
+  //If you click on the game over screen, the game restarts
   if (onEndScreen === true){
     setUpGame();
     }
@@ -112,9 +130,13 @@ function mousePressed() {
   if (mouseX > targetX - targetImage.width/2 && mouseX < targetX + targetImage.width/2) {
     // Check if the cursor is also in the y range of the target
     // i.e. check if it's within the top and bottom of the image
+    //Also set target dog's position to celestial dog's starting point
+    //Also increase size of images every reset
     if (mouseY > targetY - targetImage.height/2 && mouseY < targetY + targetImage.height/2) {
       gameOver = true;
+      godDogY = targetY;
       onEndScreen = true;
+      imageSize += 10;
     }
   }
 
@@ -130,6 +152,7 @@ function setUpGame() {
     createCanvas(windowWidth,windowHeight);
     background("#ffff00");
     imageMode(CENTER);
+    rectMode(CENTER);
 
     // Use a for loop to draw as many decoys as we need
     for (let i = 0; i < numDecoys; i++) {
@@ -143,34 +166,34 @@ function setUpGame() {
       // We'll talk more about this nice quality of random soon enough.
       // But basically each "if" and "else if" has a 10% chance of being true
       if (r < 0.1) {
-        image(decoyImage1,x,y);
+        image(decoyImage1,x,y,imageSize,imageSize);
       }
       else if (r < 0.2) {
-        image(decoyImage2,x,y);
+        image(decoyImage2,x,y,imageSize,imageSize);
       }
       else if (r < 0.3) {
-        image(decoyImage3,x,y);
+        image(decoyImage3,x,y,imageSize,imageSize);
       }
       else if (r < 0.4) {
-        image(decoyImage4,x,y);
+        image(decoyImage4,x,y,imageSize,imageSize);
       }
       else if (r < 0.5) {
-        image(decoyImage5,x,y);
+        image(decoyImage5,x,y,imageSize,imageSize);
       }
       else if (r < 0.6) {
-        image(decoyImage6,x,y);
+        image(decoyImage6,x,y,imageSize,imageSize);
       }
       else if (r < 0.7) {
-        image(decoyImage7,x,y);
+        image(decoyImage7,x,y,imageSize,imageSize);
       }
       else if (r < 0.8) {
-        image(decoyImage8,x,y);
+        image(decoyImage8,x,y,imageSize,imageSize);
       }
       else if (r < 0.9) {
-        image(decoyImage9,x,y);
+        image(decoyImage9,x,y,imageSize,imageSize);
       }
       else if (r < 1.0) {
-        image(decoyImage10,x,y);
+        image(decoyImage10,x,y,imageSize,imageSize);
       }
     }
     // Once we've displayed all decoys, we choose a random location for the target
@@ -178,17 +201,16 @@ function setUpGame() {
     targetY = random(0,height);
 
     // And draw it (because it's the last thing drawn, it will always be on top)
-    image(targetImage,targetX,targetY);
+    image(targetImage,targetX,targetY,imageSize, imageSize);
 
     //Draw dog on rectangle, with text, in top right CORNER
     noStroke();
     fill(227, 160, 5);
-    rect(width-136,0,136,160);
+    rect(width-70,80,140,160);
     fill(0);
     textStyle(CENTER);
     textSize(12);
     text("RELEASE ME FROM \n THIS NIGHTMARE", width - 128,128);
-
     image(targetImage, width-64,64);
 
 }
