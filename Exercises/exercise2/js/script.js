@@ -13,6 +13,8 @@ let avatarY;
 let avatarSize = 50;
 let avatarShip;
 
+
+
 // The different speeds and velocity of our avatar
 let boostedSpeed = 12;
 let startingSpeed = 8;
