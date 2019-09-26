@@ -112,11 +112,11 @@ function draw() {
 
   //Move backgrounds over to the left, off screen
   if (bg1x >= width){
-    bg1x = -backGroundSizeX;
-  }
+      bg1x = -backGroundSizeX;
+    }
   if (bg2x >= width){
-    bg2x = -backGroundSizeX;
-  }
+      bg2x = -backGroundSizeX;
+    }
 
   //draw and move foregrounds in same manner
   image(foreGround,fg1x,0,backGroundSizeX,backGroundSizeY);
@@ -126,11 +126,11 @@ function draw() {
 
   //Move backgrounds over to the left, off screen
   if (fg1x >= width){
-    fg1x = -backGroundSizeX;
-  }
+      fg1x = -backGroundSizeX;
+    }
   if (fg2x >= width){
-    fg2x = -backGroundSizeX;
-  }
+      fg2x = -backGroundSizeX;
+    }
 
   // Default the avatar's velocity to 0 in case no key is pressed this frame
   avatarVX = 0;
@@ -141,27 +141,27 @@ function draw() {
 
   // Left and right
   if (keyIsDown(LEFT_ARROW)) {
-    avatarVX = -avatarSpeed;
-  }
+      avatarVX = -avatarSpeed;
+    }
   else if (keyIsDown(RIGHT_ARROW)) {
-    avatarVX = avatarSpeed;
-  }
+      avatarVX = avatarSpeed;
+    }
 
   // Up and down (separate if-statements so you can move vertically and
   // horizontally at the same time)
   if (keyIsDown(UP_ARROW)) {
-    avatarVY = -avatarSpeed;
-  }
+      avatarVY = -avatarSpeed;
+    }
   else if (keyIsDown(DOWN_ARROW)) {
-    avatarVY = avatarSpeed;
-  }
+      avatarVY = avatarSpeed;
+    }
 
   if (keyIsDown(SHIFT)) {
-    avatarSpeed = boostedSpeed;
-  }
+      avatarSpeed = boostedSpeed;
+    }
   else {
-    avatarSpeed = startingSpeed;
-  }
+      avatarSpeed = startingSpeed;
+    }
 
   // Move the avatar according to its calculated velocity
   avatarX = avatarX + avatarVX;
@@ -265,18 +265,15 @@ function draw() {
 //If we still havent clicked past the intro, prevent the game from running
 //If intro hasnt been shown yet, show it! flaunt it! display it for all the world to see!
   if (showIntro){
-    image(startScreen, 0,0);
-    noLoop();
-  }
+      image(startScreen, 0,0);
+      noLoop();
+    }
 
-}
+} //end of draw
 
 
 //When we click to continue, the game starts to run again
 function mousePressed() {
-  showIntro = false;
-  loop();
-
-
-//wait do I even need the boolean here
-}
+    showIntro = false;
+    loop();
+  }
