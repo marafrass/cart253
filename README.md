@@ -7,3 +7,5 @@
 [Exercise 2: Artful Dodger](https://marafrass.github.io/cart253/Exercises/exercise2/index.html)
 
 [(version 2 - SUPERHOT)](https://marafrass.github.io/cart253/Exercises/exercise2B/index.html)
+
+[Exercise 3: Ascension of Nightmare Dog](https://marafrass.github.io/cart253/Exercises/exercise3/index.html)
