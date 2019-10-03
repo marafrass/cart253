@@ -21,7 +21,7 @@ let gameOver = false;
 // Player position, size, velocity
 let playerX;
 let playerY;
-let playerRadius = 25;
+let playerRadius = 15;
 let playerVX = 0;
 let playerVY = 0;
 //Player speeds, current, standard and boosted
@@ -44,7 +44,7 @@ let playerFill = 50;
 // Prey position, size, velocity and noise variables
 let preyX;
 let preyY;
-let preyRadius = 25;
+let preyRadius = 40;
 let preyVX;
 let preyVY;
 let preyMaxSpeed = 4;
@@ -56,8 +56,9 @@ let preyMaxHealth = 100;
 // Prey fill color
 let preyFill = 200;
 
+
 // Amount of health obtained per frame of "eating" (overlapping) the prey
-let eatHealth = 10;
+let eatHealth = 1;
 // Number of prey eaten during the game (the "score")
 let preyEaten = 0;
 
@@ -66,10 +67,10 @@ let preyEaten = 0;
 // Sets up the basic elements of the game
 function setup() {
   createCanvas(500, 500);
-  // preyTX = random(0, 750);
-  // preyTY = random(0, 750);
 
-  noStroke();
+
+
+
 
   // We're using simple functions to separate code out
   setupPrey();
@@ -85,6 +86,9 @@ function setupPrey() {
   preyVX = -preyMaxSpeed;
   preyVY = preyMaxSpeed;
   preyHealth = preyMaxHealth;
+  // Initialise noise variables for prey
+  preyTX = random(0, 750);
+  preyTY = random(0, 750);
 }
 
 // setupPlayer()
@@ -217,7 +221,7 @@ function checkEating() {
   // Check if it's an overlap
   if (d < playerRadius + preyRadius) {
     // Increase the player health
-    playerHealth = playerHealth + eatHealth;
+    playerHealth = playerHealth + (eatHealth * 3);
     // Constrain to the possible range
     playerHealth = constrain(playerHealth, 0, playerMaxHealth);
     // Reduce the prey health
@@ -274,16 +278,20 @@ function movePrey() {
 //
 // Draw the prey as an ellipse with alpha based on health
 function drawPrey() {
+  strokeWeight(4);
   fill(preyFill, preyHealth);
   ellipse(preyX, preyY, preyRadius * 2);
 }
 
 // drawPlayer()
 //
-// Draw the player as an ellipse with alpha value based on health
+// Draw the player as an ellipse with alpha value based on health, without black outline
 function drawPlayer() {
+  push();
+  noStroke();
   fill(playerFill, playerHealth);
   ellipse(playerX, playerY, playerRadius * 2);
+  pop();
 }
 
 // showGameOver()
