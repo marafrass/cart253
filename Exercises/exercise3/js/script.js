@@ -47,9 +47,10 @@ let godDogX;
 //Set height of celestial beam (on which the game over dog is transported)
 let beamHeight = 1000;
 
-//Set speed and velocity variables for animated dog
+//Set speed, noise and velocity variables for animated dog
 let dogSpeed = 1;
 let dogVelocity = 1;
+let dogNoise = 0;
 
 //Create random color values for RGB background
   let randomColorValue1;
@@ -94,6 +95,14 @@ function draw() {
   if (gameOver) {
 
 
+
+
+    godDogY -= dogSpeed * (dogVelocity * dogVelocity);
+    //I multiply dogVelocity with itself to create a more curved acceleration,
+    //starting slow but progressively accelerating
+    dogVelocity += 0.03;
+    godDogX += random(-2,2);
+
     //Create celestial tractor beam on location of found dog
     fill(255);
     rect(targetX, targetY - (beamHeight / 2), imageSize, beamHeight);
@@ -102,10 +111,6 @@ function draw() {
     image(targetImage, godDogX, godDogY, imageSize, imageSize);
     //Animate dog up the screen, into the heavens.
 
-    godDogY -= dogSpeed * (dogVelocity * dogVelocity);
-    dogVelocity += 0.03;
-    //I multiply dogVelocity with itself to create a more curved acceleration,
-    //starting slow and ending very quickly
 
 
 
