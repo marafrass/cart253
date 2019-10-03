@@ -24,10 +24,20 @@ let playerY;
 let playerRadius = 25;
 let playerVX = 0;
 let playerVY = 0;
-let playerMaxSpeed = 2;
-// Player health
+//Player speeds, current, standard and boosted
+let playerCurrentSpeed;
+let playerStdSpeed = 2;
+let playerBoostSpeed = 5;
+// Player health & damage values (standard, current, and boosted)
 let playerHealth;
 let playerMaxHealth = 255;
+let playerCurrentDamageOverTime;
+let playerStdDamageOverTime = 0.5;
+let sprintingDamageOverTime = 2;
+
+//Player check if moving
+let playerIsMoving = false;
+
 // Player fill color
 let playerFill = 50;
 
@@ -113,12 +123,23 @@ function draw() {
 //
 // Checks arrow keys and adjusts player velocity accordingly
 function handleInput() {
+
+  //Check if any movement key is down (if player is moving)
+  let isAnyMoveKeyPressed = keyIsDown(LEFT_ARROW) || keyIsDown(RIGHT_ARROW) || keyIsDown(UP_ARROW) || keyIsDown(DOWN_ARROW);
+
+  //Check if player is moving
+  if (isAnyMoveKeyPressed) {
+    playerIsMoving = true;
+  } else {
+    playerIsMoving = false;
+  }
+
   // Check for horizontal movement
   if (keyIsDown(LEFT_ARROW)) {
-    playerVX = -playerMaxSpeed;
+    playerVX = -playerCurrentSpeed;
   }
   else if (keyIsDown(RIGHT_ARROW)) {
-    playerVX = playerMaxSpeed;
+    playerVX = playerCurrentSpeed;
   }
   else {
     playerVX = 0;
@@ -126,13 +147,23 @@ function handleInput() {
 
   // Check for vertical movement
   if (keyIsDown(UP_ARROW)) {
-    playerVY = -playerMaxSpeed;
+    playerVY = -playerCurrentSpeed;
   }
   else if (keyIsDown(DOWN_ARROW)) {
-    playerVY = playerMaxSpeed;
+    playerVY = playerCurrentSpeed;
   }
   else {
     playerVY = 0;
+  }
+
+  //Check for sprinting
+  if ((keyIsDown(SHIFT)) && (playerIsMoving == true)){
+    playerCurrentSpeed = playerBoostSpeed;
+    playerCurrentDamageOverTime = sprintingDamageOverTime;
+  }
+  else {
+    playerCurrentSpeed = playerStdSpeed
+    playerCurrentDamageOverTime = playerStdDamageOverTime;
   }
 }
 
@@ -171,7 +202,7 @@ function movePlayer() {
 // Check if the player is dead
 function updateHealth() {
   // Reduce player health
-  playerHealth = playerHealth - 0.5;
+  playerHealth = playerHealth - playerCurrentDamageOverTime;
   // Constrain the result to a sensible range
   playerHealth = constrain(playerHealth, 0, playerMaxHealth);
   // Check if the player is dead (0 health)
