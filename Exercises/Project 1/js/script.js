@@ -33,7 +33,7 @@ let playerHealth;
 let playerMaxHealth = 255;
 let playerCurrentDamageOverTime;
 let playerStdDamageOverTime = 0.5;
-let sprintingDamageOverTime = 2;
+let sprintingDamageOverTime = 2.3;
 
 //Player check if moving
 let playerIsMoving = false;
@@ -54,7 +54,7 @@ let preyTY;
 let preyHealth;
 let preyMaxHealth = 100;
 // Prey fill color
-let preyFill = 200;
+let preyFill = 255;
 
 
 // Amount of health obtained per frame of "eating" (overlapping) the prey
@@ -62,11 +62,28 @@ let eatHealth = 1;
 // Number of prey eaten during the game (the "score")
 let preyEaten = 0;
 
+
+//Load images
+let enemySpriteSpeak;
+
+
+// preload()
+//
+//Preload all images and sprites
+function preload() {
+
+  enemySpriteSpeak = loadImage('assets/images/EnemySpeaking.gif');
+
+
+
+
+}
+
 // setup()
 //
 // Sets up the basic elements of the game
 function setup() {
-  createCanvas(500, 500);
+  createCanvas(800, 380);
 
 
 
@@ -105,10 +122,10 @@ function setupPlayer() {
 // While the game is active, checks input
 // updates positions of prey and player,
 // checks health (dying), checks eating (overlaps)
-// displays the two agents.
+// displays the two agents, and draws sprites for characters.
 // When the game is over, shows the game over screen.
 function draw() {
-  background(100, 100, 200);
+  background(255, 209, 171);
 
   if (!gameOver) {
     handleInput();
@@ -121,6 +138,8 @@ function draw() {
 
     drawPrey();
     drawPlayer();
+
+    drawCharacters();
   } else {
     showGameOver();
   }
@@ -281,6 +300,8 @@ function drawPrey() {
   strokeWeight(4);
   fill(preyFill, preyHealth);
   ellipse(preyX, preyY, preyRadius * 2);
+  // Add a secondary circle as a "countdown" to when the prey has lost all health
+  ellipse(preyX, preyY, preyHealth * 0.8);
 }
 
 // drawPlayer()
@@ -308,4 +329,13 @@ function showGameOver() {
   gameOverText = gameOverText + "before you died."
   // Display it in the centre of the screen
   text(gameOverText, width / 2, height / 2);
+}
+
+//Add characters to the game to create a narrative 
+function drawCharacters() {
+  let enemyPenguinX = height - 100;
+  let enemyPenguinY = width / 3;
+  image(enemySpriteSpeak, enemyPenguinX, enemyPenguinY);
+
+
 }
