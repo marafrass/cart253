@@ -3,6 +3,8 @@
 /******************************************************
 
 Game - Elephant Parent Simulator 2019
+
+All code, art, music and sound effects by
 Martin Hanses
 
 Original code by
@@ -47,7 +49,7 @@ let playerIsMoving = false;
 // Player fill color
 let playerFill = 50;
 
-// Prey position, size, velocity and noise variables
+// target position, size, velocity and noise variables
 let targetX;
 let targetY;
 let targetRadius = 40;
@@ -56,15 +58,15 @@ let targetVY;
 let targetMaxSpeed = 5;
 let targetTX;
 let targetTY;
-// Prey health
+// target health
 let targetHealth;
 let targetMaxHealth = 100;
-// Prey fill color
+// target fill color
 let targetFill = 255;
 
-// Amount of health obtained per frame of "eating" (overlapping) the prey
+// Amount of health obtained per frame of "eating" (overlapping) the target
 let eatHealth = 1;
-// Number of prey eaten during the game (the "score")
+// Number of target eaten during the game (the "score")
 let targetHit = 0;
 
 //width of side windows
@@ -79,6 +81,9 @@ let leftScreen;
 let target;
 let gameBackground;
 let playerAvatar;
+let sweat;
+let wrinkles;
+let doubt;
 
 //Set up sound variables
 let parentBark1;
@@ -95,12 +100,10 @@ let timerMusic;
 // create variable for dialogue line to display
 let currentLine;
 
-
 // preload()
 //
 //Preload all images and sounds
 function preload() {
-
 
   // Load all images
   winScreen = loadImage("assets/images/winScreen.PNG");
@@ -111,6 +114,9 @@ function preload() {
   target = loadImage("assets/images/target.png");
   gameBackground = loadImage("assets/images/gameBackground.png");
   playerAvatar = loadImage("assets/images/player.png");
+  sweat = loadImage("assets/images/sweat.png");
+  wrinkles = loadImage("assets/images/wrinkles.png");
+  doubt = loadImage("assets/images/doubt.png");
 
   //Load all sounds
   parentBark1 = loadSound("assets/sounds/parentBark1.wav");
@@ -124,8 +130,6 @@ function preload() {
   parentBark9 = loadSound("assets/sounds/parentBark9.wav");
 
   timerMusic = loadSound("assets/sounds/timerMusic.wav");
-
-
 }
 
 // setup()
@@ -136,22 +140,22 @@ function setup() {
 
 
   // We're using simple functions to separate code out
-  setupPrey();
+  setupTarget();
   setupPlayer();
   setupMusic();
 
 }
 
-// setupPrey()
+// setupTarget()
 //
-// Initialises prey's position, velocity, and health
-function setupPrey() {
+// Initialises target's position, velocity, and health
+function setupTarget() {
   targetX = width / 5;
   targetY = height / 2;
   targetVX = -targetMaxSpeed;
   targetVY = targetMaxSpeed;
   targetHealth = targetMaxHealth;
-  // Initialise noise variables for prey
+  // Initialise noise variables for target
   targetTX = random(0, 750);
   targetTY = random(0, 750);
 }
@@ -179,26 +183,30 @@ function setupMusic() {
 // When the game is over, shows the game over screen.
 function draw() {
   background(187, 236, 240);
+
   drawSprites();
+  //Show intro if game just started (variable is checked)
   if (onIntroScreen) {
     showIntro();
-    console.log("introshow");
+
+  // If hit 20 targets, go to victory screen
   } else if (targetHit === 20) {
     showVictory();
 
+    // If conditions are met, start gameplay
   } else if (!gameOver && targetHit < 20) {
 
     handleInput();
     movePlayer();
-    movePrey();
+    movetarget();
     updateHealth();
     checkEating();
-    drawPrey();
+    drawtarget();
     drawPlayer();
     dialogue();
     displayStats();
 
-
+    //Go to game over screen if health is zero
   } else if (gameOver) {
     showGameOver();
   }
@@ -292,9 +300,9 @@ function updateHealth() {
 
 // checkEating()
 //
-// Check if the player overlaps the prey and updates health of both
+// Check if the player overlaps the target and updates health of both
 function checkEating() {
-  // Get distance of player to prey
+  // Get distance of player to target
   let d = dist(playerX, playerY, targetX, targetY);
   // Check if it's an overlap
   if (d < playerRadius + targetRadius) {
@@ -302,40 +310,40 @@ function checkEating() {
     playerHealth = playerHealth + (eatHealth * 3);
     // Constrain to the possible range
     playerHealth = constrain(playerHealth, 0, playerMaxHealth);
-    // Reduce the prey health
+    // Reduce the target health
     targetHealth = targetHealth - eatHealth;
     // Constrain to the possible range
     targetHealth = constrain(targetHealth, 0, targetMaxHealth);
 
-    // Check if the prey died (health 0)
+    // Check if the target died (health 0)
     if (targetHealth === 0) {
-      // Move the "new" prey to a random position within designated play area
+      // Move the "new" target to a random position within designated play area
       targetX = random(sideSpace, width - sideSpace);
       targetY = random(0, height);
       // Give it full health
       targetHealth = targetMaxHealth;
-      // Track how many prey were eaten
+      // Track how many target were eaten
       targetHit = targetHit + 1;
       playBark();
     }
   }
 }
 
-// movePrey()
+// movetarget()
 //
-// Moves the prey based on Perlin noise
-function movePrey() {
+// Moves the target based on Perlin noise
+function movetarget() {
 
-  // Change the prey's velocity at random intervals using Perlin noise
+  // Change the target's velocity at random intervals using Perlin noise
   targetVX = map(noise(targetTX), 0, 1, -targetMaxSpeed, targetMaxSpeed);
   targetVY = map(noise(targetTY), 0, 1, -targetMaxSpeed, targetMaxSpeed);
 
-  // Update prey position based on velocity
+  // Update target position based on velocity
   targetX = targetX + targetVX;
   targetY = targetY + targetVY;
 
   // // Update noise variables
-  // targetHit / 100 is added to make the prey move progressively more erratic
+  // targetHit / 100 is added to make the target move progressively more erratic
   targetTX += 0.01 + (targetHit / 100);
   targetTY += 0.01 + (targetHit / 100);
 
@@ -354,76 +362,61 @@ function movePrey() {
   }
 }
 
-// drawPrey()
+// drawtarget()
 //
-// Draw the target with alpha based on health
-function drawPrey() {
+// Draw the target with alpha based on health and shrinking middle
+function drawtarget() {
   push();
   strokeWeight(4);
   fill(targetFill, targetHealth);
   imageMode(CENTER);
   image(target, targetX, targetY, targetRadius * 2, targetRadius * 2);
-  // Add a secondary circle as a "countdown" to when the prey has lost all health
+  // Add a secondary circle as a "countdown" to when the target has lost all health
   ellipse(targetX, targetY, targetHealth * 0.8);
   pop();
 }
 
 // drawPlayer()
 //
-// Draw the player as an ellipse with alpha value based on health, without black outline
+// Draw the player as speech bubble
 function drawPlayer() {
   push();
   imageMode(CENTER);
   noStroke();
   fill(playerFill, playerHealth);
-  image(playerAvatar,playerX,playerY, playerRadius * 2);
+  image(playerAvatar, playerX, playerY, playerRadius * 2);
   pop();
 }
 
-// showGameOver()
-//
-// Display stats when the game is over!
-function showGameOver() {
-
-  //If player has fails to stay on target, show this
-  image(gameOverScreen, 0, 0);
-  // Set up the font
-  pop();
-  textAlign(CENTER);
-  fill(0);
-  // Set up the text to display
-  textSize(17);
-  let gameOverText = "STATS:\n"
-  gameOverText = gameOverText + "You managed to complete " + targetHit + " ";
-  gameOverText = gameOverText + "consecutive sentences."
-  // Display it in the centre of the screen
-  text(gameOverText, 275, 275);
-  push();
-}
 
 
 // drawCharacters
 //
-//Draw sprites depending on what state the game is in!
+//Draw sprites for the main game screen
 function drawSprites() {
 
   if (!gameOver) {
-        image(gameBackground, sideSpace,0);
+    image(gameBackground, sideSpace, 0);
     image(leftScreen, 0, 0);
     image(rightScreen, width - sideSpace, 0);
+    // Draw additional effects on side images depending on player health and progression
+    if (targetHit >= 7) {
+      image(sweat, 0, 0);
+    }
+    if (targetHit >= 15) {
+      image(wrinkles, 0, 0);
+    }
+    if (playerHealth < 120) {
+      image(doubt, width - sideSpace, 0);
+    }
 
   }
 
-
-
-
-
-
 }
 
-//dialogue
+//DIALOGUE
 //
-//Display current dialogue and play bark
+//Set up dialogue font and size
 function dialogue() {
   push();
   fill(0);
@@ -434,62 +427,62 @@ function dialogue() {
   pop();
 
 
-  //DIALOGUE
-  //
-  //Displays dialogue based on amount of prey eaten
+  //Determine dialogue based on targetHit
   if (targetHit === 0) {
     currentLine = "Oh boy. Umm. Okay. Where to start."
-  } else if (targetHit === 2) {
+  } else if (targetHit === 1) {
     currentLine = "You know how, um, there are mama elephants and papa elephants."
-  } else if (targetHit === 3) {
+  } else if (targetHit === 2) {
     currentLine = "And, um. Well."
-  } else if (targetHit === 4) {
+  } else if (targetHit === 3) {
     currentLine = "Sometimes, if they like each other a lot, they, uh.."
-  } else if (targetHit === 5) {
+  } else if (targetHit === 4) {
     currentLine = "They might start having three hot meals together, daily."
-  } else if (targetHit === 6) {
+  } else if (targetHit === 5) {
     currentLine = "Breakfast, lunch, supper. That sort of thing."
-  } else if (targetHit === 7) {
+  } else if (targetHit === 6) {
     currentLine = "And, um, if a mama and a papa elephant get into that kind of routine.."
-  } else if (targetHit === 8) {
+  } else if (targetHit === 7) {
     currentLine = "...They might get in touch with, um.."
+  } else if (targetHit === 8) {
+    currentLine = "...An adoption service? Or maybe an orphanage."
   } else if (targetHit === 9) {
-    currentLine = "...An adoption service? Or maybe an orphanage."
+    currentLine = "You see, in those places, um.. There are kiddie elephants."
   } else if (targetHit === 10) {
-    currentLine = "You see, in those places, um.. There are kiddie elephants."
-  } else if (targetHit === 11) {
     currentLine = "And they're brought there by the, um, baby elephant delivery elephants.'"
-  } else if (targetHit === 12) {
+  } else if (targetHit === 11) {
     currentLine = "From the baby elephant factory."
-  } else if (targetHit === 13) {
+  } else if (targetHit === 12) {
     currentLine = "If you're a couple and you're having three hot meals a day."
-  } else if (targetHit === 14) {
+  } else if (targetHit === 13) {
     currentLine = "That's, uh, how baby elephants are made. "
-  } else if (targetHit === 15) {
+  } else if (targetHit === 14) {
     currentLine = "...An adoption service? Or maybe an orphanage."
-  } else if (targetHit === 16) {
+  } else if (targetHit === 15) {
     currentLine = "You see, in those places, um.. There are kiddie elephants."
-  } else if (targetHit === 17) {
+  } else if (targetHit === 16) {
     currentLine = "And they, um, just sort of appear there."
-  } else if (targetHit === 18) {
+  } else if (targetHit === 17) {
     currentLine = "But sometimes they might appear in your living room as well."
+  } else if (targetHit === 18) {
+    currentLine = "If you're a couple and you're having three hot meals a day."
   } else if (targetHit === 19) {
     currentLine = "If you're a couple and you're having three hot meals a day."
   }
 
 }
 
+//Run whenever mouse is clicked
 function mousePressed() {
 
-// Start game if on intro screen
+  // Start game if on intro screen
   if (onIntroScreen) {
     onIntroScreen = false;
-    console.log("testing");
   }
-//restart game if on game over screen
+  //restart game if on game over screen
   if (gameOver) {
     gameOver = false;
-    setupPrey();
+    setupTarget();
     setupPlayer();
     targetHit = 0;
   }
@@ -498,7 +491,7 @@ function mousePressed() {
 
 
 
-//Plays a certain bark whenever targetHit is added to!
+//Plays a certain bark whenever targetHit changes!
 function playBark() {
   if (targetHit === 1) {
     parentBark1.play();
@@ -544,21 +537,44 @@ function playBark() {
 
 }
 
-
+//Victory screen
 function showVictory() {
-  //If player has explained 20 difficult subjects, show win screen
+  //If player has explained 20 difficult subjects,(destroyed 20 targets without losing all health)
+  // show win screen
   image(winScreen, 0, 0);
-  noLoop();
 }
 
+//Starting screen
 function showIntro() {
+  //Show intro at beginning of game
   image(introScreen, 0, 0);
 }
 
+// showGameOver()
+//
+// Display stats when the game is over!
+function showGameOver() {
 
-    //Display all stats on left side of screen
+  //If player has fails to stay on target, show this
+  image(gameOverScreen, 0, 0);
+  // Set up the font
+  pop();
+  textAlign(CENTER);
+  fill(0);
+  // Set up the text to display
+  textSize(17);
+  let gameOverText = "STATS:\n"
+  gameOverText = gameOverText + "You managed to complete " + targetHit + " ";
+  gameOverText = gameOverText + "consecutive sentences."
+  // Display it in the centre of the screen
+  text(gameOverText, 275, 275);
+  push();
+}
+
+
+//Display all stats on left side of screen
 function displayStats() {
-
+  //First statistic (cohesiveness)
   pop();
   textSize(13);
   fill(0);
@@ -568,13 +584,13 @@ function displayStats() {
   fill(96, 156, 64);
   rect(825, 130, targetHit * 5, 30);
   image(playerAvatar, 930, 130);
-
+  //Second statistic (Coolness)
   fill(0);
   text("Coolness", 825, 190);
   fill(235, 73, 52);
-  rect(825, 200, playerMaxHealth/2, 30,);
+  rect(825, 200, playerMaxHealth / 2, 30, );
   fill(96, 156, 64);
-  rect(825, 200, (playerHealth/2), 30);
+  rect(825, 200, (playerHealth / 2), 30);
   push();
 
 }
