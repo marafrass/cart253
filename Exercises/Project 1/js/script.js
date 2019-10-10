@@ -192,6 +192,7 @@ function setupObstacle() {
 }
 
 function setupMusic() {
+  timerMusic.play();
   timerMusic.loop();
 }
 
@@ -437,7 +438,7 @@ function drawSprites() {
 }
 
 
-//ALL OBSTACLE ACTIONS 
+//ALL OBSTACLE ACTIONS
 //
 //Move and respawn obstacle
 //Make player take extra damage when touching obstacle
