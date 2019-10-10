@@ -111,6 +111,9 @@ let victoryMusic;
 // create variable for dialogue line to display
 let currentLine;
 
+//Check if music is playing
+let musicIsPlaying = false;
+
 // preload()
 //
 //Preload all images and sounds
@@ -192,7 +195,7 @@ function setupObstacle() {
 
 }
 
-function setupMusic() {
+function playMusic() {
   timerMusic.play();
   timerMusic.loop();
 }
@@ -218,6 +221,12 @@ function draw() {
 
     // If conditions are met, start gameplay
   } else if (!gameOver && targetHit < 20) {
+    //Start playing music if not already playing
+    if (!musicIsPlaying){
+      playMusic();
+      musicIsPlaying = true;
+    }
+
 
     handleInput();
     movePlayer();
@@ -535,8 +544,7 @@ function mousePressed() {
   // Start game if on intro screen
   if (onIntroScreen) {
     onIntroScreen = false;
-    //Start playing music
-    setupMusic();
+
   }
   //restart game if on game over screen
   if (gameOver) {
