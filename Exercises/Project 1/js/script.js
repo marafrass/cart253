@@ -471,8 +471,8 @@ function obstacleAction() {
   // Check if they overlap
   if (d < playerRadius + obstacleSize) {
 
-    // Reduce the player health, times 1.5
-    playerHealth = playerHealth - (eatHealth * 1.5);
+    // Reduce the player health, times 3
+    playerHealth = playerHealth - (eatHealth * 3);
 
 
 
