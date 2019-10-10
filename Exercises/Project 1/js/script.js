@@ -69,21 +69,31 @@ let eatHealth = 1;
 // Number of target eaten during the game (the "score")
 let targetHit = 0;
 
+//Obstacle size, position and speed
+let obstacle;
+let obstacleX;
+let obstacleY;
+let obstacleSpeed = 3;
+let obstacleSize = 50;
+
+
+
 //width of side windows
 let sideSpace = 200;
 
-//set up image variables
+//set up all image variables
 let winScreen;
 let introScreen;
 let gameOverScreen;
 let rightScreen;
 let leftScreen;
-let target;
 let gameBackground;
-let playerAvatar;
 let sweat;
 let wrinkles;
 let doubt;
+
+let target;
+let playerAvatar;
 
 //Set up sound variables
 let parentBark1;
@@ -95,8 +105,9 @@ let parentBark6;
 let parentBark7;
 let parentBark8;
 let parentBark9;
-//set up background music
+//set up background and victory music
 let timerMusic;
+let victoryMusic;
 // create variable for dialogue line to display
 let currentLine;
 
@@ -117,6 +128,7 @@ function preload() {
   sweat = loadImage("assets/images/sweat.png");
   wrinkles = loadImage("assets/images/wrinkles.png");
   doubt = loadImage("assets/images/doubt.png");
+  obstacle = loadImage("assets/images/obstacle.png");
 
   //Load all sounds
   parentBark1 = loadSound("assets/sounds/parentBark1.wav");
@@ -129,6 +141,7 @@ function preload() {
   parentBark8 = loadSound("assets/sounds/parentBark8.wav");
   parentBark9 = loadSound("assets/sounds/parentBark9.wav");
 
+  victoryMusic = loadSound("assets/sounds/victoryMusic.wav");
   timerMusic = loadSound("assets/sounds/timerMusic.wav");
 }
 
@@ -142,6 +155,7 @@ function setup() {
   // We're using simple functions to separate code out
   setupTarget();
   setupPlayer();
+  setupObstacle();
   setupMusic();
 
 }
@@ -170,6 +184,13 @@ function setupPlayer() {
   playerHealth = playerMaxHealth;
 }
 
+function setupObstacle(){
+
+  obstacleX = random(sideSpace, width - sideSpace);
+  obstacleY = random(0, height);
+
+}
+
 function setupMusic() {
   timerMusic.loop();
 }
@@ -189,7 +210,7 @@ function draw() {
   if (onIntroScreen) {
     showIntro();
 
-  // If hit 20 targets, go to victory screen
+    // If hit 20 targets, go to victory screen
   } else if (targetHit === 20) {
     showVictory();
 
@@ -203,6 +224,7 @@ function draw() {
     checkEating();
     drawtarget();
     drawPlayer();
+    obstacleMovement();
     dialogue();
     displayStats();
 
@@ -324,6 +346,8 @@ function checkEating() {
       targetHealth = targetMaxHealth;
       // Track how many target were eaten
       targetHit = targetHit + 1;
+      //Speed up obstacle with each "kill"
+      obstacleSpeed += 0.2;
       playBark();
     }
   }
@@ -409,8 +433,39 @@ function drawSprites() {
     if (playerHealth < 120) {
       image(doubt, width - sideSpace, 0);
     }
-
   }
+}
+
+
+//ALL OBSTACLE ARGUMENTS AND STUFF
+//
+//Move and respawn obstacle
+//Make player take extra damage when touching obstacle
+
+function obstacleMovement(){
+  //draw obstacle
+  image(obstacle, obstacleX,obstacleY, obstacleSize,obstacleSize);
+  obstacleY += obstacleSpeed;
+
+  //Move to top, at random x, if Y drops below height
+  if (obstacleY > height){
+    obstacleY = 0;
+    obstacleX = random(sideSpace, width - sideSpace);
+  }
+
+  //Check if player and obstacle collide
+  //
+  // Get distance of player to obstacle
+  let d = dist(playerX, playerY, obstacleX, obstacleY);
+  // Check if they overlap
+  if (d < playerRadius + obstacleSize) {
+
+    // Reduce the player health, times 1.5
+    playerHealth = playerHealth - (eatHealth * 1.5);
+
+
+
+}
 
 }
 
@@ -443,31 +498,31 @@ function dialogue() {
   } else if (targetHit === 6) {
     currentLine = "And, um, if a mama and a papa elephant get into that kind of routine.."
   } else if (targetHit === 7) {
-    currentLine = "...They might get in touch with, um.."
+    currentLine = "...They might start to consider, uh..."
   } else if (targetHit === 8) {
-    currentLine = "...An adoption service? Or maybe an orphanage."
+    currentLine = "...Adding an additional meal to that whole routine.."
   } else if (targetHit === 9) {
-    currentLine = "You see, in those places, um.. There are kiddie elephants."
+    currentLine = "You can never have enough breakfast. Add a second one."
   } else if (targetHit === 10) {
-    currentLine = "And they're brought there by the, um, baby elephant delivery elephants.'"
+    currentLine = "And you, um, know how we sometimes have sausages for breakfast?'"
   } else if (targetHit === 11) {
-    currentLine = "From the baby elephant factory."
+    currentLine = "You know how our trunks kind of look like sausages?"
   } else if (targetHit === 12) {
-    currentLine = "If you're a couple and you're having three hot meals a day."
+    currentLine = "...No, scratch that. I didn't think it through."
   } else if (targetHit === 13) {
-    currentLine = "That's, uh, how baby elephants are made. "
+    currentLine = "Baby elephants. Right. They're, um.."
   } else if (targetHit === 14) {
-    currentLine = "...An adoption service? Or maybe an orphanage."
+    currentLine = "So the mama and the papa elephant maybe, um.."
   } else if (targetHit === 15) {
-    currentLine = "You see, in those places, um.. There are kiddie elephants."
+    currentLine = "They might start smooching each other."
   } else if (targetHit === 16) {
-    currentLine = "And they, um, just sort of appear there."
+    currentLine = "Just good traditional smooching. Nothing particular. Everyone smooches."
   } else if (targetHit === 17) {
-    currentLine = "But sometimes they might appear in your living room as well."
+    currentLine = "And if they smooch for a very, very long time, they, um..."
   } else if (targetHit === 18) {
-    currentLine = "If you're a couple and you're having three hot meals a day."
+    currentLine = "...Oh boy. They, um, they might have a look at a catalogue."
   } else if (targetHit === 19) {
-    currentLine = "If you're a couple and you're having three hot meals a day."
+    currentLine = "A catalogue for baby elephants. And then they order one."
   }
 
 }
@@ -485,11 +540,9 @@ function mousePressed() {
     setupTarget();
     setupPlayer();
     targetHit = 0;
+    obstacleSpeed = 3;
   }
-
 }
-
-
 
 //Plays a certain bark whenever targetHit changes!
 function playBark() {
@@ -532,7 +585,8 @@ function playBark() {
   } else if (targetHit === 19) {
     parentBark2.play();
   } else if (targetHit === 20) {
-    parentBark1.play();
+    victoryMusic.play();
+
   }
 
 }
@@ -557,7 +611,7 @@ function showGameOver() {
 
   //If player has fails to stay on target, show this
   image(gameOverScreen, 0, 0);
-  // Set up the font
+  // Set up the text and font 
   pop();
   textAlign(CENTER);
   fill(0);
@@ -584,9 +638,10 @@ function displayStats() {
   fill(96, 156, 64);
   rect(825, 130, targetHit * 5, 30);
   image(playerAvatar, 930, 130);
+
   //Second statistic (Coolness)
   fill(0);
-  text("Coolness", 825, 190);
+  text("Coolness", 835, 190);
   fill(235, 73, 52);
   rect(825, 200, playerMaxHealth / 2, 30, );
   fill(96, 156, 64);
