@@ -184,7 +184,7 @@ function setupPlayer() {
   playerHealth = playerMaxHealth;
 }
 
-function setupObstacle(){
+function setupObstacle() {
 
   obstacleX = random(sideSpace, width - sideSpace);
   obstacleY = random(0, height);
@@ -222,9 +222,9 @@ function draw() {
     movetarget();
     updateHealth();
     checkEating();
-    drawtarget();
+    drawTarget();
     drawPlayer();
-    obstacleMovement();
+    obstacleAction();
     dialogue();
     displayStats();
 
@@ -386,10 +386,10 @@ function movetarget() {
   }
 }
 
-// drawtarget()
+// drawTarget()
 //
 // Draw the target with alpha based on health and shrinking middle
-function drawtarget() {
+function drawTarget() {
   push();
   strokeWeight(4);
   fill(targetFill, targetHealth);
@@ -437,18 +437,18 @@ function drawSprites() {
 }
 
 
-//ALL OBSTACLE ARGUMENTS AND STUFF
+//ALL OBSTACLE ACTIONS 
 //
 //Move and respawn obstacle
 //Make player take extra damage when touching obstacle
 
-function obstacleMovement(){
+function obstacleAction() {
   //draw obstacle
-  image(obstacle, obstacleX,obstacleY, obstacleSize,obstacleSize);
+  image(obstacle, obstacleX, obstacleY, obstacleSize, obstacleSize);
   obstacleY += obstacleSpeed;
 
   //Move to top, at random x, if Y drops below height
-  if (obstacleY > height){
+  if (obstacleY > height) {
     obstacleY = 0;
     obstacleX = random(sideSpace, width - sideSpace);
   }
@@ -465,7 +465,7 @@ function obstacleMovement(){
 
 
 
-}
+  }
 
 }
 
@@ -611,7 +611,7 @@ function showGameOver() {
 
   //If player has fails to stay on target, show this
   image(gameOverScreen, 0, 0);
-  // Set up the text and font 
+  // Set up the text and font
   pop();
   textAlign(CENTER);
   fill(0);
