@@ -153,10 +153,11 @@ function setup() {
 
 
   // We're using simple functions to separate code out
+
   setupTarget();
   setupPlayer();
   setupObstacle();
-  setupMusic();
+
 
 }
 
@@ -534,6 +535,8 @@ function mousePressed() {
   // Start game if on intro screen
   if (onIntroScreen) {
     onIntroScreen = false;
+    //Start playing music
+    setupMusic();
   }
   //restart game if on game over screen
   if (gameOver) {
@@ -603,6 +606,7 @@ function showVictory() {
 function showIntro() {
   //Show intro at beginning of game
   image(introScreen, 0, 0);
+
 }
 
 // showGameOver()
