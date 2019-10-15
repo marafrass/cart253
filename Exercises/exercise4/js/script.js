@@ -126,13 +126,17 @@ function draw() {
     // (Note how we can use a function that returns a truth value
     // inside a conditional!)
     if (ballIsOutOfBounds()) {
-      
+
       //If ball goes out to the left, give player on the right a point - otherwise,
-      //give player on the left one.
+      //give player on the left one. Additionally, set direction of ball after scoring a point.
       if(ball.x <= 0 ) {
         rightScore += 1;
+        //Set ball to move to the right
+        ball.speed = 5;
       } else {
         leftScore += 1;
+        //Set ball to move to the left
+        ball.speed = -5;
       }
 
       // After points have been added, reset it
