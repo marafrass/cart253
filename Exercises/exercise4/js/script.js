@@ -1,10 +1,10 @@
 "use strict";
 
 // Pong
-// by Pippin Barr
+// Originally by Pippin Barr, edited by Martin Hanses
 //
 // A "simple" implementation of Pong with no scoring system
-// just the ability to play the game with the keyboard.
+// just the ability to play the game with the keyboard. Or is it? Yes, it is.
 //
 // Up and down keys control the right hand paddle, W and S keys control
 // the left hand paddle
@@ -61,6 +61,10 @@ let rightPaddle = {
 
 // A variable to hold the beep sound we will play on bouncing
 let beepSFX;
+
+//Set up score variables
+let leftScore = 0;
+let rightScore = 0;
 
 // preload()
 //
@@ -122,10 +126,18 @@ function draw() {
     // (Note how we can use a function that returns a truth value
     // inside a conditional!)
     if (ballIsOutOfBounds()) {
-      // If it went off either side, reset it
+      
+      //If ball goes out to the left, give player on the right a point - otherwise,
+      //give player on the left one.
+      if(ball.x <= 0 ) {
+        rightScore += 1;
+      } else {
+        leftScore += 1;
+      }
+
+      // After points have been added, reset it
       resetBall();
-      // This is where we would likely count points, depending on which side
-      // the ball went off...
+
     }
   }
   else {
