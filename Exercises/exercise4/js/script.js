@@ -1,7 +1,15 @@
 "use strict";
+// NOTE: I was slightly apprehensive about handing this game in as it was,
+// since I was worried it wasn't visually and audially interesting enough.
+// I really like the simplicity and minimalistic design it has now, but I was
+// worried it'd come across as lazy. That being said, I think the visuals not
+// only look cool, but genuinelly change the game in a meaningful way. The sound
+// and marker make the game different enough to be interesting, at least in my opinion.
 
-// Danger Pong
-// Originally by Pippin Barr, edited by Martin Hanses
+
+// DANGER PONG
+// By Martin Hanses
+// (Original code by Pippin Barr)
 //
 // This is danger pong. How is it different from regular pong?
 // I am glad you asked. It is more dangerous. Aggression occurs
@@ -9,9 +17,11 @@
 // Danger pong explores this violence, so that we may learn from it.
 // Learn fighting moves, mostly.
 //
+//
 // Up and down keys control the right hand paddle, W and S keys control
 // the left hand paddle.
 //
+// WHAT IS THIS GAME?
 // With every point, your playing field will grow, making it more difficult for
 // The opponent to see where the ball will go! First to fill the screen with their color wins!
 
@@ -36,7 +46,7 @@ let ball = {
   size: 20,
   vx: 0,
   vy: 0,
-  speed: 4
+  speed: 6
 }
 
 //MARKER
@@ -74,9 +84,11 @@ let rightPaddle = {
   downKey: 40
 }
 
-// A variable to hold the beep sound we will play on bouncing
+// Variables to hold the beep/boop sound we will play on bouncing on wall/paddle,
+// as well as the point scoring sound
 let beepSFX;
 let boopSFX;
+let pointSFX;
 
 //Set up score variables
 let leftScore = 0;
@@ -87,10 +99,11 @@ let winner;
 
 // preload()
 //
-// Loads the beep audio for the sound of bouncing
+// Loads the beep and boop audio for the sounds of bouncing against paddles/walls
 function preload() {
   beepSFX = new Audio("assets/sounds/beep.wav");
   boopSFX = new Audio("assets/sounds/boop.wav");
+  pointSFX = new Audio("assets/sounds/winSound.wav");
 }
 
 // setup()
@@ -100,7 +113,7 @@ function preload() {
 // and velocities.
 function setup() {
   // Create canvas and set drawing modes
-  createCanvas(840, 480);
+  createCanvas(windowWidth, 480);
   rectMode(CENTER);
   noStroke();
   fill(fgColor);
@@ -128,7 +141,7 @@ function setupPaddles() {
 
 //Sets the starting location of the marker
 function setupMarker() {
-  marker = width/2;
+  marker = width / 2;
 }
 
 // draw()
@@ -140,8 +153,8 @@ function draw() {
   background(bgColor);
   drawBackground();
   drawMarker();
-if (gameOver === true){
-  showGameOver();
+  if (gameOver === true) {
+    showGameOver();
   } else if (playing) {
     // If the game is in play, we handle input and move the elements around
     handleInput(leftPaddle);
@@ -162,35 +175,27 @@ if (gameOver === true){
       //If ball goes out to the left, give player on the right a point and deduct o
       // a point from the left player - otherwise, do the opposite
       //give player on the left one. Additionally, set direction of ball after scoring a point.
-      if(ball.x <= 0 ) {
+      if (ball.x <= 0) {
         rightScore += 1;
         leftScore -= 1;
         //Set ball to move to the right
         ball.speed = 5;
-        //Color the ball in the color of the losing player
       } else {
         leftScore += 1;
         rightScore -= 1;
         //Set ball to move to the left
         ball.speed = -5;
-        //Color the ball in the color of the losing player
       }
-      //Check if either player has reached the winning amount of points
-      //Also check who the winning player was and set that one to winner
-      if (leftScore >= winScore || rightScore >= winScore){
-        gameOver = true;
-        if(leftScore > rightScore){
-          winner = "red player";
-        } else {
-        winner = "green player";
-        }
-      }
+      // play point scoring sound effect
+      pointSFX.currentTime = 0;
+      pointSFX.play();
+      //Check if scoring player got the winning point
+      hasPlayerWon();
       // After points have been added, reset it
       resetBall();
 
     }
-  }
-  else {
+  } else {
     // Otherwise we display the message to start the game
     displayStartMessage();
   }
@@ -216,8 +221,7 @@ function handleInput(paddle) {
   else if (keyIsDown(paddle.downKey)) {
     // Move down
     paddle.vy = paddle.speed;
-  }
-  else {
+  } else {
     // Otherwise stop moving
     paddle.vy = 0;
   }
@@ -248,8 +252,7 @@ function ballIsOutOfBounds() {
   // Check for ball going off the sides
   if (ball.x < 0 || ball.x > width) {
     return true;
-  }
-  else {
+  } else {
     return false;
   }
 }
@@ -318,7 +321,7 @@ function displayPaddle(paddle) {
 // Draws the ball on screen as a square in the color of the last player to touch it
 function displayBall() {
   push();
-  if (ball.vx >= 0){
+  if (ball.vx >= 0) {
     ballColor = leftPlayerColor;
   } else {
     ballColor = rightPlayerColor;
@@ -337,8 +340,18 @@ function resetBall() {
   ball.x = width / 2;
   ball.y = height / 2;
   ball.vx = ball.speed;
-  //Randomize the vertical direction of the ball between double positive and negative values
-  ball.vy = random((ball.speed-(ball.speed*2)),(ball.speed+ball.speed));
+  //Randomize the vertical direction of the ball
+  //(This was changed due to the game being more intresting when the ball launched
+  // at more steep angles, making it bounce more)
+  ball.vy = random(random(-10, -16), random(10, 16));
+}
+
+//resetScore()
+//
+//Reset the scores and playing field
+function resetGame() {
+  leftScore = 0;
+  rightScore = 0;
 }
 
 // displayStartMessage()
@@ -349,7 +362,7 @@ function displayStartMessage() {
   textAlign(CENTER, CENTER);
   textSize(100);
   text("CLICK TO PLAY", width / 2, height / 4);
-  text("DANGER PONG", width/2, height / 1.4);
+  text("DANGER PONG", width / 2, height / 1.4);
   pop();
 }
 
@@ -358,45 +371,82 @@ function displayStartMessage() {
 // Here to require a click to start playing the game
 // Which will help us be allowed to play audio in the browser
 function mousePressed() {
-  playing = true;
+  //If game just started, click to begin
+  if (!playing) {
+    playing = true;
+  }
+  //If game is over, click to reset
+  if (gameOver) {
+    gameOver = false;
+    resetBall();
+    resetGame();
+  }
+
 }
 
+//drawMarker
+//
 //Draw and color both background squares
 //Change width of each player's sides based on the amount of points
 function drawBackground() {
-    push();
-    rectMode(LEFT);
-    fill(leftPlayerColor);
-    rect(0 + (leftScore * 50),height/2,width,height);
-    fill(rightPlayerColor);
-    rect(width - (rightScore * 50),height/2,width,height);
-    pop();
+  push();
+  rectMode(LEFT);
+  fill(leftPlayerColor);
+  rect(0 + (leftScore * 50), height / 2, width, height);
+  fill(rightPlayerColor);
+  rect(width - (rightScore * 50), height / 2, width, height);
+  pop();
 }
 
+//setupColors()
+//
 //Set RGB values to color variables
 function setupColors() {
   leftPlayerColor = color(230, 147, 129);
   rightPlayerColor = color(123, 199, 119);
 
 }
-
+//drawMarker()
+//
+//Draw the marker on the last location the ball bounced against a wall
 function drawMarker() {
   push();
-  fill(20,20,20,20);
-  rect(marker, height/2, 10, height,);
+  fill(20, 20, 20, 20);
+  rect(marker, height / 2, 10, height, );
   pop();
 }
 
+//showGameOver()
+//
+//When the winScore has been reached by either player, display the winner and show the
+//game over screen
 function showGameOver() {
-  ball.x = width*2;
-  ball.y = height*2;
+  ball.x = width * 2;
+  ball.y = height * 2;
   push();
   textSize(180);
   textFont("verdana");
-  textAlign(CENTER,CENTER);
-  text("GAME\nOVER",width/2,height/2);
+  textAlign(CENTER, CENTER);
+  text("GAME\nOVER", width / 2, height / 2);
   textAlign(CENTER);
   textSize(50);
-  text(winner + " wins", width/2,height/2);
+  text(winner + " wins", width / 2, (height / 2) - 10);
+  textSize(35);
+  text("click to play again", width / 2, height - 40);
   pop();
+}
+
+//hasPlayerWon()
+//
+//Check if either player has reached the winning amount of points
+//Also check who the winning player was and set that one to winner
+function hasPlayerWon() {
+  if (leftScore >= winScore || rightScore >= winScore) {
+    gameOver = true;
+    if (leftScore > rightScore) {
+      winner = "red player";
+    } else {
+      winner = "green player";
+    }
+  }
 }
