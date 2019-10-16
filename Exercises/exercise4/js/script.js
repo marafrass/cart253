@@ -7,14 +7,14 @@
 // and marker make the game different enough to be interesting, at least in my opinion.
 
 
-// DANGER PONG
+// TERRITORIAL PONG
 // By Martin Hanses
 // (Original code by Pippin Barr)
 //
-// This is danger pong. How is it different from regular pong?
+// This is territorial pong. How is it different from regular pong?
 // I am glad you asked. It is more dangerous. Aggression occurs
 // constantly in everyday life. Anger and violence is commonplace.
-// Danger pong explores this violence, so that we may learn from it.
+// Territorial pong explores this violence, so that we may learn from it.
 // Learn fighting moves, mostly.
 //
 //
@@ -46,7 +46,7 @@ let ball = {
   size: 20,
   vx: 0,
   vy: 0,
-  speed: 10
+  speed: 7
 }
 
 //MARKER
@@ -179,12 +179,12 @@ function draw() {
         rightScore += 1;
         leftScore -= 1;
         //Set ball to move to the right
-        ball.speed = 5;
+        ball.speed = 7;
       } else {
         leftScore += 1;
         rightScore -= 1;
         //Set ball to move to the left
-        ball.speed = -5;
+        ball.speed = -7;
       }
       // play point scoring sound effect
       pointSFX.currentTime = 0;
@@ -362,7 +362,7 @@ function displayStartMessage() {
   textAlign(CENTER, CENTER);
   textSize(100);
   text("CLICK TO PLAY", width / 2, height / 4);
-  text("DANGER PONG", width / 2, height / 1.4);
+  text("TERRITORIAL PONG", width / 2, height / 1.4);
   pop();
 }
 
@@ -392,9 +392,9 @@ function drawBackground() {
   push();
   rectMode(LEFT);
   fill(leftPlayerColor);
-  rect(0 + (leftScore * 50), height / 2, width, height);
+  rect(0 + (leftScore * (width/16)), height / 2, width, height);
   fill(rightPlayerColor);
-  rect(width - (rightScore * 50), height / 2, width, height);
+  rect(width - (rightScore * (width/16)), height / 2, width, height);
   pop();
 }
 
