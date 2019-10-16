@@ -9,8 +9,9 @@
 // Up and down keys control the right hand paddle, W and S keys control
 // the left hand paddle
 
-// Whether the game has started
+// Whether the game has started or is over
 let playing = false;
+let gameOver = false;
 
 // Game colors (Ballcolor here instead of in ball because grouping seems more logical.)
 let bgColor = 0;
@@ -31,6 +32,8 @@ let ball = {
   vy: 0,
   speed: 4
 }
+
+let marker;
 
 // PADDLES
 
@@ -68,6 +71,9 @@ let beepSFX;
 //Set up score variables
 let leftScore = 0;
 let rightScore = 0;
+let winScore = 1;
+//Set up winner
+let winner;
 
 // preload()
 //
@@ -92,6 +98,7 @@ function setup() {
 
 
   setupPaddles();
+  setupMarker();
   resetBall();
 }
 
@@ -108,6 +115,11 @@ function setupPaddles() {
   rightPaddle.y = height / 2;
 }
 
+//Sets the starting location of the marker
+function setupMarker() {
+  marker = width/2;
+}
+
 // draw()
 //
 // Calls the appropriate functions to run the game
@@ -116,8 +128,10 @@ function draw() {
   // Fill the background
   background(bgColor);
   drawBackground();
-
-  if (playing) {
+  drawMarker();
+if (gameOver === true){
+  showGameOver();
+  } else if (playing) {
     // If the game is in play, we handle input and move the elements around
     handleInput(leftPaddle);
     handleInput(rightPaddle);
@@ -134,7 +148,8 @@ function draw() {
     // inside a conditional!)
     if (ballIsOutOfBounds()) {
 
-      //If ball goes out to the left, give player on the right a point - otherwise,
+      //If ball goes out to the left, give player on the right a point and deduct o
+      // a point from the left player - otherwise, do the opposite
       //give player on the left one. Additionally, set direction of ball after scoring a point.
       if(ball.x <= 0 ) {
         rightScore += 1;
@@ -148,7 +163,16 @@ function draw() {
         //Set ball to move to the left
         ball.speed = -5;
         //Color the ball in the color of the losing player
-
+      }
+      //Check if either player has reached the winning amount of points
+      //Also check who the winning player was and set that one to winner
+      if (leftScore >= winScore || rightScore >= winScore){
+        gameOver = true;
+        if(leftScore > rightScore){
+          winner = "red player";
+        } else {
+        winner = "green player";
+        }
       }
       // After points have been added, reset it
       resetBall();
@@ -232,6 +256,9 @@ function checkBallWallCollision() {
     // Play our bouncing sound effect by rewinding and then playing
     beepSFX.currentTime = 0;
     beepSFX.play();
+    //Set marker to the location where the ball touched the wall and referenced AC/DC
+    marker = ball.x;
+
   }
 }
 
@@ -279,16 +306,14 @@ function displayPaddle(paddle) {
 //
 // Draws the ball on screen as a square in the color of the last player to touch it
 function displayBall() {
-
   push();
   if (ball.vx >= 0){
-    fill(leftPlayerColor);
+    ballColor = leftPlayerColor;
   } else {
-    fill(rightPlayerColor);
+    ballColor = rightPlayerColor;
   }
-
   // Draw the ball
-
+  fill(ballColor);
   rect(ball.x, ball.y, ball.size, ball.size);
   pop();
 }
@@ -341,4 +366,24 @@ function setupColors() {
   leftPlayerColor = color(230, 147, 129);
   rightPlayerColor = color(123, 199, 119);
 
+}
+
+function drawMarker() {
+  push();
+  fill(20,20,20,20);
+  rect(marker, height/2, 10, height,);
+  pop();
+}
+
+function showGameOver() {
+  ball.x = width*2;
+  ball.y = height*2;
+  push();
+  textSize(180);
+  textAlign(CENTER,CENTER);
+  text("GAME\nOVER",width/2,height/2);
+  textAlign(CENTER);
+  textSize(50);
+  text(winner + " wins", width/2,height/2);
+  pop();
 }
