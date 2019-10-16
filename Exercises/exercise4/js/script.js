@@ -1,13 +1,19 @@
 "use strict";
 
-// Pong
+// Danger Pong
 // Originally by Pippin Barr, edited by Martin Hanses
 //
-// A "simple" implementation of Pong with no scoring system
-// just the ability to play the game with the keyboard. Or is it? Yes, it is.
+// This is danger pong. How is it different from regular pong?
+// I am glad you asked. It is more dangerous. Aggression occurs
+// constantly in everyday life. Anger and violence is commonplace.
+// Danger pong explores this violence, so that we may learn from it.
+// Learn fighting moves, mostly.
 //
 // Up and down keys control the right hand paddle, W and S keys control
-// the left hand paddle
+// the left hand paddle.
+//
+// With every point, your playing field will grow, making it more difficult for
+// The opponent to see where the ball will go! First to fill the screen with their color wins!
 
 // Whether the game has started or is over
 let playing = false;
@@ -33,6 +39,9 @@ let ball = {
   speed: 4
 }
 
+//MARKER
+//
+//Helps the players see where the ball bounced
 let marker;
 
 // PADDLES
@@ -67,11 +76,12 @@ let rightPaddle = {
 
 // A variable to hold the beep sound we will play on bouncing
 let beepSFX;
+let boopSFX;
 
 //Set up score variables
 let leftScore = 0;
 let rightScore = 0;
-let winScore = 1;
+let winScore = 8;
 //Set up winner
 let winner;
 
@@ -80,6 +90,7 @@ let winner;
 // Loads the beep audio for the sound of bouncing
 function preload() {
   beepSFX = new Audio("assets/sounds/beep.wav");
+  boopSFX = new Audio("assets/sounds/boop.wav");
 }
 
 // setup()
@@ -254,8 +265,8 @@ function checkBallWallCollision() {
     // It hit so reverse velocity
     ball.vy = -ball.vy;
     // Play our bouncing sound effect by rewinding and then playing
-    beepSFX.currentTime = 0;
-    beepSFX.play();
+    boopSFX.currentTime = 0;
+    boopSFX.play();
     //Set marker to the location where the ball touched the wall and referenced AC/DC
     marker = ball.x;
 
@@ -336,8 +347,9 @@ function resetBall() {
 function displayStartMessage() {
   push();
   textAlign(CENTER, CENTER);
-  textSize(32);
-  text("CLICK TO PONG", width / 2, height / 2);
+  textSize(100);
+  text("CLICK TO PLAY", width / 2, height / 4);
+  text("DANGER PONG", width/2, height / 1.4);
   pop();
 }
 
@@ -380,6 +392,7 @@ function showGameOver() {
   ball.y = height*2;
   push();
   textSize(180);
+  textFont("verdana");
   textAlign(CENTER,CENTER);
   text("GAME\nOVER",width/2,height/2);
   textAlign(CENTER);
