@@ -12,9 +12,12 @@
 // Whether the game has started
 let playing = false;
 
-// Game colors (using hexadecimal)
+// Game colors (Ballcolor here instead of in ball because grouping seems more logical.)
 let bgColor = 0;
 let fgColor = 255;
+let ballColor;
+let leftPlayerColor;
+let rightPlayerColor;
 
 // BALL
 
@@ -26,7 +29,7 @@ let ball = {
   size: 20,
   vx: 0,
   vy: 0,
-  speed: 5
+  speed: 4
 }
 
 // PADDLES
@@ -39,7 +42,7 @@ let leftPaddle = {
   w: 20,
   h: 70,
   vy: 0,
-  speed: 5,
+  speed: 7,
   upKey: 87,
   downKey: 83
 }
@@ -54,7 +57,7 @@ let rightPaddle = {
   w: 20,
   h: 70,
   vy: 0,
-  speed: 5,
+  speed: 7,
   upKey: 38,
   downKey: 40
 }
@@ -80,10 +83,13 @@ function preload() {
 // and velocities.
 function setup() {
   // Create canvas and set drawing modes
-  createCanvas(640, 480);
+  createCanvas(840, 480);
   rectMode(CENTER);
   noStroke();
   fill(fgColor);
+
+  setupColors();
+
 
   setupPaddles();
   resetBall();
@@ -109,6 +115,7 @@ function setupPaddles() {
 function draw() {
   // Fill the background
   background(bgColor);
+  drawBackground();
 
   if (playing) {
     // If the game is in play, we handle input and move the elements around
@@ -131,14 +138,18 @@ function draw() {
       //give player on the left one. Additionally, set direction of ball after scoring a point.
       if(ball.x <= 0 ) {
         rightScore += 1;
+        leftScore -= 1;
         //Set ball to move to the right
         ball.speed = 5;
+        //Color the ball in the color of the losing player
       } else {
         leftScore += 1;
+        rightScore -= 1;
         //Set ball to move to the left
         ball.speed = -5;
-      }
+        //Color the ball in the color of the losing player
 
+      }
       // After points have been added, reset it
       resetBall();
 
@@ -266,10 +277,20 @@ function displayPaddle(paddle) {
 
 // displayBall()
 //
-// Draws the ball on screen as a square
+// Draws the ball on screen as a square in the color of the last player to touch it
 function displayBall() {
+
+  push();
+  if (ball.vx >= 0){
+    fill(leftPlayerColor);
+  } else {
+    fill(rightPlayerColor);
+  }
+
   // Draw the ball
+
   rect(ball.x, ball.y, ball.size, ball.size);
+  pop();
 }
 
 // resetBall()
@@ -280,7 +301,8 @@ function resetBall() {
   ball.x = width / 2;
   ball.y = height / 2;
   ball.vx = ball.speed;
-  ball.vy = ball.speed;
+  //Randomize the vertical direction of the ball between double positive and negative values
+  ball.vy = random((ball.speed-(ball.speed*2)),(ball.speed+ball.speed));
 }
 
 // displayStartMessage()
@@ -290,7 +312,7 @@ function displayStartMessage() {
   push();
   textAlign(CENTER, CENTER);
   textSize(32);
-  text("CLICK TO START", width / 2, height / 2);
+  text("CLICK TO PONG", width / 2, height / 2);
   pop();
 }
 
@@ -300,4 +322,23 @@ function displayStartMessage() {
 // Which will help us be allowed to play audio in the browser
 function mousePressed() {
   playing = true;
+}
+
+//Draw and color both background squares
+//Change width of each player's sides based on the amount of points
+function drawBackground() {
+    push();
+    rectMode(LEFT);
+    fill(leftPlayerColor);
+    rect(0 + (leftScore * 50),height/2,width,height);
+    fill(rightPlayerColor);
+    rect(width - (rightScore * 50),height/2,width,height);
+    pop();
+}
+
+//Set RGB values to color variables
+function setupColors() {
+  leftPlayerColor = color(230, 147, 129);
+  rightPlayerColor = color(123, 199, 119);
+
 }
