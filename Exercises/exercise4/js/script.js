@@ -46,7 +46,7 @@ let ball = {
   size: 20,
   vx: 0,
   vy: 0,
-  speed: 6
+  speed: 10
 }
 
 //MARKER
@@ -343,7 +343,7 @@ function resetBall() {
   //Randomize the vertical direction of the ball
   //(This was changed due to the game being more intresting when the ball launched
   // at more steep angles, making it bounce more)
-  ball.vy = random(random(-10, -16), random(10, 16));
+  ball.vy = random(random(-12, -16), random(12, 16));
 }
 
 //resetScore()
