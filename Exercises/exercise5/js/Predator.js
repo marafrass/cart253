@@ -145,6 +145,17 @@ class Predator {
     fill(this.fillColor);
     this.radius = this.health;
     ellipse(this.x, this.y, this.radius * 2);
+    //Create number in middle of circle showing the current player score
+    textSize(this.radius);
+    fill(0);
+    textAlign(CENTER,CENTER);
+    text(this.preyEaten, this.x,this.y);
     pop();
+  }
+
+
+  reset() {
+    this.health = this.maxHealth;
+    this.preyEaten = 0;
   }
 }
