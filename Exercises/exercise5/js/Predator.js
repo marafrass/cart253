@@ -23,6 +23,9 @@ class Predator {
     this.health = this.maxHealth; // Must be AFTER defining this.maxHealth
     this.healthLossPerMove = 0.1;
     this.healthGainPerEat = 1;
+    // Score properties
+    this.preyEaten = 0;
+
     // Display properties
     this.fillColor = fillColor;
     this.radius = this.health; // Radius is defined in terms of health
@@ -101,7 +104,7 @@ class Predator {
   //
   // Takes a Prey object as an argument and checks if the predator
   // overlaps it. If so, reduces the prey's health and increases
-  // the predator's. If the prey dies, it gets reset.
+  // the predator's. If the prey dies, one point is added to predator, and prey gets reset.
   handleEating(prey) {
     // Calculate distance from this predator to the prey
     let d = dist(this.x, this.y, prey.x, prey.y);
@@ -115,6 +118,9 @@ class Predator {
       // Check if the prey died and reset it if so
       if (prey.health < 0) {
         prey.reset();
+        // Add one to the preyEaten score
+        this.preyEaten += 1;
+        console.log(this.preyEaten);
       }
     }
   }
