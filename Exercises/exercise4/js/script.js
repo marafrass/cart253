@@ -178,13 +178,9 @@ function draw() {
       if (ball.x <= 0) {
         rightScore += 1;
         leftScore -= 1;
-        //Set ball to move to the right
-        ball.speed = 7;
       } else {
         leftScore += 1;
         rightScore -= 1;
-        //Set ball to move to the left
-        ball.speed = -7;
       }
       // play point scoring sound effect
       pointSFX.currentTime = 0;
@@ -339,7 +335,12 @@ function resetBall() {
   // Initialise the ball's position and velocity
   ball.x = width / 2;
   ball.y = height / 2;
-  ball.vx = ball.speed;
+  // Set direction of ball based on where it last went out of bounds
+  if (ball.vx < 0) {
+    ball.vx = ball.speed;
+  } else {
+    ball.vx = -ball.speed;
+  }
   //Randomize the vertical direction of the ball
   //(This was changed due to the game being more intresting when the ball launched
   // at more steep angles, making it bounce more)
@@ -392,9 +393,9 @@ function drawBackground() {
   push();
   rectMode(LEFT);
   fill(leftPlayerColor);
-  rect(0 + (leftScore * (width/16)), height / 2, width, height);
+  rect(0 + (leftScore * (width / 16)), height / 2, width, height);
   fill(rightPlayerColor);
-  rect(width - (rightScore * (width/16)), height / 2, width, height);
+  rect(width - (rightScore * (width / 16)), height / 2, width, height);
   pop();
 }
 
