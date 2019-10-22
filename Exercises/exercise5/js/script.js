@@ -10,8 +10,9 @@
 let gameStart = false;
 let gameOver = false;
 
-// The amount of points needed to win
-let winScore = 1;
+// The amount of points needed to win and the winner variable
+let winScore = 10;
+let winner = " ";
 
 // Our players
 let playerOne;
@@ -30,6 +31,7 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   playerOne = new Predator(100, height / 2, 5, color(200, 200, 0), 40, UP_ARROW, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW, 77);
   playerTwo = new Predator(width - 100, height / 2, 5, color(140, 230, 34), 40, 87, 83, 65, 68, 86);
+
   antelope = new Prey(100, 100, 10, color(255, 100, 10), 50);
   zebra = new Prey(100, 100, 8, color(255, 255, 255), 60);
   bee = new Prey(100, 100, 20, color(255, 255, 0), 10);
@@ -59,7 +61,7 @@ function draw() {
     zebra.move();
     bee.move();
 
-    // Handle the tiger eating any of the prey
+    // Handle the players eating any of the prey
     playerOne.handleEating(antelope);
     playerTwo.handleEating(antelope);
     playerOne.handleEating(zebra);
@@ -67,7 +69,11 @@ function draw() {
     playerOne.handleEating(bee);
     playerTwo.handleEating(bee);
 
-    // Display all the "animals"
+    //Handle the players eating eachother
+    playerOne.handleFighting(playerTwo);
+    playerTwo.handleFighting(playerOne);
+
+    // Display players and all the "animals"
     playerOne.display();
     playerTwo.display();
     antelope.display();
@@ -85,6 +91,11 @@ function gameIsOver() {
   textSize(100);
   textAlign(CENTER, CENTER);
   text("GAME OVER", width / 2, height / 2);
+  textSize(50);
+  text(winner + " wins!", width / 2, height / 1.4);
+  textSize(30);
+  text("Click to restart!", width / 2, height / 1.2);
+  pop();
 }
 
 //GAMEINTRO
@@ -117,10 +128,15 @@ function mousePressed() {
 //CHECKSCORES
 //
 //This functions checks if either player has reached the end score, and if so,
-// returns as true.
+// returns as true. Also sets the "winner" variable to the player who reached winScore first
 function checkScores() {
   if ((playerOne.preyEaten >= winScore) || (playerTwo.preyEaten >= winScore)) {
-    console.log("game is over")
+    console.log("game is over");
+    if (playerOne.preyEaten >= winScore){
+      winner = "Player One";
+    } else {
+      winner = "Player Two";
+    }
     return true;
   }
 }

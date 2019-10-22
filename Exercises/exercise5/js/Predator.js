@@ -18,13 +18,17 @@ class Predator {
     this.vx = 0;
     this.vy = 0;
     this.speed = speed;
-    this.sprintSpeed = speed * 2;
+    this.sprintSpeed = speed * 1.3;
     this.standardSpeed = speed;
     // Health properties
-    this.maxHealth = radius;
-    this.health = this.maxHealth; // Must be AFTER defining this.maxHealth
-    this.healthLossPerMove = 0.1;
-    this.healthGainPerEat = 1;
+    this.startingHealth = radius;
+    this.minHealth = 5;
+    this.maxHealth = 130;
+    this.health = this.startingHealth; // Must be AFTER defining this.startingHealth
+    this.healthLossPerMove = 0.2;
+    this.standardHealthLossPerMove = 0.2;
+    this.sprintingHealthLossPerMove = 0.6;
+    this.healthGainPerEat = 0.5;
     // Score properties
     this.preyEaten = 0;
 
@@ -44,11 +48,13 @@ class Predator {
   // Checks if an arrow key is pressed and sets the predator's
   // velocity appropriately.
   handleInput() {
-    //Sprinting movement
+    //Sprinting movement (also increases speed of health lost)
     if (keyIsDown(this.sprintKey)) {
-      this.speed = this.sprintSpeed ;
+      this.speed = this.sprintSpeed;
+      this.healthLossPerMove = this.sprintingHealthLossPerMove;
     } else {
       this.speed = this.standardSpeed;
+      this.healthLossPerMove = this.standardHealthLossPerMove;
     }
 
     // Horizontal movement
@@ -79,12 +85,12 @@ class Predator {
   // Lowers health (as a cost of living)
   // Handles wrapping
   move() {
-    // Update position
+    // Update position, with size (health) affecting speed of movement
     this.x += this.vx;
     this.y += this.vy;
-    // Update health
-    this.health = this.health - this.healthLossPerMove;
-    this.health = constrain(this.health, 0, this.maxHealth);
+    // Update health - player can not become smaller than their minimum health!
+    this.health = this.health - this.healthLossPerMove/3;
+    this.health = constrain(this.health, this.minHealth, this.maxHealth);
     // Handle wrapping
     this.handleWrapping();
   }
@@ -135,6 +141,25 @@ class Predator {
     }
   }
 
+
+  //handleFighting()
+  //
+  //Check if players are overlapping, and in that case, make the one with more preyEaten grow
+  //And the other shrink
+  handleFighting(player){
+        //Check distance between players
+        let d = dist(this.x, this.y, player.x, player.y);
+        //Check if this distance is shorter than the radius of the players
+        if (d < this.radius + player.radius) {
+          // If this player has more preyEaten, make it grow further and
+          // shrink the other player
+          if (this.preyEaten > player.preyEaten) {
+            this.health += this.healthGainPerEat/3;
+            player.health -= player.healthGainPerEat/3;
+          }
+        }
+}
+
   // display
   //
   // Draw the predator as an ellipse on the canvas
@@ -155,7 +180,7 @@ class Predator {
 
 
   reset() {
-    this.health = this.maxHealth;
+    this.health = this.startingHealth;
     this.preyEaten = 0;
   }
 }
