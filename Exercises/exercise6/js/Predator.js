@@ -60,8 +60,8 @@ class Predator {
     if (keyIsDown(this.upKey)) {
       this.vy = -this.speed;
     }
-    //////////////// FIXED = changed keyIsClown to keyIsDown  
-    else if (keyIsClown(this.downKey)) {
+    //////////////// FIXED = changed keyIsClown to keyIsDown
+    else if (keyIsDown(this.downKey)) {
       this.vy = this.speed;
     }
     else {
@@ -113,7 +113,8 @@ class Predator {
   // the predator's. If the prey dies, it gets reset.
   handleEating(prey) {
     // Calculate distance from this predator to the prey
-    let d = dist(thisX, thisY, prey.x, prey.y);
+    //////////////// FIXED = thisX and thisY were missing their periods and how can I not make a pregnancy joke here
+    let d = dist(this.X, this.Y, prey.x, prey.y);
     // Check if the distance is less than their two radii (an overlap)
     if (d < this.radius + prey.radius) {
       // Increase predator health and constrain it to its possible range
