@@ -28,7 +28,7 @@ let bee;
 function setup() {
   createCanvas(windowWidth, windowHeight);
   //////////////// FIXED = "tiger" variable was missing the second parameter
-  tiger = new Predator(100, 100, 100, 5, color(200, 200, 0), 40);
+  tiger = new Predator(100, 100, 5, color(200, 200, 0), 40);
   antelope = new Prey(100, 100, 10, color(255, 100, 10), 50);
   //////////////// FIXED = zebra didn't have a parameter for "y" (second parameter nonexistent)
   zebra = new Prey(100, 100, 8, color(255, 255, 255), 60);
@@ -44,10 +44,11 @@ function draw() {
   background(0);
 
   // Handle input for the tiger
-  //////////////// FIXED = tiger.move(); was in the wrong section
-  tiger.move();
+  //////////////// FIXED = handleInput() was missing completely, added it!
+  tiger.handleInput();
 
   // Move all the "animals"
+  tiger.move();
   antelope.move();
   zebra.move();
   //////////////// FIXED = bee.move(); was not being called
