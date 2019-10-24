@@ -8,7 +8,8 @@
 // ~10 ERRORS IN HERE
 /////////////////////////
 
-glass Prey {
+  //////////////// FIXED = class was misspelled as "glass"
+class Prey {
 
   // constructor
   //
