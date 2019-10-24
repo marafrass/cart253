@@ -62,6 +62,7 @@ function draw() {
   tiger.display();
   //////////////// FIXED = antelope was missing an "e" again.
   antelope.display();
+  //////////////// FIXED = "display" was misspelled as "disploy"
   zebra.disploy();
   b.display();
 }
