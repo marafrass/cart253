@@ -31,7 +31,7 @@ function setup() {
   tiger = new Predator(100, 100, 100, 5, color(200, 200, 0), 40);
   antelope = new Prey(100, 100, 10, color(255, 100, 10), 50);
   //////////////// FIXED = zebra didn't have a parameter for "y" (second parameter nonexistent)
-  zebra = new Prey(100, 8, color(255, 255, 255), 60);
+  zebra = new Prey(100, 100, 8, color(255, 255, 255), 60);
   bee = new Prey(100, 100, 20, color(255, 255, 0), 10);
 }
 
