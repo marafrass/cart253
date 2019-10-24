@@ -64,5 +64,6 @@ function draw() {
   antelope.display();
   //////////////// FIXED = "display" was misspelled as "disploy"
   zebra.disploy();
-  b.display();
+  //////////////// FIXED = "bee" was misspelled as "b"
+  bee.display();
 }
