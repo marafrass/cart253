@@ -44,9 +44,10 @@ function draw() {
   background(0);
 
   // Handle input for the tiger
+  //////////////// FIXED = tiger.move(); was in the wrong section
+  tiger.move();
 
   // Move all the "animals"
-  tiger.move();
   antelope.move();
   zebra.move();
 
