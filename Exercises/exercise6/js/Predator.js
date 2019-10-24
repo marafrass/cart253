@@ -15,8 +15,8 @@ class Predator {
   // Sets the initial values for the Predator's properties
   // Either sets default values or uses the arguments provided
   //////////////// FIXED = constructor misspelled as "construction"
-  //////////////// ALSO FIXED = third parameter was misspelled as feltColor rather than fillColor 
-  constructor(x, y, speed, feltColor, radius) {
+  //////////////// ALSO FIXED = third parameter was misspelled as feltColor rather than fillColor
+  constructor(x, y, speed, fillColor, radius) {
     // Position
     this.x = x;
     this.y = y;
@@ -31,6 +31,7 @@ class Predator {
     this.healthGainPerEat = 1;
     // Display properties
     this.fillColor = fillColor;
+    //////////////// FIXED = radius misspelled as "radios"
     this.radios = this.health; // Radius is defined in terms of health
     // Input properties
     this.appKey = UP_ARROW;
