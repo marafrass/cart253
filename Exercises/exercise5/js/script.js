@@ -41,13 +41,11 @@ let imgWhite;
 // preload()
 //
 // Preloads all the images we're using
-function preload(){
-imgPink = loadImage("assets/images/pinkDonut.PNG");
-imgBrown = loadImage("assets/images/brownDonut.PNG");
-imgWhite = loadImage("assets/images/whiteDonut.PNG");
-
+function preload() {
+  imgPink = loadImage("assets/images/pinkDonut.PNG");
+  imgBrown = loadImage("assets/images/brownDonut.PNG");
+  imgWhite = loadImage("assets/images/whiteDonut.PNG");
 }
-
 
 // setup()
 //
@@ -55,7 +53,7 @@ imgWhite = loadImage("assets/images/whiteDonut.PNG");
 // Creates objects for the players and four donuts
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  playerOne = new Predator(width-100, height / 2, 5, 0, 40, UP_ARROW, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW, 77);
+  playerOne = new Predator(width - 100, height / 2, 5, 0, 40, UP_ARROW, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW, 77);
   playerTwo = new Predator(100, height / 2, 5, 80, 40, 87, 83, 65, 68, 86);
 
   pinkDonut = new Prey(100, 100, 10, color(255, 100, 10), 50, imgPink);
@@ -138,7 +136,7 @@ function gameIntro() {
   textSize(60);
   text("DONUT COUNTY \nDEMAKE", width / 2, height / 2);
   textSize(25);
-  text("click to play", width/2, height/1.4);
+  text("click to play", width / 2, height / 1.4);
   pop();
 }
 
@@ -167,7 +165,7 @@ function mousePressed() {
 function checkScores() {
   if ((playerOne.donutsEaten >= winScore) || (playerTwo.donutsEaten >= winScore)) {
     console.log("game is over");
-    if (playerOne.donutsEaten >= winScore){
+    if (playerOne.donutsEaten >= winScore) {
       winner = "Player One";
     } else {
       winner = "Player Two";

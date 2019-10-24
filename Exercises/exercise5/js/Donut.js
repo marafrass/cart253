@@ -56,15 +56,13 @@ class Prey {
     // Off the left or right
     if (this.x < 0) {
       this.x += width;
-    }
-    else if (this.x > width) {
+    } else if (this.x > width) {
       this.x -= width;
     }
     // Off the top or bottom
     if (this.y < 0) {
       this.y += height;
-    }
-    else if (this.y > height) {
+    } else if (this.y > height) {
       this.y -= height;
     }
   }
@@ -79,7 +77,7 @@ class Prey {
     noStroke();
     fill(this.fillColor);
     this.radius = this.health;
-    image(this.image,this.x,this.y, this.radius * 2, this.radius * 2);
+    image(this.image, this.x, this.y, this.radius * 2, this.radius * 2);
     // ellipse(this.x, this.y, this.radius * 2);
     pop();
   }

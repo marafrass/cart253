@@ -49,7 +49,7 @@ class Predator {
   // velocity appropriately.
   handleInput() {
 
-    this.speed = this.speed - (this.donutsEaten/4);
+    this.speed = this.speed - (this.donutsEaten / 4);
 
     //Sprinting movement (also increases speed of health lost)
     if (keyIsDown(this.sprintKey)) {
@@ -63,21 +63,17 @@ class Predator {
     // Horizontal movement
     if (keyIsDown(this.leftKey)) {
       this.vx = -this.speed;
-    }
-    else if (keyIsDown(this.rightKey)) {
+    } else if (keyIsDown(this.rightKey)) {
       this.vx = this.speed;
-    }
-    else {
+    } else {
       this.vx = 0;
     }
     // Vertical movement
     if (keyIsDown(this.upKey)) {
       this.vy = -this.speed;
-    }
-    else if (keyIsDown(this.downKey)) {
+    } else if (keyIsDown(this.downKey)) {
       this.vy = this.speed;
-    }
-    else {
+    } else {
       this.vy = 0;
     }
   }
@@ -93,9 +89,8 @@ class Predator {
     this.y += this.vy;
 
     // Update health - player can not become smaller than their minimum health!
-    this.health = this.health - this.healthLossPerMove/3;
+    this.health = this.health - this.healthLossPerMove / 3;
     this.health = constrain(this.health, this.minHealth, this.maxHealth);
-
 
     // Handle wrapping
     this.handleWrapping();
@@ -109,15 +104,13 @@ class Predator {
     // Off the left or right
     if (this.x < 0) {
       this.x += width;
-    }
-    else if (this.x > width) {
+    } else if (this.x > width) {
       this.x -= width;
     }
     // Off the top or bottom
     if (this.y < 0) {
       this.y += height;
-    }
-    else if (this.y > height) {
+    } else if (this.y > height) {
       this.y -= height;
     }
   }
@@ -131,6 +124,8 @@ class Predator {
     // Calculate distance from this predator to the donut
     let d = dist(this.x, this.y, donut.x, donut.y);
     // Check if the distance is less than their two radii (an overlap)
+    // ALSO check if the player is bigger than the donut - only then can it fall
+    // into the hole.
     if ((d < this.radius + donut.radius) && (this.radius > donut.radius)) {
       // Increase predator health and constrain it to its possible range
       this.health += this.healthGainPerEat;
@@ -152,19 +147,19 @@ class Predator {
   //
   //Check if players are overlapping, and in that case, make the one with more donutsEaten grow
   //And the other shrink
-  handleFighting(player){
-        //Check distance between players
-        let d = dist(this.x, this.y, player.x, player.y);
-        //Check if this distance is shorter than the radius of the players
-        if (d < this.radius + player.radius) {
-          // If this player has more donutsEaten, make it grow further and
-          // shrink the other player
-          if (this.donutsEaten > player.donutsEaten) {
-            this.health += this.healthGainPerEat/3;
-            player.health -= player.healthGainPerEat/3;
-          }
-        }
-}
+  handleFighting(player) {
+    //Check distance between players
+    let d = dist(this.x, this.y, player.x, player.y);
+    //Check if this distance is shorter than the radius of the players
+    if (d < this.radius + player.radius) {
+      // If this player has more donutsEaten, make it grow further and
+      // shrink the other player
+      if (this.donutsEaten > player.donutsEaten) {
+        this.health += this.healthGainPerEat / 3;
+        player.health -= player.healthGainPerEat / 3;
+      }
+    }
+  }
 
   // display
   //
@@ -179,12 +174,14 @@ class Predator {
     //Create number in middle of circle showing the current player score
     textSize(this.radius);
     fill(255);
-    textAlign(CENTER,CENTER);
-    text(this.donutsEaten, this.x,this.y);
+    textAlign(CENTER, CENTER);
+    text(this.donutsEaten, this.x, this.y);
     pop();
   }
-
-
+  
+  // reset();
+  //
+  //Reset size and score for the predator.
   reset() {
     this.health = this.startingHealth;
     this.donutsEaten = 0;
