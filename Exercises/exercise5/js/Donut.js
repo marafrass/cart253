@@ -1,6 +1,6 @@
-// Prey
+// DONUT
 //
-// A class that represents a simple prey that moves
+// A class that represents a simple donut that moves
 // on screen based on a noise() function. It can move around
 // the screen and be consumed by Predator objects.
 
@@ -10,7 +10,7 @@ class Prey {
   //
   // Sets the initial values for the Predator's properties
   // Either sets default values or uses the arguments provided
-  constructor(x, y, speed, fillColor, radius) {
+  constructor(x, y, speed, fillColor, radius, image) {
     // Position
     this.x = x;
     this.y = y;
@@ -27,6 +27,7 @@ class Prey {
     // Display properties
     this.fillColor = fillColor;
     this.radius = this.health;
+    this.image = image;
   }
 
   // move
@@ -49,7 +50,7 @@ class Prey {
 
   // handleWrapping
   //
-  // Checks if the prey has gone off the canvas and
+  // Checks if the donut has gone off the canvas and
   // wraps it to the other side if so
   handleWrapping() {
     // Off the left or right
@@ -70,14 +71,16 @@ class Prey {
 
   // display
   //
-  // Draw the prey as an ellipse on the canvas
-  // with a radius the same size as its current health.
+  // Draw the donut as a donut because I'm not about to fuck with dont existence
+  // with a radius-based size the same size as its current health.
   display() {
     push();
+    imageMode(CENTER, CENTER);
     noStroke();
     fill(this.fillColor);
     this.radius = this.health;
-    ellipse(this.x, this.y, this.radius * 2);
+    image(this.image,this.x,this.y, this.radius * 2, this.radius * 2);
+    // ellipse(this.x, this.y, this.radius * 2);
     pop();
   }
 

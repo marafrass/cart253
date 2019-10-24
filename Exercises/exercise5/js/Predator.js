@@ -22,15 +22,15 @@ class Predator {
     this.standardSpeed = speed;
     // Health properties
     this.startingHealth = radius;
-    this.minHealth = 5;
+    this.minHealth = 31;
     this.maxHealth = 130;
     this.health = this.startingHealth; // Must be AFTER defining this.startingHealth
-    this.healthLossPerMove = 0.2;
+    this.healthLossPerMove = 0.4;
     this.standardHealthLossPerMove = 0.2;
     this.sprintingHealthLossPerMove = 0.6;
     this.healthGainPerEat = 0.5;
     // Score properties
-    this.preyEaten = 0;
+    this.donutsEaten = 0;
 
     // Display properties
     this.fillColor = fillColor;
@@ -48,6 +48,9 @@ class Predator {
   // Checks if an arrow key is pressed and sets the predator's
   // velocity appropriately.
   handleInput() {
+
+    this.speed = this.speed - (this.donutsEaten/4);
+
     //Sprinting movement (also increases speed of health lost)
     if (keyIsDown(this.sprintKey)) {
       this.speed = this.sprintSpeed;
@@ -82,15 +85,18 @@ class Predator {
   // move
   //
   // Updates the position according to velocity
-  // Lowers health (as a cost of living)
+  //
   // Handles wrapping
   move() {
     // Update position, with size (health) affecting speed of movement
     this.x += this.vx;
     this.y += this.vy;
+
     // Update health - player can not become smaller than their minimum health!
     this.health = this.health - this.healthLossPerMove/3;
     this.health = constrain(this.health, this.minHealth, this.maxHealth);
+
+
     // Handle wrapping
     this.handleWrapping();
   }
@@ -119,24 +125,24 @@ class Predator {
   // handleEating
   //
   // Takes a Prey object as an argument and checks if the predator
-  // overlaps it. If so, reduces the prey's health and increases
-  // the predator's. If the prey dies, one point is added to predator, and prey gets reset.
-  handleEating(prey) {
-    // Calculate distance from this predator to the prey
-    let d = dist(this.x, this.y, prey.x, prey.y);
+  // overlaps it. If so, reduces the donut's health and increases
+  // the predator's. If the donut dies, one point is added to predator, and donut gets reset.
+  handleEating(donut) {
+    // Calculate distance from this predator to the donut
+    let d = dist(this.x, this.y, donut.x, donut.y);
     // Check if the distance is less than their two radii (an overlap)
-    if (d < this.radius + prey.radius) {
+    if ((d < this.radius + donut.radius) && (this.radius > donut.radius)) {
       // Increase predator health and constrain it to its possible range
       this.health += this.healthGainPerEat;
       this.health = constrain(this.health, 0, this.maxHealth);
-      // Decrease prey health by the same amount
-      prey.health -= this.healthGainPerEat;
-      // Check if the prey died and reset it if so
-      if (prey.health < 0) {
-        prey.reset();
-        // Add one to the preyEaten score
-        this.preyEaten += 1;
-        console.log(this.preyEaten);
+      // Decrease donut health by the same amount
+      donut.health -= this.healthGainPerEat;
+      // Check if the donut was eaten and reset it if so
+      if (donut.health < 0) {
+        donut.reset();
+        // Add one to the donutsEaten score
+        this.donutsEaten += 1;
+        console.log(this.donutsEaten);
       }
     }
   }
@@ -144,16 +150,16 @@ class Predator {
 
   //handleFighting()
   //
-  //Check if players are overlapping, and in that case, make the one with more preyEaten grow
+  //Check if players are overlapping, and in that case, make the one with more donutsEaten grow
   //And the other shrink
   handleFighting(player){
         //Check distance between players
         let d = dist(this.x, this.y, player.x, player.y);
         //Check if this distance is shorter than the radius of the players
         if (d < this.radius + player.radius) {
-          // If this player has more preyEaten, make it grow further and
+          // If this player has more donutsEaten, make it grow further and
           // shrink the other player
-          if (this.preyEaten > player.preyEaten) {
+          if (this.donutsEaten > player.donutsEaten) {
             this.health += this.healthGainPerEat/3;
             player.health -= player.healthGainPerEat/3;
           }
@@ -172,15 +178,15 @@ class Predator {
     ellipse(this.x, this.y, this.radius * 2);
     //Create number in middle of circle showing the current player score
     textSize(this.radius);
-    fill(0);
+    fill(255);
     textAlign(CENTER,CENTER);
-    text(this.preyEaten, this.x,this.y);
+    text(this.donutsEaten, this.x,this.y);
     pop();
   }
 
 
   reset() {
     this.health = this.startingHealth;
-    this.preyEaten = 0;
+    this.donutsEaten = 0;
   }
 }
