@@ -63,7 +63,8 @@ class Prey {
     //////////////// FIXED = handleWarping was misspelled as handleWrapping
     handleWarping() {
       // Off the left or right
-      if (this.x > 0) {
+      //////////////// FIXED = > should be < since we're checking if it goes below 0
+      if (this.x < 0) {
         this.x += width;
       }
       else if (this.x > width) {
