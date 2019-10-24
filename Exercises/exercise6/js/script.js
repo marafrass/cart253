@@ -60,7 +60,8 @@ function draw() {
 
   // Display all the "animals"
   tiger.display();
-  antelop.display();
+  //////////////// FIXED = antelope was missing an "e" again.
+  antelope.display();
   zebra.disploy();
   b.display();
 }
