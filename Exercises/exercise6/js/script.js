@@ -50,6 +50,8 @@ function draw() {
   // Move all the "animals"
   antelope.move();
   zebra.move();
+  //////////////// FIXED = bee.move(); was not being called
+  bee.move();
 
   // Handle the tiger eating any of the prey
   tiger.handleEating(antelope);
