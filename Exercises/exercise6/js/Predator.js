@@ -73,8 +73,10 @@ class Predator {
   // Handles wrapping
   move() {
     // Update position
-    this.x = this.vx;
-    this.y = this.vy;
+    /////////////// FIXED = the original code set x and y to vx and vy, changed it to instead add vx and vy to
+    // the actual values
+    this.x += this.vx;
+    this.y += this.vy;
     // Update health
     this.health = this.health - this.healthLossPerMove;
     this.health = constrain(this.health, 0, this.maxHealth);
