@@ -1,63 +1,75 @@
-
 class Enemy {
   //Construct location, properties and size
-constructor(x,y){
-  this.size = (windowWidth/20);
-  this.x = x*(this.size*5);
-  this.y = y*(this.size*5);
-
-  this.nextDirection = 0;
-
-  this.nextMoveX = this.x + this.size;
-  this.nextMoveY = this.y + this.size;
-
-}
-
-
-
-
-randomizeDirection(){
-
-
-
-  let directions = [this.size,-this.size*2];
-
-  let randomDirection = floor(random() * directions.length);
-
-  this.nextMoveX = this.x + randomDirection;
-
-
-
-}
-
-//Update all physical variables
-update(){
-    this.size = (windowWidth/20);
+  constructor(x, y) {
+    this.size = windowWidth / 20;
+    this.x = this.size * x;
+    this.y = this.size * y;
+    this.direction = this.size;
     this.nextMoveX = this.x + this.size;
-    this.nextMoveY = this.y + this.size;
+    this.nextMoveY = this.y;
+    this.nextDirectionX = 0;
+    this.nextDirectionY = 0;
+    this.nextMoveY = 0;
+  }
 
 
-}
+  //update()
+  //
+  //Update location of the next tile the enemy will move to
+  update() {
+    this.nextMoveX = this.x + this.nextDirectionX;
+    this.nextMoveY = this.y + this.nextDirectionY;
+  }
 
-// display()
-//
-//draw the sprites for the enemy and location of the next move
-display(){
-  fill(120);
-rect(this.x,this.y,this.size,this.size);
-rect(this.nextMoveX,this.nextMoveY,this.size,this.size);
+  //randomizeDirection()
+  //
+  //Randomize the next tile the enemy will move towards
+  randomizeDirection() {
+    //Create variables to pick randomly from array
+    let directions = [this.size, 0, -this.size];
+    //Pick from the array index and set the next direction on a horizontal axis
+    let randomDirection = floor(random(0, 1) * directions.length);
+    this.nextDirectionX = directions[randomDirection];
+    //Pick from the array index and set the next direction on a vertical axis
+    randomDirection = floor(random(0, 1) * directions.length);
+    this.nextDirectionY = directions[randomDirection];
 
+  }
 
-}
-//move()
-//
-//actually move the enemy based on the next predicted location
-move() {
+  //move()
+  //
+  //Update the position of the enemy based on the predicted tile
+  move() {
+    this.x = this.nextMoveX;
+    this.y = this.nextMoveY;
 
-  this.x = this.nextMoveX;
-  this.y = this.nextMoveY;
+  }
 
-}
+  //display()
+  //
+  //Display both enemy and their next predicted movement
+  display() {
+    fill(120);
+    rect(this.x, this.y, this.size, this.size);
+    fill(color(255, 0, 0, 120));
+    rect(this.nextMoveX, this.nextMoveY, this.size, this.size);
+
+  }
+
+  // handleWrapping(){
+  //
+  //   if (this.nextMoveX < 0){
+  //     this.nextMoveX+windowWidth;
+  //   } else if (this.nextMoveX > windowWidth){
+  //     this.nextMoveX - windowWidth;
+  //   } else if (this.nextMoveY < 0){
+  //     this.nextMoveY + windowHeight;
+  //   } else if (this.nextMoveY > 0){
+  //     this.nextMoveY - windowHeight;
+  //   }
+  //
+  //
+  // }
 
 
 }

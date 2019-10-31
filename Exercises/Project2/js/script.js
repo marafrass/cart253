@@ -1,33 +1,42 @@
 function setup() {
   createCanvas(windowWidth, windowWidth * 0.5);
-
+  //Create player
   player = new Player();
-  //enemy = new Enemy(1, 1);
-
+  //Create enemies
+  enemy = new Enemy(floor(random(0, 20)), floor(random(1, 10)));
 
 
 }
-
+  //draw()
+  //
+  //Call all functions we want to call
 function draw() {
   background(255);
   drawGrid();
   player.display();
   player.handleInput();
 
-  // enemy.display();
-  // enemy.update();
+  enemy.display();
+  enemy.update();
 
-
-
-}
-
-function mouseClicked(){
-player.move();
+  //call ghostbusters
+  ghostBusters();
 
 }
 
 
-//draw the playing grid
+//mouseClicked();
+//
+//Update whenever we click the mouse
+function mouseClicked() {
+  player.move();
+  enemy.move();
+  enemy.randomizeDirection();
+}
+
+//drawGrid()
+//
+//Draw the playing grid
 function drawGrid() {
   let tileSize = windowWidth / 20;
 
@@ -45,6 +54,12 @@ function drawGrid() {
     gridHeight += tileSize;
   }
 
-
+//ghostBusters()
+//
+//Create a function just so we can call ghostBusters() in every frame
+//because we really should. Happy belated Halloween!
+function ghostBusters(){
+  console.log("These are the people you are going to call")
+}
 
 }
