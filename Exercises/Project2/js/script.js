@@ -1,9 +1,45 @@
+
+let enemies = [];
+let standardEnemy;
+
+let pawn;
+let board;
+
+
+function preload(){
+
+  pawn = loadImage("assets/images/pawn.png");
+  board = loadImage("assets/images/board.png");
+
+
+}
+
+
 function setup() {
-  createCanvas(windowWidth, windowWidth * 0.5);
+  createCanvas(windowWidth, windowWidth * 0.4);
   //Create player
   player = new Player();
   //Create enemies
-  enemy = new Enemy(floor(random(0, 20)), floor(random(1, 10)));
+  enemy1 = new Enemy(floor(random(0, 20)), floor(random(0, 10)));
+  enemies.push(enemy1);
+  enemy2 = new Enemy(floor(random(0, 20)), floor(random(0, 10)));
+  enemies.push(enemy2);
+  enemy3 = new Enemy(floor(random(0, 20)), floor(random(0, 10)));
+  enemies.push(enemy3);
+  enemy4 = new Enemy(floor(random(0, 20)), floor(random(0, 10)));
+  enemies.push(enemy4);
+  enemy5 = new Enemy(floor(random(0, 20)), floor(random(0, 10)));
+  enemies.push(enemy5);
+  enemy6 = new Enemy(floor(random(0, 20)), floor(random(0, 10)));
+  enemies.push(enemy6);
+  enemy7 = new Enemy(floor(random(0, 20)), floor(random(0, 10)));
+  enemies.push(enemy7);
+  enemy8 = new Enemy(floor(random(0, 20)), floor(random(0, 10)));
+  enemies.push(enemy8);
+  enemy9 = new Enemy(floor(random(0, 20)), floor(random(0, 10)));
+  enemies.push(enemy9);
+  enemy10 = new Enemy(floor(random(0, 20)), floor(random(0, 10)));
+  enemies.push(enemy10);
 
 
 }
@@ -11,16 +47,20 @@ function setup() {
   //
   //Call all functions we want to call
 function draw() {
-  background(255);
+  image(board,0,0,windowWidth,(windowWidth*0.5));
   drawGrid();
   player.display();
   player.handleInput();
 
-  enemy.display();
-  enemy.update();
 
-  //call ghostbusters
-  ghostBusters();
+//Call all display and movement functions in the enemies
+  for (let i = 0; i < enemies.length; i++) {
+    enemies[i].update();
+    enemies[i].display();
+  }
+
+  // //call ghostbusters
+  // ghostBusters();
 
 }
 
@@ -30,8 +70,10 @@ function draw() {
 //Update whenever we click the mouse
 function mouseClicked() {
   player.move();
-  enemy.move();
-  enemy.randomizeDirection();
+    for (let i = 0; i < enemies.length; i++) {
+  enemies[i].move();
+  enemies[i].randomizeDirection();
+}
 }
 
 //drawGrid()
@@ -54,12 +96,10 @@ function drawGrid() {
     gridHeight += tileSize;
   }
 
-//ghostBusters()
-//
-//Create a function just so we can call ghostBusters() in every frame
-//because we really should. Happy belated Halloween!
-function ghostBusters(){
-  console.log("These are the people you are going to call")
-}
+//function ghostBusters(){
+// console.log("You are going to call them")
+// //Happy Belated Halloween!
+//}
+
 
 }

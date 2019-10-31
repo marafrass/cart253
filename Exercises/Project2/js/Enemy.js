@@ -19,6 +19,7 @@ class Enemy {
   update() {
     this.nextMoveX = this.x + this.nextDirectionX;
     this.nextMoveY = this.y + this.nextDirectionY;
+
   }
 
   //randomizeDirection()
@@ -43,6 +44,7 @@ class Enemy {
     this.x = this.nextMoveX;
     this.y = this.nextMoveY;
 
+
   }
 
   //display()
@@ -50,7 +52,8 @@ class Enemy {
   //Display both enemy and their next predicted movement
   display() {
     fill(120);
-    rect(this.x, this.y, this.size, this.size);
+    image(pawn, this.x,this.y,this.size,this.size);
+    // rect(this.x, this.y, this.size, this.size);
     fill(color(255, 0, 0, 120));
     rect(this.nextMoveX, this.nextMoveY, this.size, this.size);
 
@@ -58,14 +61,17 @@ class Enemy {
 
   // handleWrapping(){
   //
-  //   if (this.nextMoveX < 0){
-  //     this.nextMoveX+windowWidth;
-  //   } else if (this.nextMoveX > windowWidth){
-  //     this.nextMoveX - windowWidth;
-  //   } else if (this.nextMoveY < 0){
-  //     this.nextMoveY + windowHeight;
-  //   } else if (this.nextMoveY > 0){
-  //     this.nextMoveY - windowHeight;
+  //   if (this.x < 0){
+  //     this.x+windowWidth;
+  //   }
+  //   if (this.x> windowWidth){
+  //     this.x - windowWidth;
+  //   }
+  //   if (this.y < 0){
+  //     this.y + windowHeight;
+  //   }
+  //   if (this.y > 0){
+  //     this.y - windowHeight;
   //   }
   //
   //
