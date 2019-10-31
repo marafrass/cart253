@@ -1,11 +1,8 @@
-
-
-
 function setup() {
-  createCanvas(windowWidth, windowWidth*0.4);
+  createCanvas(windowWidth, windowWidth * 0.5);
 
-  player = new Predator();
-
+  player = new Player();
+  //enemy = new Enemy(1, 1);
 
 
 
@@ -17,18 +14,27 @@ function draw() {
   player.display();
   player.handleInput();
 
+  // enemy.display();
+  // enemy.update();
+
 
 
 }
 
+function mouseClicked(){
+player.move();
+
+}
+
+
 //draw the playing grid
 function drawGrid() {
-    let tileSize = windowWidth/20;
+  let tileSize = windowWidth / 20;
 
   // set grid dimensions based on tilesize
   let gridWidth = tileSize;
   let gridHeight = tileSize;
-// Draw vertical lines
+  // Draw vertical lines
   for (let i = 0; gridWidth < width; i++) {
     line(gridWidth, 0, gridWidth, height);
     gridWidth += tileSize;
