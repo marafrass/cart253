@@ -41,6 +41,7 @@ class Enemy {
   //
   //Update the position of the enemy based on the predicted tile
   move() {
+
     this.x = this.nextMoveX;
     this.y = this.nextMoveY;
 

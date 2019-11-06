@@ -6,6 +6,11 @@ let pawn;
 let board;
 
 
+  let numberOfPawns = 10;
+  let pawns = [];
+
+
+
 function preload(){
 
   pawn = loadImage("assets/images/pawn.png");
@@ -14,49 +19,38 @@ function preload(){
 
 }
 
-
+//setup()
+//
+//Set up player, enemies, and targets
 function setup() {
   createCanvas(windowWidth, windowWidth * 0.4);
   //Create player
   player = new Player();
-  //Create enemies
-  enemy1 = new Enemy(floor(random(0, 20)), floor(random(0, 10)));
-  enemies.push(enemy1);
-  enemy2 = new Enemy(floor(random(0, 20)), floor(random(0, 10)));
-  enemies.push(enemy2);
-  enemy3 = new Enemy(floor(random(0, 20)), floor(random(0, 10)));
-  enemies.push(enemy3);
-  enemy4 = new Enemy(floor(random(0, 20)), floor(random(0, 10)));
-  enemies.push(enemy4);
-  enemy5 = new Enemy(floor(random(0, 20)), floor(random(0, 10)));
-  enemies.push(enemy5);
-  enemy6 = new Enemy(floor(random(0, 20)), floor(random(0, 10)));
-  enemies.push(enemy6);
-  enemy7 = new Enemy(floor(random(0, 20)), floor(random(0, 10)));
-  enemies.push(enemy7);
-  enemy8 = new Enemy(floor(random(0, 20)), floor(random(0, 10)));
-  enemies.push(enemy8);
-  enemy9 = new Enemy(floor(random(0, 20)), floor(random(0, 10)));
-  enemies.push(enemy9);
-  enemy10 = new Enemy(floor(random(0, 20)), floor(random(0, 10)));
-  enemies.push(enemy10);
 
+  // Create pawns based on numberOfPawns wanted
+  for (let i = 0; i < numberOfPawns; i++) {
+    let x = floor(random(0, 20));
+    let y = floor(random(0, 10));
+    let newPawn = new Enemy(x,y);
+    console.log("pawn created");
+    pawns.push(newPawn);
+  }
 
 }
   //draw()
   //
-  //Call all functions we want to call
+  //Call all functions we want to call during gameplay
 function draw() {
-  image(board,0,0,windowWidth,(windowWidth*0.5));
+
   drawGrid();
   player.display();
   player.handleInput();
 
 
 //Call all display and movement functions in the enemies
-  for (let i = 0; i < enemies.length; i++) {
-    enemies[i].update();
-    enemies[i].display();
+  for (let i = 0; i < pawns.length; i++) {
+    pawns[i].update();
+    pawns[i].display();
   }
 
   // //call ghostbusters
@@ -70,9 +64,9 @@ function draw() {
 //Update whenever we click the mouse
 function mouseClicked() {
   player.move();
-    for (let i = 0; i < enemies.length; i++) {
-  enemies[i].move();
-  enemies[i].randomizeDirection();
+    for (let i = 0; i < pawns.length; i++) {
+  pawns[i].move();
+  pawns[i].randomizeDirection();
 }
 }
 
@@ -80,8 +74,10 @@ function mouseClicked() {
 //
 //Draw the playing grid
 function drawGrid() {
+  //Draw background tiles
+  image(board,0,0,windowWidth,(windowWidth*0.5));
+  //Set tile size based on window size 
   let tileSize = windowWidth / 20;
-
   // set grid dimensions based on tilesize
   let gridWidth = tileSize;
   let gridHeight = tileSize;
