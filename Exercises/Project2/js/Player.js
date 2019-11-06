@@ -17,10 +17,13 @@ class Player {
   //
   //Display sprite for player and location where you've selected to move next
   display() {
-    fill(0);
-    rect(this.x, this.y, this.size, this.size);
-    fill(255, 0, 0, 30);
-    rect(this.nextMoveX, this.nextMoveY, this.size, this.size);
+    push();
+
+    image(imgPlayer, this.x, this.y, this.size, this.size);
+
+    tint(255,120);
+    image(imgPlayer, this.nextMoveX, this.nextMoveY, this.size, this.size);
+    pop();
   }
 
 

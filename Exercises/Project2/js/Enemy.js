@@ -52,11 +52,16 @@ class Enemy {
   //
   //Display both enemy and their next predicted movement
   display() {
+    push();
     fill(120);
-    image(pawn, this.x,this.y,this.size,this.size);
+    image(imgPawn, this.x,this.y,this.size,this.size);
     // rect(this.x, this.y, this.size, this.size);
     fill(color(255, 0, 0, 120));
-    rect(this.nextMoveX, this.nextMoveY, this.size, this.size);
+    tint(255, 126);
+    image(imgPawn, this.nextMoveX, this.nextMoveY, this.size, this.size);
+
+
+    pop();
 
   }
 

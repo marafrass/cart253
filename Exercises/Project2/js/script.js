@@ -1,20 +1,31 @@
+let isGameRunning = false;
+let isGameOver = false;
 
 let enemies = [];
 let standardEnemy;
 
-let pawn;
-let board;
+let numberOfPawns = 10;
+let pawns = [];
 
+let imgPlayer;
+let imgPawn;
+let imgBoard;
 
-  let numberOfPawns = 10;
-  let pawns = [];
+let imgLoseScreen;
+let imgIntroScreen;
+let imgWinScreen;
+let imgKing;
 
+function preload() {
+  imgPlayer = loadImage("assets/images/player.png");
 
+  imgPawn = loadImage("assets/images/pawn.png");
+  imgKing = loadImage("assets/images/king.png")
+  imgBoard = loadImage("assets/images/board.png");
+  imgIntroScreen = loadImage("assets/images/introScreen.png");
+  imgLoseScreen = loadImage("assets/images/loseScreen.png");
+  imgWinScreen = loadImage("assets/images/winScreen.png");
 
-function preload(){
-
-  pawn = loadImage("assets/images/pawn.png");
-  board = loadImage("assets/images/board.png");
 
 
 }
@@ -31,43 +42,65 @@ function setup() {
   for (let i = 0; i < numberOfPawns; i++) {
     let x = floor(random(0, 20));
     let y = floor(random(0, 10));
-    let newPawn = new Enemy(x,y);
+    let newPawn = new Enemy(x, y);
     console.log("pawn created");
     pawns.push(newPawn);
   }
 
 }
-  //draw()
-  //
-  //Call all functions we want to call during gameplay
+//draw()
+//
+//Call all functions we want to call during gameplay
 function draw() {
+  if (!isGameOver && !isGameRunning) {
+    image(imgIntroScreen, 0, 0, windowWidth, windowHeight);
+  } else if (isGameOver) {
+    image(imgEndScreen, 0, 0);
+  } else {
+    gamePlay();
+
+  }
+}
+
+
+
+
+
+
+//gamePlay();
+//
+//Handle all the functions of the actual gameplay
+function gamePlay() {
 
   drawGrid();
   player.display();
   player.handleInput();
 
-
-//Call all display and movement functions in the enemies
+  //Call all display and movement functions in the enemies
   for (let i = 0; i < pawns.length; i++) {
     pawns[i].update();
     pawns[i].display();
   }
 
-  // //call ghostbusters
-  // ghostBusters();
-
 }
-
 
 //mouseClicked();
 //
 //Update whenever we click the mouse
 function mouseClicked() {
-  player.move();
+  if (!isGameRunning) {
+    isGameRunning = true;
+  } else if (isGameOver) {
+
+  } else {
     for (let i = 0; i < pawns.length; i++) {
-  pawns[i].move();
-  pawns[i].randomizeDirection();
-}
+      pawns[i].move();
+      pawns[i].randomizeDirection();
+    }
+
+    player.move();
+
+  }
 }
 
 //drawGrid()
@@ -75,8 +108,8 @@ function mouseClicked() {
 //Draw the playing grid
 function drawGrid() {
   //Draw background tiles
-  image(board,0,0,windowWidth,(windowWidth*0.5));
-  //Set tile size based on window size 
+  image(imgBoard, 0, 0, windowWidth, (windowWidth * 0.5));
+  //Set tile size based on window size
   let tileSize = windowWidth / 20;
   // set grid dimensions based on tilesize
   let gridWidth = tileSize;
@@ -91,11 +124,5 @@ function drawGrid() {
     line(0, gridHeight, width, gridHeight);
     gridHeight += tileSize;
   }
-
-//function ghostBusters(){
-// console.log("You are going to call them")
-// //Happy Belated Halloween!
-//}
-
 
 }
