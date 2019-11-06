@@ -26,8 +26,6 @@ function preload() {
   imgLoseScreen = loadImage("assets/images/loseScreen.png");
   imgWinScreen = loadImage("assets/images/winScreen.png");
 
-
-
 }
 
 //setup()
@@ -46,6 +44,8 @@ function setup() {
     console.log("pawn created");
     pawns.push(newPawn);
   }
+
+  king = new King(floor(random(0, 20)),floor(random(0, 10)))
 
 }
 //draw()
@@ -81,6 +81,10 @@ function gamePlay() {
     pawns[i].update();
     pawns[i].display();
   }
+
+  king.display();
+
+  player.handleScoring(king);
 
 }
 

@@ -20,7 +20,6 @@ class Player {
     push();
 
     image(imgPlayer, this.x, this.y, this.size, this.size);
-
     tint(255,120);
     image(imgPlayer, this.nextMoveX, this.nextMoveY, this.size, this.size);
     pop();
@@ -54,6 +53,13 @@ class Player {
     if (keyIsDown(DOWN_ARROW)) {
       this.nextMoveX = this.x;
       this.nextMoveY = this.y + this.size;
+    }
+  }
+
+  handleScoring(target){
+    let d = dist(this.x,this.y, target.x,target.y);
+    if (d < 5) {
+      target.reset();
     }
   }
 
