@@ -1,5 +1,5 @@
-class Enemy {
-  //Construct location, properties and size
+class Kid {
+  //Construct location, properties and size, along with next predicted location
   constructor(x, y) {
     this.size = windowWidth / 20;
     this.x = this.size * x;
@@ -15,7 +15,7 @@ class Enemy {
 
   //update()
   //
-  //Update location of the next tile the enemy will move to
+  //Update location of the next tile the kid will move to
   update() {
 
     this.nextMoveX = this.x + this.nextDirectionX;
@@ -26,7 +26,7 @@ class Enemy {
 
   //randomizeDirection()
   //
-  //Randomize the next tile the enemy will move towards
+  //Randomize the next tile the kid will move towards
   randomizeDirection() {
     //Create variables to pick randomly from array
     let directions = [this.size, 0, -this.size];
@@ -43,65 +43,68 @@ class Enemy {
 
   //move()
   //
-  //Update the position of the enemy based on the predicted tile
+  //Update the position of the kid based on the predicted tile
   move() {
-
-    //Move the enemy to the determined location
+    //Move the kid to the determined location
     this.x = this.nextMoveX;
     this.y = this.nextMoveY;
-    //Check in case the enemy touches the edges of the map,
+    //Check in case the kid touches the edges of the map,
     // if so, prevent them from leaving.
     this.handleConstraints();
   }
 
   //display()
   //
-  //Display both enemy and their next predicted movement
+  //Display both kid and their next predicted movement
   display() {
     push();
-
     fill(120);
-    image(imgKid, this.x,this.y,this.size,this.size);
-    // rect(this.x, this.y, this.size, this.size);
+    image(imgKid, this.x, this.y, this.size, this.size);
     fill(color(255, 0, 0, 120));
+    // set sprite for the predicted location of the kid to be slightly opaque
     tint(255, 126);
     image(imgKid, this.nextMoveX, this.nextMoveY, this.size, this.size);
     pop();
 
   }
-
-  handleConstraints(){
-    if (this.x < 0){
+  //handleConstraints()
+  //
+  //Make the kid turn around or remain close to the map whenever it reaches an
+  //edge of the window
+  handleConstraints() {
+    if (this.x < 0) {
       this.x = 0;
     }
-    if (this.x > width-1){
+    if (this.x > width - 1) {
       this.x = width - this.size;
     }
-    if (this.y < 0){
+    if (this.y < 0) {
       this.y = 0;
     }
-    if (this.y > height-1){
+    if (this.y > height - 1) {
       this.y = height - this.size;
     }
 
 
   }
 
-  reset(){
-    this.x = (floor(random(0, 20)))*this.size;
-    this.y = (floor(random(0, 10)))*this.size;
+  //reset()
+  //
+  //Reset location of the kid whenever this is called
+  reset() {
+    this.x = (floor(random(0, 20))) * this.size;
+    this.y = (floor(random(0, 10))) * this.size;
 
   }
-
-
-  handleDamage(player){
-    let d = dist(this.x,this.y, player.x, player.y);
+  //Checks collision with the player, and if so, adds to player's sentence
+  //and resets location of this instance of kid
+  handleDamage(player) {
+    let d = dist(this.x, this.y, player.x, player.y);
     if (d < 5) {
       this.reset();
-      player.health -= 5;
-      console.log("took damage");
+      player.sentence += 2;
+      console.log("2 days added to community service, current sentence is " + player.sentence + " days");
     }
-
   }
 
 }

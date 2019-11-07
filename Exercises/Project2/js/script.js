@@ -1,8 +1,34 @@
+// COMMUNITY SERVICE
+// by Martin Hanses
+//
+// Known for his appearances in TURTLES HAGGLING and TURTLES IN MINNEAPOLIS,
+// Hieronymous the Turtle stars in this adventure of based on two core beliefs
+// of conservative politicians - avoiding children and only picking up trash
+// when forced to by the state.
+//
+// This is a turn-based game in which you, as Hieronymous the turtle, have to
+// clean up the forest and the beach - 10 massive pieces of trash. The area is
+// overrun by children, however, and you must do your best to not run into them.
+// If you do, more days will be added to your community service duty!
+//
+// CONTROLS:
+// Use arrow keys to set a direction for Hieronymous
+// Use Left Shift to execute the move you've planned
+// Click to begin the game or restart it!
+//
+
+//VARIABLES
+//
+//This is a section for variables. They're happy together.
+
 //Set variables for checking what state the game is in
 let isGameRunning = false;
 let isGameOver = false;
 
-//Set variables for spawning enemies
+//Set amount of points needed for endgame
+let winScore = 10;
+
+//Set variables for spawning kids
 let numberOfKids = 15;
 let kids = [];
 
@@ -21,13 +47,16 @@ let audioGameMusic;
 let audioPickUpTrash;
 let audioPlayerMove;
 
+// VARIABLES END SECTION HERE
+
+
 //preload()
 //
 //Preload all music and image assets for quick access
 function preload() {
   // load player avatar
   imgPlayer = loadImage("assets/images/imgPlayer.png");
-  //load enemy and target avatars
+  //load enemy and trash avatars
   imgKid = loadImage("assets/images/imgKid.PNG");
   imgTrash = loadImage("assets/images/imgTrash.png")
   // load the game background
@@ -36,20 +65,21 @@ function preload() {
   imgIntroScreen = loadImage("assets/images/introScreen.png");
   imgEndScreen = loadImage("assets/images/endScreen.png");
 
-  //Load sound effects
-  audioGameMusic = loadSound("assets/sounds/gameMusic.wav")
-  audioPlayerMove = loadSound("assets/sounds/playerMove.wav")
-  audioPickUpTrash = loadSound("assets/sounds/pickupTrash.wav")
+  //Load sound effects and music
+  audioGameMusic = createAudio("assets/sounds/gameMusic.wav")
+  audioPlayerMove = createAudio("assets/sounds/playerMove.wav")
+  audioPickUpTrash = createAudio("assets/sounds/pickupTrash.wav")
 
 }
 
 //setup()
 //
-//Set up player, enemies, and targets
+//Set up player, enemies, and trash
 function setup() {
   createCanvas(windowWidth, windowWidth * 0.4);
   setupActors();
 }
+
 //setupActors()
 //
 //Set up players, kids and trash for a new game
@@ -60,13 +90,10 @@ function setupActors() {
   // Create kids based on numberOfKids wanted using a for loop,
   // add them to the array
   for (let i = 0; i < numberOfKids; i++) {
-    let x = floor(random(0, 20));
-    let y = floor(random(0, 10));
-    let newKid = new Enemy(x, y);
-    kids.push(newKid);
+    spawnKid();
   }
-  // Create target on a random location within the center tiles of the game
-  trash = new King(floor(random(0, 15)), floor(random(2, 7)));
+  // Create trash on a random location within the center tiles of the game
+  trash = new Trash(floor(random(0, 15)), floor(random(2, 7)));
 
 }
 
@@ -76,10 +103,10 @@ function setupActors() {
 function draw() {
   //If game has just started, show intro screen
   if (!isGameOver && !isGameRunning) {
-    image(imgIntroScreen, 0, 0, windowWidth, windowWidth* 0.4);
+    image(imgIntroScreen, 0, 0, windowWidth, windowWidth * 0.4);
     // if game is over, show end screen
   } else if (isGameOver) {
-    image(imgEndScreen, 0, 0);
+    image(imgEndScreen, 0, 0, windowWidth, windowWidth * 0.4);
     //Otherwise, go to gameplay
   } else {
     gamePlay();
@@ -96,8 +123,12 @@ function gamePlay() {
   //Update and display player and check for input
   player.display();
   player.handleInput();
-  //Check for collisions with target and handle scoring
+  //Check for collisions with trash and handle scoring
   player.handleScoring(trash);
+  //Display trash
+  trash.display();
+  //Check the score of the player to determine if they've won yet
+  checkScores();
 
   //Call all display and movement functions in the enemies
   for (let i = 0; i < kids.length; i++) {
@@ -105,8 +136,7 @@ function gamePlay() {
     kids[i].display();
     kids[i].handleDamage(player)
   }
-  //Display target
-  trash.display();
+
 }
 
 //mouseClicked();
@@ -115,10 +145,11 @@ function gamePlay() {
 function mouseClicked() {
   if (!isGameRunning) {
     isGameRunning = true;
+    playMusic();
   } else if (isGameOver) {
     resetGame();
   } else {
-    resetGame();
+    // Nothing here
   }
 }
 
@@ -132,7 +163,6 @@ function keyPressed() {
       //Update movement and random direction among all the kids
       kids[i].move();
       kids[i].randomizeDirection();
-
     }
   }
 }
@@ -158,6 +188,15 @@ function drawMap() {
     line(0, gridHeight, width, gridHeight);
     gridHeight += tileSize;
   }
+}
+
+//playMusic();
+//
+//Loops the main music of the game
+function playMusic() {
+  audioGameMusic.stop();
+  audioGameMusic.volume(0.2);
+  audioGameMusic.loop();
 
 }
 
@@ -168,6 +207,29 @@ function drawMap() {
 function resetGame() {
   for (let i = 0; i < kids.length; i++) {
     kids[i].reset();
-    player.score = 0;
+    player.reset();
+    isGameOver = false;
   }
+}
+
+//checkScores();
+//
+//Check what the player score is and changes game state accordingly
+function checkScores() {
+  if (player.score >= winScore) {
+    isGameOver = true;
+  }
+}
+
+//spawnKid()
+//
+//Code for creating a single child (hahaha)
+function spawnKid(){
+  //randomize location
+  let x = floor(random(0, 20));
+  let y = floor(random(0, 10));
+  //Create kid based on the variable
+  let newKid = new Kid(x, y);
+  //place the new kid in the kids array 
+  kids.push(newKid);
 }
