@@ -1,5 +1,9 @@
 // COMMUNITY SERVICE
-// by Martin Hanses
+//
+// All code, art and audio by Martin Hanses
+// (Except for background music, by Martin Holm, which is a track I commissioned
+// previously and own the rights to - "Clammy Quest")
+//
 //
 // Known for his appearances in TURTLES HAGGLING and TURTLES IN MINNEAPOLIS,
 // Hieronymous the Turtle stars in this adventure of based on two core beliefs
@@ -46,6 +50,8 @@ let imgIntroScreen;
 let audioGameMusic;
 let audioPickUpTrash;
 let audioPlayerMove;
+let audioPlayerHit;
+let audioFanfare;
 
 // VARIABLES END SECTION HERE
 
@@ -66,9 +72,11 @@ function preload() {
   imgEndScreen = loadImage("assets/images/endScreen.png");
 
   //Load sound effects and music
-  audioGameMusic = createAudio("assets/sounds/gameMusic.wav")
-  audioPlayerMove = createAudio("assets/sounds/playerMove.wav")
-  audioPickUpTrash = createAudio("assets/sounds/pickupTrash.wav")
+  audioGameMusic = loadSound("assets/sounds/gameMusic.wav")
+  audioPlayerMove = loadSound("assets/sounds/playerMove.wav")
+  audioPlayerHit = loadSound("assets/sounds/playerHit.wav")
+  audioPickUpTrash = loadSound("assets/sounds/pickupTrash.wav")
+  audioFanfare = loadSound("assets/sounds/fanfare.wav")
 
 }
 
@@ -106,7 +114,7 @@ function draw() {
     image(imgIntroScreen, 0, 0, windowWidth, windowWidth * 0.4);
     // if game is over, show end screen
   } else if (isGameOver) {
-    image(imgEndScreen, 0, 0, windowWidth, windowWidth * 0.4);
+    displayEndScreen();
     //Otherwise, go to gameplay
   } else {
     gamePlay();
@@ -195,7 +203,7 @@ function drawMap() {
 //Loops the main music of the game
 function playMusic() {
   audioGameMusic.stop();
-  audioGameMusic.volume(0.2);
+  audioGameMusic.setVolume(0.2);
   audioGameMusic.loop();
 
 }
@@ -216,6 +224,15 @@ function resetGame() {
 //
 //Check what the player score is and changes game state accordingly
 function checkScores() {
+
+  // When player reaches the winScore, play the fanfare and immediately
+  // add another point to only play the sound effect once
+
+  if (player.score === winScore){
+      audioFanfare.play();
+      player.score += 1;
+  }
+  //If the player has reached the winning score, set game state to gameover
   if (player.score >= winScore) {
     isGameOver = true;
   }
@@ -224,12 +241,38 @@ function checkScores() {
 //spawnKid()
 //
 //Code for creating a single child (hahaha)
-function spawnKid(){
+function spawnKid() {
+
   //randomize location
   let x = floor(random(0, 20));
   let y = floor(random(0, 10));
   //Create kid based on the variable
   let newKid = new Kid(x, y);
-  //place the new kid in the kids array 
+  //place the new kid in the kids array
   kids.push(newKid);
+}
+
+//displayEndScreen()
+//
+//Displays the end screen along with messages based on the number of times
+//the player bumped into kids
+function displayEndScreen() {
+
+  //display image
+  image(imgEndScreen, 0, 0, windowWidth, windowWidth * 0.4);
+  //Set text size in push-pop
+  push();
+  textSize(19);
+  //If player hits zero kids, display this
+  if (player.sentence === 0) {
+    text("And you did it without bumping into children! \nAmazing job, Hieronymous! Back to \nloitering!", 0 + windowWidth / 20, windowWidth / 5);
+  //If player hits less than three kids, display this
+} else if (player.sentence < 107){
+    text("And you only added " + player.sentence + " days \n to your community service!", 0 + windowWidth / 20, windowWidth / 5);
+  } else {
+    //otherwise, display this message
+    text("But holy crap Hieronymous you added " + player.sentence + " days \nto your community service. Embarrassing.", 0 + windowWidth / 20, windowWidth / 5);
+  }
+  pop();
+
 }

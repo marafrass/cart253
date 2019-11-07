@@ -96,14 +96,19 @@ class Kid {
     this.y = (floor(random(0, 10))) * this.size;
 
   }
+
   //Checks collision with the player, and if so, adds to player's sentence
   //and resets location of this instance of kid
+  //Additionally, play sound for player getting hit
   handleDamage(player) {
     let d = dist(this.x, this.y, player.x, player.y);
     if (d < 5) {
       this.reset();
-      player.sentence += 2;
-      console.log("2 days added to community service, current sentence is " + player.sentence + " days");
+      player.sentence += 36;
+      console.log("36 days added to community service, current sentence is " + player.sentence + " days");
+      //Stop any potential instance of the sound effect and play it again
+      audioPlayerHit.stop();
+      audioPlayerHit.play();
     }
   }
 

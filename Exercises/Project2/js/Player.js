@@ -76,7 +76,7 @@ class Player {
       audioPickUpTrash.stop();
 
       //play trash pickup audio
-      audioPickUpTrash.volume(0.5);
+      audioPickUpTrash.setVolume(0.5);
       audioPickUpTrash.play();
 
       //Create a new child (jesus christ martin go back and rephrase this at
@@ -91,7 +91,8 @@ class Player {
   reset() {
     this.x = this.size * 3;
     this.y = this.size * 2;
-    player.score = 0;
+    this.score = 0;
+    this.sentence = 0;
   }
 
 }
