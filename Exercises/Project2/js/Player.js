@@ -2,7 +2,7 @@
 
 
 class Player {
-//Define position, size, properties and next predicted move
+  //Define position, size, properties and next predicted move
   constructor() {
     this.size = windowWidth / 20;
     this.x = this.size * 3;
@@ -10,21 +10,21 @@ class Player {
     this.direction = this.size;
     this.nextMoveX = this.x + this.size;
     this.nextMoveY = this.y;
-
+    this.score = 0;
+    this.health = 20;
   }
 
   //display()
   //
   //Display sprite for player and location where you've selected to move next
   display() {
-    push();
 
+    push();
     image(imgPlayer, this.x, this.y, this.size, this.size);
-    tint(255,120);
+    tint(255, 120);
     image(imgPlayer, this.nextMoveX, this.nextMoveY, this.size, this.size);
     pop();
   }
-
 
   //move()
   //
@@ -56,10 +56,12 @@ class Player {
     }
   }
 
-  handleScoring(target){
-    let d = dist(this.x,this.y, target.x,target.y);
+  handleScoring(target) {
+    let d = dist(this.x, this.y, target.x, target.y);
     if (d < 5) {
       target.reset();
+      this.score += 1;
+      console.log("Score: " + this.score);
     }
   }
 

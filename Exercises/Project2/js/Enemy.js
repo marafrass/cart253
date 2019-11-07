@@ -17,8 +17,10 @@ class Enemy {
   //
   //Update location of the next tile the enemy will move to
   update() {
+
     this.nextMoveX = this.x + this.nextDirectionX;
     this.nextMoveY = this.y + this.nextDirectionY;
+
 
   }
 
@@ -35,6 +37,8 @@ class Enemy {
     randomDirection = floor(random(0, 1) * directions.length);
     this.nextDirectionY = directions[randomDirection];
 
+
+
   }
 
   //move()
@@ -42,10 +46,12 @@ class Enemy {
   //Update the position of the enemy based on the predicted tile
   move() {
 
+    //Move the enemy to the determined location
     this.x = this.nextMoveX;
     this.y = this.nextMoveY;
-
-
+    //Check in case the enemy touches the edges of the map,
+    // if so, prevent them from leaving.
+    this.handleConstraints();
   }
 
   //display()
@@ -53,35 +59,49 @@ class Enemy {
   //Display both enemy and their next predicted movement
   display() {
     push();
+
     fill(120);
-    image(imgPawn, this.x,this.y,this.size,this.size);
+    image(imgKid, this.x,this.y,this.size,this.size);
     // rect(this.x, this.y, this.size, this.size);
     fill(color(255, 0, 0, 120));
     tint(255, 126);
-    image(imgPawn, this.nextMoveX, this.nextMoveY, this.size, this.size);
-
-
+    image(imgKid, this.nextMoveX, this.nextMoveY, this.size, this.size);
     pop();
 
   }
 
-  // handleWrapping(){
-  //
-  //   if (this.x < 0){
-  //     this.x+windowWidth;
-  //   }
-  //   if (this.x> windowWidth){
-  //     this.x - windowWidth;
-  //   }
-  //   if (this.y < 0){
-  //     this.y + windowHeight;
-  //   }
-  //   if (this.y > 0){
-  //     this.y - windowHeight;
-  //   }
-  //
-  //
-  // }
+  handleConstraints(){
+    if (this.x < 0){
+      this.x = 0;
+    }
+    if (this.x > width-1){
+      this.x = width - this.size;
+    }
+    if (this.y < 0){
+      this.y = 0;
+    }
+    if (this.y > height-1){
+      this.y = height - this.size;
+    }
 
+
+  }
+
+  reset(){
+    this.x = (floor(random(0, 20)))*this.size;
+    this.y = (floor(random(0, 10)))*this.size;
+
+  }
+
+
+  handleDamage(player){
+    let d = dist(this.x,this.y, player.x, player.y);
+    if (d < 5) {
+      this.reset();
+      player.health -= 5;
+      console.log("took damage");
+    }
+
+  }
 
 }

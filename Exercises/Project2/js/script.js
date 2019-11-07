@@ -1,30 +1,45 @@
+//Set variables for checking what state the game is in
 let isGameRunning = false;
 let isGameOver = false;
 
-let enemies = [];
-let standardEnemy;
+//Set variables for spawning enemies
+let numberOfKids = 15;
+let kids = [];
 
-let numberOfPawns = 10;
-let pawns = [];
-
+//Set image variables for player and all enemies
 let imgPlayer;
-let imgPawn;
-let imgBoard;
+let imgKid;
+let imgBackground;
+let imgTrash;
 
-let imgLoseScreen;
+//Set intro and end screen variables
+let imgEndScreen;
 let imgIntroScreen;
-let imgWinScreen;
-let imgKing;
 
+//Set audio and music variables
+let audioGameMusic;
+let audioPickUpTrash;
+let audioPlayerMove;
+
+//preload()
+//
+//Preload all music and image assets for quick access
 function preload() {
-  imgPlayer = loadImage("assets/images/player.png");
-
-  imgPawn = loadImage("assets/images/pawn.png");
-  imgKing = loadImage("assets/images/king.png")
-  imgBoard = loadImage("assets/images/board.png");
+  // load player avatar
+  imgPlayer = loadImage("assets/images/imgPlayer.png");
+  //load enemy and target avatars
+  imgKid = loadImage("assets/images/imgKid.PNG");
+  imgTrash = loadImage("assets/images/imgTrash.png")
+  // load the game background
+  imgBackground = loadImage("assets/images/imgBackground.png");
+  //Load intro and end screens
   imgIntroScreen = loadImage("assets/images/introScreen.png");
-  imgLoseScreen = loadImage("assets/images/loseScreen.png");
-  imgWinScreen = loadImage("assets/images/winScreen.png");
+  imgEndScreen = loadImage("assets/images/endScreen.png");
+
+  //Load sound effects
+  audioGameMusic = loadSound("assets/sounds/gameMusic.wav")
+  audioPlayerMove = loadSound("assets/sounds/playerMove.wav")
+  audioPickUpTrash = loadSound("assets/sounds/pickupTrash.wav")
 
 }
 
@@ -33,86 +48,101 @@ function preload() {
 //Set up player, enemies, and targets
 function setup() {
   createCanvas(windowWidth, windowWidth * 0.4);
+  setupActors();
+}
+//setupActors()
+//
+//Set up players, kids and trash for a new game
+function setupActors() {
   //Create player
   player = new Player();
 
-  // Create pawns based on numberOfPawns wanted
-  for (let i = 0; i < numberOfPawns; i++) {
+  // Create kids based on numberOfKids wanted using a for loop,
+  // add them to the array
+  for (let i = 0; i < numberOfKids; i++) {
     let x = floor(random(0, 20));
     let y = floor(random(0, 10));
-    let newPawn = new Enemy(x, y);
-    console.log("pawn created");
-    pawns.push(newPawn);
+    let newKid = new Enemy(x, y);
+    kids.push(newKid);
   }
-
-  king = new King(floor(random(0, 20)),floor(random(0, 10)))
+  // Create target on a random location within the center tiles of the game
+  trash = new King(floor(random(0, 15)), floor(random(2, 7)));
 
 }
+
 //draw()
 //
 //Call all functions we want to call during gameplay
 function draw() {
+  //If game has just started, show intro screen
   if (!isGameOver && !isGameRunning) {
-    image(imgIntroScreen, 0, 0, windowWidth, windowHeight);
+    image(imgIntroScreen, 0, 0, windowWidth, windowWidth* 0.4);
+    // if game is over, show end screen
   } else if (isGameOver) {
     image(imgEndScreen, 0, 0);
+    //Otherwise, go to gameplay
   } else {
     gamePlay();
-
   }
 }
-
-
-
-
-
 
 //gamePlay();
 //
 //Handle all the functions of the actual gameplay
 function gamePlay() {
+  //draw the grid
+  drawMap();
 
-  drawGrid();
+  //Update and display player and check for input
   player.display();
   player.handleInput();
+  //Check for collisions with target and handle scoring
+  player.handleScoring(trash);
 
   //Call all display and movement functions in the enemies
-  for (let i = 0; i < pawns.length; i++) {
-    pawns[i].update();
-    pawns[i].display();
+  for (let i = 0; i < kids.length; i++) {
+    kids[i].update();
+    kids[i].display();
+    kids[i].handleDamage(player)
   }
-
-  king.display();
-
-  player.handleScoring(king);
-
+  //Display target
+  trash.display();
 }
 
 //mouseClicked();
 //
-//Update whenever we click the mouse
+//Update whenever we click the mouse, depending on state of the game
 function mouseClicked() {
   if (!isGameRunning) {
     isGameRunning = true;
   } else if (isGameOver) {
-
+    resetGame();
   } else {
-    for (let i = 0; i < pawns.length; i++) {
-      pawns[i].move();
-      pawns[i].randomizeDirection();
+    resetGame();
+  }
+}
+
+//keyPressed()
+//
+//When pressing the turn key, shift, make all actors move
+function keyPressed() {
+  if (keyCode === SHIFT) {
+    for (let i = 0; i < kids.length; i++) {
+      player.move();
+      //Update movement and random direction among all the kids
+      kids[i].move();
+      kids[i].randomizeDirection();
+
     }
-
-    player.move();
-
   }
 }
 
 //drawGrid()
 //
-//Draw the playing grid
-function drawGrid() {
+//Draw the playing grid and background
+function drawMap() {
   //Draw background tiles
-  image(imgBoard, 0, 0, windowWidth, (windowWidth * 0.5));
+  image(imgBackground, 0, 0, windowWidth, (windowWidth * 0.5));
   //Set tile size based on window size
   let tileSize = windowWidth / 20;
   // set grid dimensions based on tilesize
@@ -129,4 +159,15 @@ function drawGrid() {
     gridHeight += tileSize;
   }
 
+}
+
+//resetGame()
+//
+//when game is over and clicked, reset the whole game including variables,
+//positions and setup
+function resetGame() {
+  for (let i = 0; i < kids.length; i++) {
+    kids[i].reset();
+    player.score = 0;
+  }
 }
