@@ -16,6 +16,8 @@
 // clean up the forest and the beach - 10 massive pieces of trash. The area is
 // overrun by children, however, and you must do your best to not run into them.
 // If you do, more days will be added to your community service duty!
+// This game gets progressively harder every time you play - you can refresh
+// the browser window to reset the difficulty!
 //
 // CONTROLS:
 // - Use arrow keys to set a direction for Hieronymous
