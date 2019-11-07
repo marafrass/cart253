@@ -1,14 +1,16 @@
 // COMMUNITY SERVICE
 //
 // All code, art and audio by Martin Hanses
-// (Except for background music, by Martin Holm, which is a track I commissioned
+// (Except for:
+// Background music, by Martin Holm, which is a track I commissioned
 // previously and own the rights to - "Clammy Quest")
+// Fanfare, by user "joepayne", https://freesound.org/people/joepayne/sounds/413203/
 //
-//
-// Known for his appearances in TURTLES HAGGLING and TURTLES IN MINNEAPOLIS,
-// Hieronymous the Turtle stars in this adventure of based on two core beliefs
+// DESCRIPTION:
+// Known for his appearances in TURTLES HAGGLING and TURTLES NOT HAGGLING,
+// Hieronymous the Turtle stars in this adventure based on two core beliefs
 // of conservative politicians - avoiding children and only picking up trash
-// when forced to by the state.
+// when the state forces you to.
 //
 // This is a turn-based game in which you, as Hieronymous the turtle, have to
 // clean up the forest and the beach - 10 massive pieces of trash. The area is
@@ -16,11 +18,12 @@
 // If you do, more days will be added to your community service duty!
 //
 // CONTROLS:
-// Use arrow keys to set a direction for Hieronymous
-// Use Left Shift to execute the move you've planned
-// Click to begin the game or restart it!
-//
+// - Use arrow keys to set a direction for Hieronymous
+// - Use Left Shift to execute the move you've planned
+// - Click to begin the game or restart it!
 
+
+///////////////////////////////////////////////////////////
 //VARIABLES
 //
 //This is a section for variables. They're happy together.
@@ -36,7 +39,7 @@ let winScore = 10;
 let numberOfKids = 15;
 let kids = [];
 
-//Set image variables for player and all enemies
+//Set image variables for player and all kids
 let imgPlayer;
 let imgKid;
 let imgBackground;
@@ -54,7 +57,7 @@ let audioPlayerHit;
 let audioFanfare;
 
 // VARIABLES END SECTION HERE
-
+///////////////////////////////////////////////////////////
 
 //preload()
 //
@@ -82,7 +85,7 @@ function preload() {
 
 //setup()
 //
-//Set up player, enemies, and trash
+//Set up player, kids, and trash
 function setup() {
   createCanvas(windowWidth, windowWidth * 0.4);
   setupActors();
@@ -102,7 +105,6 @@ function setupActors() {
   }
   // Create trash on a random location within the center tiles of the game
   trash = new Trash(floor(random(0, 15)), floor(random(2, 7)));
-
 }
 
 //draw()
@@ -111,7 +113,7 @@ function setupActors() {
 function draw() {
   //If game has just started, show intro screen
   if (!isGameOver && !isGameRunning) {
-    image(imgIntroScreen, 0, 0, windowWidth, windowWidth * 0.4);
+    displayIntroScreen();
     // if game is over, show end screen
   } else if (isGameOver) {
     displayEndScreen();
@@ -138,7 +140,7 @@ function gamePlay() {
   //Check the score of the player to determine if they've won yet
   checkScores();
 
-  //Call all display and movement functions in the enemies
+  //Call all display and movement functions for kids in the kids array
   for (let i = 0; i < kids.length; i++) {
     kids[i].update();
     kids[i].display();
@@ -227,10 +229,9 @@ function checkScores() {
 
   // When player reaches the winScore, play the fanfare and immediately
   // add another point to only play the sound effect once
-
-  if (player.score === winScore){
-      audioFanfare.play();
-      player.score += 1;
+  if (player.score === winScore) {
+    audioFanfare.play();
+    player.score += 1;
   }
   //If the player has reached the winning score, set game state to gameover
   if (player.score >= winScore) {
@@ -242,7 +243,6 @@ function checkScores() {
 //
 //Code for creating a single child (hahaha)
 function spawnKid() {
-
   //randomize location
   let x = floor(random(0, 20));
   let y = floor(random(0, 10));
@@ -252,12 +252,19 @@ function spawnKid() {
   kids.push(newKid);
 }
 
+//displayIntroScreen()
+//
+//Displays the intro screen
+function displayIntroScreen() {
+  image(imgIntroScreen, 0, 0, windowWidth, windowWidth * 0.4);
+
+}
+
 //displayEndScreen()
 //
 //Displays the end screen along with messages based on the number of times
 //the player bumped into kids
 function displayEndScreen() {
-
   //display image
   image(imgEndScreen, 0, 0, windowWidth, windowWidth * 0.4);
   //Set text size in push-pop
@@ -265,13 +272,13 @@ function displayEndScreen() {
   textSize(19);
   //If player hits zero kids, display this
   if (player.sentence === 0) {
-    text("And you did it without bumping into children! \nAmazing job, Hieronymous! Back to \nloitering!", 0 + windowWidth / 20, windowWidth / 5);
-  //If player hits less than three kids, display this
-} else if (player.sentence < 107){
-    text("And you only added " + player.sentence + " days \n to your community service!", 0 + windowWidth / 20, windowWidth / 5);
+    text("It took you only " + player.timeSpent + " hours and you did it \nwithout bumping into children! \nAmazing job, Hieronymous! Back to \nloitering!", 0 + windowWidth / 20, windowWidth / 5);
+    //If player hits less than three kids, display this
+  } else if (player.sentence < 107) {
+    text("It took you only " + player.timeSpent + " hours you only added " + player.sentence + " days \n to your community service!", 0 + windowWidth / 20, windowWidth / 5);
   } else {
     //otherwise, display this message
-    text("But holy crap Hieronymous you added " + player.sentence + " days \nto your community service. Embarrassing.", 0 + windowWidth / 20, windowWidth / 5);
+    text("It took you " + player.timeSpent + " hours... \n...but holy crap Hieronymous you added " + player.sentence + " days \nto your community service. Embarrassing.", 0 + windowWidth / 20, windowWidth / 5);
   }
   pop();
 

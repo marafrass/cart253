@@ -2,6 +2,8 @@
 
 
 class Player {
+  //constructor()
+  //
   //Define position, size, properties and next predicted move
   constructor() {
     this.size = windowWidth / 20;
@@ -12,6 +14,7 @@ class Player {
     this.nextMoveY = this.y;
     this.score = 0;
     this.sentence = 0;
+    this.timeSpent = 0;
   }
 
   //display()
@@ -33,8 +36,13 @@ class Player {
   move() {
     this.x = this.nextMoveX;
     this.y = this.nextMoveY;
+    //Play audio for movement
     audioPlayerMove.stop();
     audioPlayerMove.play();
+    //Check if player is out of bounds and in that case, adjust
+    this.handleConstraints();
+    //add an "hour" to time spent
+    this.timeSpent += 1;
   }
 
   //handleInput()
@@ -87,12 +95,31 @@ class Player {
 
   //reset();
   //
-  //Resets location and score for the player
+  //Resets location, sentence and score for the player
   reset() {
     this.x = this.size * 3;
     this.y = this.size * 2;
     this.score = 0;
     this.sentence = 0;
+    this.timeSpent = 0;
+  }
+
+  //handleConstraints()
+  //
+  //Keep the player within the tiles on the map
+  handleConstraints() {
+    if (this.x < 0) {
+      this.x = 0;
+    }
+    if (this.x > width - 1) {
+      this.x = width - this.size;
+    }
+    if (this.y < 0) {
+      this.y = 0;
+    }
+    if (this.y > height - 1) {
+      this.y = height - this.size;
+    }
   }
 
 }

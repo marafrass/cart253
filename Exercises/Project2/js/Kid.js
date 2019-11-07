@@ -1,4 +1,6 @@
 class Kid {
+  //constructor()
+  //
   //Construct location, properties and size, along with next predicted location
   constructor(x, y) {
     this.size = windowWidth / 20;
@@ -11,7 +13,6 @@ class Kid {
     this.nextDirectionY = 0;
     this.nextMoveY = 0;
   }
-
 
   //update()
   //
