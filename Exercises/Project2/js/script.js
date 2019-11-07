@@ -66,7 +66,7 @@ function preload() {
   // load player avatar
   imgPlayer = loadImage("assets/images/imgPlayer.png");
   //load enemy and trash avatars
-  imgKid = loadImage("assets/images/imgKid.PNG");
+  imgKid = loadImage("assets/images/imgKid.png");
   imgTrash = loadImage("assets/images/imgTrash.png")
   // load the game background
   imgBackground = loadImage("assets/images/imgBackground.png");
