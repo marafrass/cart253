@@ -5,6 +5,7 @@ class Player {
   //constructor()
   //
   //Define position, size, properties and next predicted move
+  // also define score, sentence and timeSpent for flavor text 
   constructor() {
     this.size = windowWidth / 20;
     this.x = this.size * 3;
