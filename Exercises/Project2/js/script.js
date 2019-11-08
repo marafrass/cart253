@@ -277,7 +277,7 @@ function displayEndScreen() {
     text("It took you only " + player.timeSpent + " hours and you did it \nwithout bumping into children! \nAmazing job, Hieronymous! Back to \nloitering!", 0 + windowWidth / 20, windowWidth / 5);
     //If player hits less than three kids, display this
   } else if (player.sentence < 107) {
-    text("It took you only " + player.timeSpent + " hours you only added " + player.sentence + " days \n to your community service!", 0 + windowWidth / 20, windowWidth / 5);
+    text("It took you only " + player.timeSpent + " hours \nand you only added " + player.sentence + " days \n to your community service!", 0 + windowWidth / 20, windowWidth / 5);
   } else {
     //otherwise, display this message
     text("It took you " + player.timeSpent + " hours... \n...but holy crap Hieronymous you added " + player.sentence + " days \nto your community service. Embarrassing.", 0 + windowWidth / 20, windowWidth / 5);
