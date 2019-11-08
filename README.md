@@ -13,3 +13,5 @@
 [Exercise 4: Territorial Pong](https://marafrass.github.io/cart253/Exercises/exercise4/index.html)
 
 [Project 1: Elephant Parenting Simulator 2019](https://marafrass.github.io/cart253/Exercises/Project%201/index.html)
+
+[Project 2: Community Service](https://marafrass.github.io/cart253/Exercises/Project2/index.html)
