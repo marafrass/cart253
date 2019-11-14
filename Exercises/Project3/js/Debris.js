@@ -1,45 +1,68 @@
 class Debris {
-  constructor(x,y,size){
-  this.x = x;
-  this.y = y;
-  this.size = size;
-  this.alpha = 0;
+  constructor(x, y, size) {
+    this.x = x;
+    this.y = y;
+    this.size = size;
+    this.alpha = 0;
   }
 
+  //update()
+  //
+  //Update direction, position and speed of the debris
+  update() {
+    let flyByX;
+    let flyByY;
 
-update(){
-
-  let d = dist(this.x,this.y,mouseX,mouseY);
-
-  if (mouseX < this.x){
-    this.x += d/100;
-  } else {
-    this.x -= d/100;
-  }
-
-
-    if (mouseY < this.y){
-      this.y += d/100;
+    if (this.x < player.targetX) {
+      flyByX = player.targetX - this.x;
     } else {
-      this.y -= d/100;
+      flyByX = this.x - player.targetX;
     }
 
-  this.alpha +=4;
-  fill(255,255,255,this.alpha);
-  rect(this.x,this.y,this.size,this.size);
-  console.log("star");
+    if (this.y < player.targetY) {
+      flyByY = player.targetY - this.y;
+    } else {
+      flyByY = this.y - player.targetY;
+    }
 
-  if (this.x > windowWidth || this.x < 0 || this.y < 0 || this.y > windowHeight){
-    this.reset();
+    if (player.targetX < this.x) {
+      this.x += flyByX / 50 + this.size / 3;
+    } else {
+      this.x -= flyByX / 50 + this.size / 3;
+    }
+
+    if (player.targetY < this.y) {
+      this.y += flyByY / 50 + this.size / 3;
+    } else {
+      this.y -= flyByY / 50 + this.size / 3;
+    }
+    this.size += 0.01;
+    this.alpha += 3;
+    fill(255, 255, 255, this.alpha);
+    noStroke();
+    rect(this.x, this.y, this.size, this.size);
+    console.log("star");
+
+
+    //When the debris leaves the screen, reset it
+    if (this.x > windowWidth || this.x < 0 || this.y < 0 || this.y > windowHeight) {
+      this.reset();
+    }
+    //When the debris gets too close to the camera/too big, reset it
+    if (this.size > 30) {
+      this.reset();
+    }
+
   }
 
-}
-
-reset(){
-  this.alpha = 0;
-  this.x = floor(random(0, 640));
-  this.y = floor(random(0, 480));
-}
-
+  //reset()
+  //
+  //Reset position, size and alpha of the debris
+  reset() {
+    this.alpha = 0;
+    this.size = 4;
+    this.x = floor(random(0, windowWidth));
+    this.y = floor(random(0, windowHeight));
+  }
 
 }
