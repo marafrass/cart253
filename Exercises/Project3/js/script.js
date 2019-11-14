@@ -2,7 +2,7 @@
 //by Martin Hanses
 //
 // Use arrow keys to fly (you control the ship, not the reticule)
-// Press shift to fire laser 
+// Press shift to fire laser
 
 
 //Create debris variables
@@ -58,8 +58,6 @@ function setup() {
 //call all functions we use
 function draw() {
 
-  background(0);
-
   backgroundSprite.display();
   backgroundSprite.handleInput();
 
@@ -76,5 +74,9 @@ function draw() {
   player.display();
   player.handleInput();
   player.handleShooting();
+
+  push();
+  text("Use the arrow keys to fly \nand shift to fire lasers!",50,50);
+  pop();
 
 }
