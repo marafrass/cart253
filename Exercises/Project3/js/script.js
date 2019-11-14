@@ -9,6 +9,9 @@ let reticule;
 let earth;
 let backgroundSprite;
 
+//create enemy
+let enemy;
+
 //preload()
 //
 //Preload images and sounds
@@ -27,6 +30,8 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   player = new Player();
   backgroundSprite = new Background();
+
+  enemy = new Enemy();
 
   for (let i = 0; i < 100; i++) {
 
@@ -51,6 +56,9 @@ function draw() {
   backgroundSprite.display();
   backgroundSprite.handleInput();
 
+  enemy.display();
+  enemy.update();
+
 
 
   for (let i = 0; i < stars.length; i++) {
@@ -60,5 +68,6 @@ function draw() {
   player.update();
   player.display();
   player.handleInput();
+  player.handleShooting();
 
 }

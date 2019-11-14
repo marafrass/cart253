@@ -19,16 +19,16 @@ class Background {
   //Handle the movement of the background
   handleInput() {
     if (keyIsDown(LEFT_ARROW)) {
-      this.vx = -0.4;
+      this.vx = -0.6;
     } else if (keyIsDown(RIGHT_ARROW)) {
-      this.vx = 0.4;
+      this.vx = 0.6;
     } else {
       this.vx = 0;
     }
     if (keyIsDown(UP_ARROW)) {
-      this.vy = -0.4;
+      this.vy = -0.6;
     } else if (keyIsDown(DOWN_ARROW)) {
-      this.vy = 0.4;
+      this.vy = 0.6;
     } else {
       this.vy = 0;
     }

@@ -1,9 +1,9 @@
 class Player {
   constructor() {
     this.x = windowWidth / 2;
-    this.y = windowHeight / 2;
+    this.y = windowHeight / 1.5;
     this.targetX = this.x;
-    this.targetY = this.y - 50;
+    this.targetY = this.y - 100;
     this.size = 75;
     this.vx = 0;
     this.vy = 0;
@@ -26,16 +26,26 @@ class Player {
   handleInput() {
 
     if (keyIsDown(LEFT_ARROW)) {
-      this.vx = -3;
+      this.vx += -0.5;
     } else if (keyIsDown(RIGHT_ARROW)) {
-      this.vx = 3;
+      this.vx += 0.5;
+    } else if (this.vx <= 0) {
+      this.vx += 0.5;
+    } else if (this.vx >= 0.5) {
+      this.vx -= 0.5;
     } else {
       this.vx = 0;
     }
+
+
     if (keyIsDown(UP_ARROW)) {
-      this.vy = -3;
+      this.vy += -0.5;
     } else if (keyIsDown(DOWN_ARROW)) {
-      this.vy = 3;
+      this.vy += 0.5;
+    } else if (this.vy <= 0) {
+      this.vy += 0.5;
+    } else if (this.vy >= 0.5) {
+      this.vy -= 0.5;
     } else {
       this.vy = 0;
     }
@@ -58,13 +68,28 @@ class Player {
   display() {
     push();
     imageMode(CENTER, CENTER);
-    rectMode(CENTER,CENTER);
-    fill(100, 100, 100);
+    rectMode(CENTER, CENTER);
     image(reticule, this.targetX, this.targetY, 50, 50);
 
-    fill(100, 100, 100);
+    fill(255, 255, 255);
     rect(this.x, this.y, this.size, this.size);
     pop();
   }
+
+  //handleShooting()
+  //
+  //Checks if lasers collide with enemy when shots are fired
+  handleShooting() {
+
+    let d = dist(player.targetX,player.targetY, enemy.x,enemy.y )
+
+    if (d < 20){
+      enemy.fillcolor += 20;
+
+    }
+
+
+  }
+
 
 }
