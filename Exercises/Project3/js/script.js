@@ -1,3 +1,10 @@
+//WIP SPACEGAME
+//by Martin Hanses
+//
+// Use arrow keys to fly (you control the ship, not the reticule)
+// Press shift to fire laser 
+
+
 //Create debris variables
 let star;
 let stars = [];
