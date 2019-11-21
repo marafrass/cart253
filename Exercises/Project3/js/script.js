@@ -64,8 +64,6 @@ function draw() {
   enemy.display();
   enemy.update();
 
-
-
   for (let i = 0; i < stars.length; i++) {
     stars[i].update();
   }

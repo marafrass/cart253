@@ -9,6 +9,8 @@ class Background {
   //
   //display the background image and update its position
   display() {
+
+    this.constrainEdges();
     this.x += this.vx;
     this.y += this.vy;
     image(earth, this.x, this.y, windowWidth * 1.4, windowHeight * 1.4);
@@ -34,5 +36,21 @@ class Background {
     }
 
   }
+
+constrainEdges(){
+  if (this.y > 0){
+    this.y = 0;
+  }
+  if (this.y < -200){
+    this.y = -200;
+  }
+  if (this.x > 0){
+    this.x = 0;
+  }
+  if (this.x < -200){
+    this.x = -200;
+  }
+}
+
 
 }
