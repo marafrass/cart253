@@ -21,18 +21,17 @@ class Background {
   //Handle the movement of the background
   handleInput() {
     if (keyIsDown(LEFT_ARROW)) {
-      this.vx = -0.6;
-    } else if (keyIsDown(RIGHT_ARROW)) {
-      this.vx = 0.6;
-    } else {
-      this.vx = 0;
+      this.vx += -0.01;
     }
+     if (keyIsDown(RIGHT_ARROW)) {
+      this.vx += 0.01;
+    }
+
     if (keyIsDown(UP_ARROW)) {
-      this.vy = -0.6;
-    } else if (keyIsDown(DOWN_ARROW)) {
-      this.vy = 0.6;
-    } else {
-      this.vy = 0;
+      this.vy += -0.01;
+    }
+    if (keyIsDown(DOWN_ARROW)) {
+      this.vy += 0.01;
     }
 
   }

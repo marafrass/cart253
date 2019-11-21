@@ -19,6 +19,17 @@ let backgroundSprite;
 //create enemy
 let enemy;
 
+
+//Create image variables
+let imgPlayer;
+let imgPlayerBottomLeft;
+let imgPlayerBottomRight;
+let imgPlayerTopLeft;
+let imgPlayerTopRight;
+let imgPlayerRight;
+let imgPlayerLeft;
+let imgPlayerTop;
+let imgPlayerBottom;
 //preload()
 //
 //Preload images and sounds
@@ -26,6 +37,15 @@ function preload() {
 
   reticule = loadImage('assets/images/target.png');
   earth = loadImage('assets/images/earth.png')
+  imgPlayer = loadImage('assets/images/playerShipCenter.png')
+  imgPlayerBottomLeft = loadImage('assets/images/playerShipBottomLeft.png')
+  imgPlayerBottomRight = loadImage('assets/images/playerShipBottomRight.png')
+  imgPlayerTopLeft = loadImage('assets/images/playerShipTopLeft.png')
+  imgPlayerTopRight = loadImage('assets/images/playerShipTopRight.png')
+  imgPlayerLeft = loadImage('assets/images/playerShipLeft.png')
+  imgPlayerRight = loadImage('assets/images/playerShipRight.png')
+  imgPlayerTop = loadImage('assets/images/playerShipTop.png')
+  imgPlayerBottom = loadImage('assets/images/playerShipBottom.png')
 
 }
 

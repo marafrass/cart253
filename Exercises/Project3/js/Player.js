@@ -8,7 +8,7 @@ class Player {
     this.vx = 0;
     this.vy = 0;
 
-    this.bullet = createVector(this.x,this.y);
+    this.bullet = createVector(this.x, this.y);
     this.bulletSize = 10;
 
     this.bulletIsActive = true;
@@ -18,10 +18,19 @@ class Player {
   //
   //Update the position of the player and the reticule
   update() {
+
+    if (this.bulletIsActive === false) {
+      this.bullet.x = this.x;
+      this.bullet.y = this.y;
+    }
+
     this.x += this.vx;
     this.y += this.vy;
     this.targetX -= this.vx;
     this.targetY -= this.vy;
+
+    this.vx = constrain(this.vx, -8, 8);
+    this.vy = constrain(this.vy, -8, 8);
 
     this.constrainToMap();
 
@@ -73,49 +82,73 @@ class Player {
     image(reticule, this.targetX, this.targetY, 50, 50);
 
     fill(255, 255, 255);
-    rect(this.x, this.y, this.size, this.size);
+
+    let currentSprite;
+
+    //If player is on the left of the screen, find the right left sprite
+    if (this.x < windowWidth / 3) {
+      if (this.y > (windowHeight - (windowHeight / 3))) {
+        currentSprite = imgPlayerBottomLeft;
+      } else if (this.y > (windowHeight / 3)) {
+          currentSprite = imgPlayerLeft;
+        } else {
+          currentSprite = imgPlayerTopLeft;
+        }
+    //If player is on the right of the screen, find the right, um, right sprite
+      } else if (this.x > (windowWidth - windowWidth / 3)) {
+          if (this.y > (windowHeight - (windowHeight / 3))) {
+            currentSprite = imgPlayerBottomRight;
+          } else if (this.y > (windowHeight / 3)) {
+              currentSprite = imgPlayerRight;
+            } else {
+              currentSprite = imgPlayerTopRight;
+            }
+    //If player is in the center, find the right sprite
+          } else {
+            if (this.y > (windowHeight - (windowHeight / 3))) {
+              currentSprite = imgPlayerBottom;
+            } else if (this.y > (windowHeight /3)) {
+                currentSprite = imgPlayer;
+              } else {
+                currentSprite = imgPlayerTop;
+              }
+            }
+
+    image(currentSprite, this.x, this.y, this.size*2, this.size);
     pop();
 
-    if (this.bulletIsActive === true){
+    if (this.bulletIsActive === true) {
 
-      let bulletToTarget = dist(this.bullet.x,this.bullet.y,this.targetX,this.targetY);
+      let bulletToTarget = dist(this.bullet.x, this.bullet.y, this.targetX, this.targetY);
 
-      if (bulletToTarget < 10){
+      if (bulletToTarget < 10) {
         this.bulletIsActive = false;
         this.bullet.x = this.x;
         this.bullet.y = this.y;
         this.bulletSize = 10;
+      } else {
+
+        let d = dist(this.x, this.y, this.targetX, this.targetY);
+
+
+        let vecObject = createVector(this.bullet.x, this.bullet.y);
+        let vecTarget = createVector(this.targetX, this.targetY);
+        let vecDesiredVel = vecTarget.sub(vecObject);
+
+        let frameVel = vecDesiredVel.limit(d / 10);
+
+        this.bullet.x += frameVel.x;
+        this.bullet.y += frameVel.y;
+
+        push();
+        strokeWeight(3);
+        stroke(0, 0, 255);
+        rect(this.bullet.x, this.bullet.y, this.bulletSize, this.bulletSize);
+        pop();
+
+        this.bulletSize -= 1;
       }
-          else
-        {
-
-      let d = dist(this.x,this.y,this.targetX,this.targetY);
-
-
-      let vecObject = createVector(this.bullet.x,this.bullet.y);
-      let vecTarget = createVector(this.targetX,this.targetY);
-      let vecDesiredVel = vecTarget.sub(vecObject);
-
-      let frameVel = vecDesiredVel.limit(d/10);
-
-      this.bullet.x += frameVel.x;
-      this.bullet.y += frameVel.y;
-
-
-      push();
-      strokeWeight(3);
-      stroke(0, 0, 255);
-      rect(this.bullet.x,this.bullet.y,this.bulletSize,this.bulletSize);
-      pop();
-
-      this.bulletSize -=1;
-
-
-
-      }
-
     }
-
 
   }
 
@@ -123,36 +156,32 @@ class Player {
   //
   //Checks if lasers collide with enemy when shots are fired
   handleShooting() {
-
     let d = dist(player.targetX, player.targetY, enemy.x, enemy.y)
-
     if (d < 20) {
       enemy.fillcolor += 20;
-
     }
 
+  }
+  //constrainToMap()
+  //
+  //Nudges the player ship to a smaller area of the screen
+  constrainToMap() {
+
+    if (this.x < (windowWidth / 20)) {
+      this.vx += 1;
+    }
+    if (this.x > (windowWidth - windowWidth / 20)) {
+      this.vx -= 1;
+    }
+    if (this.y < (windowHeight / 5)) {
+      this.vy += 1;
+    }
+
+    if (this.y > (windowHeight - windowHeight / 10)) {
+      this.vy -= 1;
+    }
 
   }
-//constrainToMap()
-//
-//Nudges the player ship to a smaller area of the screen
-constrainToMap(){
-
-  if (this.x < (windowWidth/20)){
-    this.vx += 1;
-  }
-  if (this.x > (windowWidth - windowWidth/20)){
-    this.vx -= 1;
-  }
-  if (this.y < (windowHeight/5)){
-    this.vy += 1;
-  }
-
-  if (this.y > (windowHeight - windowHeight/10)){
-    this.vy -= 1;
-  }
-
-}
 
 
 
