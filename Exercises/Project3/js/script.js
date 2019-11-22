@@ -16,11 +16,10 @@ let reticule;
 let earth;
 let backgroundSprite;
 
-//create enemy
+//create enemy variable
 let enemy;
 
-
-//Create image variables
+//Create sprite variables for player
 let imgPlayer;
 let imgPlayerBottomLeft;
 let imgPlayerBottomRight;
@@ -30,6 +29,7 @@ let imgPlayerRight;
 let imgPlayerLeft;
 let imgPlayerTop;
 let imgPlayerBottom;
+
 //preload()
 //
 //Preload images and sounds
@@ -55,20 +55,19 @@ function preload() {
 function setup() {
 
   createCanvas(windowWidth, windowHeight);
+  //Set player and background
   player = new Player();
   backgroundSprite = new Background();
-
+  //create your evil opponent
   enemy = new Enemy();
-
+  //Create stars based on amount set in loop
   for (let i = 0; i < 100; i++) {
-
     //randomize location
     let x = floor(random(0, windowWidth));
     let y = floor(random(0, windowHeight));
-    //Create kid based on the variable
+    //Create star based on the variable
     let newStar = new Debris(x, y, 4);
-    //place the new kid in the kids array
-
+    //place the new star in the stars array
     stars.push(newStar);
 
   }
@@ -77,22 +76,22 @@ function setup() {
 //draw()
 //call all functions we use
 function draw() {
-
+  //Handle background functions
   backgroundSprite.display();
   backgroundSprite.handleInput();
-
+  //Handle enemy functions
   enemy.display();
   enemy.update();
-
+  //handle star debris
   for (let i = 0; i < stars.length; i++) {
     stars[i].update();
   }
-
+  //update all player functions
   player.update();
   player.display();
   player.handleInput();
   player.handleShooting();
-
+  //add WIP instructions to the screen 
   push();
   text("Use the arrow keys to fly \nand shift to fire lasers!",50,50);
   pop();
