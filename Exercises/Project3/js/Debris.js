@@ -49,7 +49,7 @@ class Debris {
       this.reset();
     }
     //When the debris gets too close to the camera/too big, reset it
-    if (this.size > 30) {
+    if (this.size > 40) {
       this.reset();
     }
 
