@@ -13,7 +13,7 @@ class EnemyBullet extends Debris {
     this.alpha = 0;
 
     //set variable for what size causes the bullet to leave the screen
-    this.exitSize = 120;
+    this.exitSize = windowWidth/10;
     //set variable for initial increase of size
     this.sizeIncrease = 0;
   }
@@ -84,7 +84,7 @@ class EnemyBullet extends Debris {
   //reset all variables for the bullet to its starting position
   reset() {
     this.alpha = 0;
-    this.size = 0;
+    this.size = 1;
     //this.x = floor(random(player.targetX - (windowWidth/4), player.targetX + (windowWidth/4)));
     //this.y = floor(random(0, windowHeight));
     this.x = enemy.x;

@@ -1,7 +1,7 @@
 class Debris {
   //constructor()
   //
-  //set all setup variables for the object 
+  //set all setup variables for the object
   constructor(x, y, size) {
     this.x = x;
     this.y = y;
@@ -17,13 +17,15 @@ class Debris {
     let flyByX;
     let flyByY;
 
-
+    //Check where debris is in relation to player target on x axis
+    // (to create illusion of perspective)
     if (this.x < player.targetX) {
       flyByX = player.targetX - this.x;
     } else {
       flyByX = this.x - player.targetX;
     }
-
+    //Check where debris is in relation to player target on y axis
+    // (to create illusion of perspective)
     if (this.y < player.targetY) {
       flyByY = player.targetY - this.y;
     } else {
@@ -31,26 +33,27 @@ class Debris {
     }
 
     //update position of the debris based on location in relation to player
+    //x-axis:
     if (player.targetX < this.x) {
       this.x += flyByX / 50 + this.size / 3;
     } else {
       this.x -= flyByX / 50 + this.size / 3;
     }
-
+    //and y-axis:
     if (player.targetY < this.y) {
       this.y += flyByY / 50 + this.size / 3;
     } else {
       this.y -= flyByY / 50 + this.size / 3;
     }
+    //update size increase and decrease opacity
     this.size += 0.05;
     this.alpha += 3;
+    //draw the star
     fill(255, 255, 255, this.alpha);
     noStroke();
     rect(this.x, this.y, this.size, this.size);
-    console.log("star");
 
-
-    //When the debris leaves the screen, reset it
+    //When the debris leaves the screen,(grows too big) reset it
     if (this.x > windowWidth || this.x < 0 || this.y < 0 || this.y > windowHeight) {
       this.reset();
     }
@@ -58,7 +61,6 @@ class Debris {
     if (this.size > this.exitSize) {
       this.reset();
     }
-
   }
 
   //reset()

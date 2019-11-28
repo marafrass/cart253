@@ -4,6 +4,8 @@ class Enemy{
     this.x = player.targetX;
     this.y = player.targetY;
 
+    this.size = windowWidth/25;
+
     this.vx = 0;
     this.vy = 0;
 
@@ -37,7 +39,7 @@ update(){
 display(){
   push();
   fill(this.fillcolor);
-  rect(this.x,this.y,40,40);
+  rect(this.x,this.y,this.size,this.size);
   pop();
 
 }

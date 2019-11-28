@@ -7,7 +7,7 @@ class Player {
     this.y = windowHeight / 1.5;
     this.targetX = this.x;
     this.targetY = this.y - 100;
-    this.size = 75;
+    this.size = windowWidth/20;
     this.vx = 0;
     this.vy = 0;
     //create variable for what sprite to display
@@ -15,7 +15,7 @@ class Player {
     //create bullet using a vector
     this.bullet = createVector(this.x, this.y);
     this.bulletSize = 10;
-    this.bulletIsActive = true;
+    this.bulletIsActive = false;
     //set player health
     this.health = 100;
 
@@ -44,7 +44,7 @@ class Player {
     this.vy = constrain(this.vy, -8, 8);
     //Keep player within a reasonable playing field
     this.constrainToMap();
-
+    //run all functions within the bullet
     this.handleBullet();
 
   }
@@ -54,21 +54,25 @@ class Player {
   //Handle the input keys to change velocity, and set velovity to balance itself
   //if no keys are pressed
   handleInput() {
-
+    //If pressing left...
     if (keyIsDown(LEFT_ARROW)) {
       this.vx += -0.5;
+      //if pressing right...
     } else if (keyIsDown(RIGHT_ARROW)) {
       this.vx += 0.5;
+      //the following two neutralize the velocity
     } else if (this.vx < 0) {
       this.vx += 0.3;
     } else if (this.vx > 0) {
       this.vx -= 0.3;
     }
-
+    //if pressing up...
     if (keyIsDown(UP_ARROW)) {
       this.vy += -0.5;
+      //if pressing down...
     } else if (keyIsDown(DOWN_ARROW)) {
       this.vy += 0.5;
+      //the following two neutralize the velocity
     } else if (this.vy < 0) {
       this.vy += 0.3;
     } else if (this.vy > 0) {
@@ -91,13 +95,12 @@ class Player {
     imageMode(CENTER, CENTER);
     ellipseMode(CENTER);
     //draw reticule or target
-    image(reticule, this.targetX, this.targetY, 50, 50);
+    image(reticule, this.targetX, this.targetY, this.size, this.size);
     //Find the right sprite to display for the ship, depending on location
     this.findSprite();
     //draw ship based on result in findSprite()
     image(this.currentSprite, this.x, this.y, this.size * 2, this.size);
     pop();
-
   }
 
   //handleShooting()
@@ -111,13 +114,11 @@ class Player {
     }
     //check if collides with enemy bullet when at a certain distance (technically size)
     let dBullet = dist(this.bullet.x, this.bullet.y, enemyBullet.x, enemyBullet.y)
-    if ((dBullet < enemyBullet.size / 2) && this.bulletIsActive === true && this.bulletSize <=5) {
+    if ((dBullet < enemyBullet.size / 2) && this.bulletIsActive === true && this.bulletSize <= 5) {
       //remove one plot point from the enemy
       enemy.plotPoints -= 1;
       enemyBullet.reset();
-
     }
-
   }
 
   //constrainToMap()
@@ -227,12 +228,13 @@ class Player {
     //if player fires gun too much, it overheats and can not be fired until
     //it has recharged
     if (this.energy <= 0) {
+      this.energy = 0;
       this.overHeated = true;
     }
     if (this.overHeated === true) {
       this.energy += 0.5;
     } else if (this.energy < 100) {
-      this.energy += 0.2;
+      this.energy += 0.5;
     }
     if (this.energy >= 100) {
       this.overHeated = false;

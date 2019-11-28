@@ -8,8 +8,8 @@ let gameStarted = false;
 let gameOver = false;
 let gameWon = false;
 
-//TEST FOR POPUP
-let popup;
+//TEST FOR playerHUD
+let playerHUD;
 
 //Create debris array
 let debris = [];
@@ -66,7 +66,7 @@ function preload() {
 //Set up game window and screen
 function setup() {
 
-  createCanvas(windowWidth, windowHeight);
+  createCanvas(windowWidth - 5 , windowHeight - 5);
   //Set player and background
   player = new Player();
   backgroundSprite = new Background();
@@ -84,14 +84,16 @@ function setup() {
   }
   let x = floor(random(0, windowWidth));
   let y = floor(random(0, windowHeight));
-  enemyBullet = new EnemyBullet(x, y, 20);
+  //create an enemy bullet at the position of the enemy
+  enemyBullet = new EnemyBullet(enemy.x, enemy.y, 20);
   debris.push(enemyBullet);
+
+  playerHUD = new HUD();
 }
 
 //draw()
 //call all functions we use
 function draw() {
-
   if (player.health <= 0) {
     handleGameOver();
   } else if (enemy.plotPoints <= 0){
@@ -135,9 +137,10 @@ function handleGameplay() {
   text("Use the arrow keys to fly \nand shift to fire lasers!", 50, 50);
   pop();
 
-  //TEST FOR Popup
-  popup = new Popup();
-  popup.display();
+  //display and set playerHUD
+  playerHUD.setDialogue();
+  playerHUD.display();
+
 
 }
 
@@ -148,7 +151,7 @@ function handleGameIntro() {
   push();
   background(255);
   fill(0);
-  text("click to begin", 50, 50);
+  text("Dont hit the enemy ship, hit the red missile! Click to begin", 50, 50);
   pop();
 }
 
@@ -191,6 +194,7 @@ if (gameOver === true) {
     gameOver = false;
     gameStarted = false;
   }
+  //if the player has won, click to restart the game
   if (gameWon === true){
     player.reset();
     enemy.reset();
