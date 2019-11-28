@@ -1,8 +1,8 @@
 class EnemyBullet extends Debris {
 
-//constructor()
-//
-//set all setup variables for the object
+  //constructor()
+  //
+  //set all setup variables for the object
   constructor(x, y, size) {
     super(x, y, size);
     this.x = x;
@@ -79,9 +79,9 @@ class EnemyBullet extends Debris {
     pop();
   }
 
-//reset()
-//
-//reset all variables for the bullet to its starting position
+  //reset()
+  //
+  //reset all variables for the bullet to its starting position
   reset() {
     this.alpha = 0;
     this.size = 0;
@@ -94,14 +94,15 @@ class EnemyBullet extends Debris {
     this.sizeIncrease = 0;
   }
 
-//handleCollisions()
-//
-//See if the bullet is about to hit the player right before it leaves the screen
+  //handleCollisions()
+  //
+  //See if the bullet is about to hit the player right before it leaves the screen
   handleCollisions() {
     //find distance between player and bullet and if close enough, player takes damage
     //and bullet resets
     let d = dist(player.x, player.y, this.x, this.y)
     if ((d < this.exitSize / 2) && this.size >= (this.exitSize - this.exitSize / 6)) {
+      //take damage
       player.health -= 20;
       this.reset();
     }

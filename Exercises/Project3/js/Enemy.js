@@ -10,6 +10,8 @@ class Enemy{
     this.tx = random(0,10);
     this.ty = random(0,10);
     this.fillcolor = 120;
+    this.maxPlotPoints = 10;
+    this.plotPoints = this.maxPlotPoints;
 
   }
 
@@ -38,6 +40,9 @@ display(){
   rect(this.x,this.y,40,40);
   pop();
 
+}
+reset(){
+  this.plotPoints = this.maxPlotPoints;
 }
 
 

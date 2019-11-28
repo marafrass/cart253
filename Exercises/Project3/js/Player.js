@@ -109,10 +109,13 @@ class Player {
     if (d < 20) {
       enemy.fillcolor += 20;
     }
-    //check if collides with enemy bullet
+    //check if collides with enemy bullet when at a certain distance (technically size)
     let dBullet = dist(this.bullet.x, this.bullet.y, enemyBullet.x, enemyBullet.y)
-    if ((dBullet < enemyBullet.size / 2) && this.bulletIsActive === true) {
+    if ((dBullet < enemyBullet.size / 2) && this.bulletIsActive === true && this.bulletSize <=5) {
+      //remove one plot point from the enemy
+      enemy.plotPoints -= 1;
       enemyBullet.reset();
+
     }
 
   }
@@ -223,20 +226,27 @@ class Player {
 
     //if player fires gun too much, it overheats and can not be fired until
     //it has recharged
-    if (this.energy <= 0){
+    if (this.energy <= 0) {
       this.overHeated = true;
     }
-    if (this.overHeated === true){
+    if (this.overHeated === true) {
       this.energy += 0.5;
-    } else if (this.energy < 100){
+    } else if (this.energy < 100) {
       this.energy += 0.2;
     }
-    if (this.energy >= 100){
+    if (this.energy >= 100) {
       this.overHeated = false;
     }
+    //cap energy at 100
+    constrain(this.energy, -10, 100);
+  }
 
-    constrain(this.energy, -10,100);
-
+  //reset()
+  //
+  //reset player variables on restart of game
+  reset() {
+    this.health = 100;
+    this.energy = 100;
   }
 
 }

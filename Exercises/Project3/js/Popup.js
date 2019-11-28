@@ -19,7 +19,7 @@ class Popup {
     rect(this.x, this.y, this.width, this.height);
     //display text for popup
     fill(255);
-    text(player.health + " that one is health and this one is energy " + player.energy, this.x + windowWidth / 8, this.y + (windowHeight / 10));
+    text(player.health + " that one is health and this one is energy " + player.energy + " and " + enemy.plotPoints, this.x + windowWidth / 8, this.y + (windowHeight / 10));
     //display image of speaker
     fill(255);
     rect(this.x + windowWidth / 100, this.y + (windowHeight / 30), 80, 80);

@@ -4,10 +4,12 @@
 // Use arrow keys to fly (you control the ship, not the reticule)
 // Press shift to fire laser
 
+let gameStarted = false;
+let gameOver = false;
+let gameWon = false;
 
 //TEST FOR POPUP
 let popup;
-
 
 //Create debris array
 let debris = [];
@@ -35,7 +37,6 @@ let imgPlayerLeft;
 let imgPlayerTop;
 let imgPlayerBottom;
 
-
 //TESTING
 let imgSpeakerPortrait;
 
@@ -55,11 +56,9 @@ function preload() {
   imgPlayerRight = loadImage('assets/images/playerShipRight.png')
   imgPlayerTop = loadImage('assets/images/playerShipTop.png')
   imgPlayerBottom = loadImage('assets/images/playerShipBottom.png')
-  imgSpeakerPortrait = loadImage('assets/images/portraitPlaceholder.png')
 
   //TESTING PURPOSES PLACEHOLDER PORTRAIT
-
-
+  imgSpeakerPortrait = loadImage('assets/images/portraitPlaceholder.png')
 }
 
 //setup()
@@ -85,50 +84,119 @@ function setup() {
   }
   let x = floor(random(0, windowWidth));
   let y = floor(random(0, windowHeight));
-  enemyBullet = new EnemyBullet(x,y,20);
-      debris.push(enemyBullet);
+  enemyBullet = new EnemyBullet(x, y, 20);
+  debris.push(enemyBullet);
 }
 
 //draw()
 //call all functions we use
 function draw() {
-  handleGameplay();
+
+  if (player.health <= 0) {
+    handleGameOver();
+  } else if (enemy.plotPoints <= 0){
+    gameWon = true;
+    handleVictory();
+  } else if (gameStarted === true) {
+    handleGameplay();
+  } else {
+    handleGameIntro();
+  }
 }
 
 //function handleGameplay()
 //
 //This function displays the elements of the main game
-function handleGameplay(){
+function handleGameplay() {
 
-    //Handle background functions
-    backgroundSprite.display();
-    backgroundSprite.handleInput();
+  //Handle background functions
+  backgroundSprite.display();
+  backgroundSprite.handleInput();
 
-    //Handle enemy functions
-    enemy.display();
-    enemy.update();
+  //Handle enemy functions
+  enemy.display();
+  enemy.update();
 
-    //handle debris and enemyBullet
-    for (let i = 0; i < debris.length; i++) {
-      debris[i].update();
-    }
-    //handle enemyBullet collisions
-    enemyBullet.handleCollisions();
+  //handle debris and enemyBullet
+  for (let i = 0; i < debris.length; i++) {
+    debris[i].update();
+  }
+  //handle enemyBullet collisions
+  enemyBullet.handleCollisions();
 
-    //update all player functions
-    player.update();
-    player.display();
-    player.handleInput();
-    player.handleShooting();
-    
-    //add WIP instructions to the screen
-    push();
-    text("Use the arrow keys to fly \nand shift to fire lasers!",50,50);
-    pop();
+  //update all player functions
+  player.update();
+  player.display();
+  player.handleInput();
+  player.handleShooting();
 
+  //add WIP instructions to the screen
+  push();
+  text("Use the arrow keys to fly \nand shift to fire lasers!", 50, 50);
+  pop();
 
-    //TEST FOR Popup
-    popup = new Popup();
-    popup.display();
+  //TEST FOR Popup
+  popup = new Popup();
+  popup.display();
+
+}
+
+//handleGameIntro()
+//
+//Run game intro state when applicable
+function handleGameIntro() {
+  push();
+  background(255);
+  fill(0);
+  text("click to begin", 50, 50);
+  pop();
+}
+
+//handleGameOver()
+//
+//Run gameover state when applicable
+function handleGameOver() {
+  gameOver = true;
+  push();
+  background(255);
+  fill(0);
+  text("you ded lol", 50, 50);
+  pop();
+}
+
+//handleVictory()
+//
+//Run gameover state when applicable
+function handleVictory() {
+  gameOver = true;
+  push();
+  background(255);
+  fill(0);
+  text("You win!", 50, 50);
+  pop();
+}
+
+//mouseClicked()
+//
+//run whenever we click the mouse
+function mouseClicked() {
+
+  //If game still hasnt started, click to begin
+  if (gameStarted === false) {
+    gameStarted = true;
+  }
+  //if the game is over, click to restart the whole thaang
+if (gameOver === true) {
+    player.reset();
+    gameOver = false;
+    gameStarted = false;
+  }
+  if (gameWon === true){
+    player.reset();
+    enemy.reset();
+    gameWon = false;
+    gameStarted = false;
+    gameOver = false;
+  }
 
 }
