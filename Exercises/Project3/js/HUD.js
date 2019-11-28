@@ -24,13 +24,16 @@ class HUD {
     rect(this.x, this.y, this.width, this.height);
     pop();
 
-    //display enemy dialogue
+    //display enemy dialogue and "incoming transmission"
     textSize(windowWidth / 80);
     fill(255);
     text(this.currentDialogue, this.x + this.width / 6, this.y + this.width / 12, this.width - (this.width / 6), this.y + (windowHeight / 10));
+    text("INCOMING TRANSMISSION:", this.x + this.width / 6, this.y + this.width / 23, this.width - (this.width / 6), this.y + (windowHeight / 10));
+
 
     //display white background behind portrait
     fill(255);
+
     //rect(this.x + this.width/23, this.y + (windowHeight / 30), this.width/8, this.width/8);
     //draw portrait of enemy
     push();
