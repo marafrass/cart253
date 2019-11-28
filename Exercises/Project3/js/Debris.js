@@ -1,17 +1,22 @@
 class Debris {
+  //constructor()
+  //
+  //set all setup variables for the object 
   constructor(x, y, size) {
     this.x = x;
     this.y = y;
     this.size = size;
     this.alpha = 0;
+    this.exitSize = 40;
   }
 
   //update()
   //
-  //Update direction, position and speed of the debris
+  //Update direction, position and speed of the debris, as well as draws it
   update() {
     let flyByX;
     let flyByY;
+
 
     if (this.x < player.targetX) {
       flyByX = player.targetX - this.x;
@@ -25,6 +30,7 @@ class Debris {
       flyByY = this.y - player.targetY;
     }
 
+    //update position of the debris based on location in relation to player
     if (player.targetX < this.x) {
       this.x += flyByX / 50 + this.size / 3;
     } else {
@@ -36,7 +42,7 @@ class Debris {
     } else {
       this.y -= flyByY / 50 + this.size / 3;
     }
-    this.size += 0.01;
+    this.size += 0.05;
     this.alpha += 3;
     fill(255, 255, 255, this.alpha);
     noStroke();
@@ -49,7 +55,7 @@ class Debris {
       this.reset();
     }
     //When the debris gets too close to the camera/too big, reset it
-    if (this.size > 40) {
+    if (this.size > this.exitSize) {
       this.reset();
     }
 

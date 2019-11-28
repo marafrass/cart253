@@ -10,12 +10,17 @@ class Player {
     this.size = 75;
     this.vx = 0;
     this.vy = 0;
-
+    //create variable for what sprite to display
     this.currentSprite;
-
+    //create bullet using a vector
     this.bullet = createVector(this.x, this.y);
     this.bulletSize = 10;
     this.bulletIsActive = true;
+    //set player health
+    this.health = 100;
+
+    this.energy = 100;
+    this.overHeated = false;
   }
 
   //update()
@@ -70,9 +75,10 @@ class Player {
       this.vy -= 0.3;
     }
 
-    // When firing, set bullets to active and phasers to stun
-    if (keyIsDown(SHIFT) && this.bulletIsActive === false) {
+    // When firing, set bullets to active (and phasers to stun, spock)
+    if (keyIsDown(SHIFT) && this.bulletIsActive === false && this.overHeated === false) {
       this.bulletIsActive = true;
+      this.energy -= 20;
     }
 
   }
@@ -96,11 +102,17 @@ class Player {
 
   //handleShooting()
   //
-  //Checks if bullet collides with enemy when shots are fired
+  //Checks if bullet collides with enemy or enemy bullet when shots are fired
   handleShooting() {
+    //check if collides with enemy
     let d = dist(player.targetX, player.targetY, enemy.x, enemy.y)
     if (d < 20) {
       enemy.fillcolor += 20;
+    }
+    //check if collides with enemy bullet
+    let dBullet = dist(this.bullet.x, this.bullet.y, enemyBullet.x, enemyBullet.y)
+    if ((dBullet < enemyBullet.size / 2) && this.bulletIsActive === true) {
+      enemyBullet.reset();
     }
 
   }
@@ -110,13 +122,15 @@ class Player {
   //Nudges the player ship to a smaller area of the screen
   //by adding to opposite velocity when the player is about to leave the screen
   constrainToMap() {
-
+    //check position on x axis and counter force
     if (this.x < (windowWidth / 20)) {
       this.vx += 1;
     }
     if (this.x > (windowWidth - windowWidth / 20)) {
       this.vx -= 1;
     }
+
+    // check position on y axis and counter force
     if (this.y < (windowHeight / 5)) {
       this.vy += 1;
     }
@@ -129,9 +143,8 @@ class Player {
   //
   //check location of the player and find the appropriate sprite to use
   findSprite() {
-
     //(This code is set to find the sprite in order of bottom to top)
-
+    // * * *
     //If player is on the left of the screen, find the right left sprite
     if (this.x < windowWidth / 3) {
       if (this.y > (windowHeight - (windowHeight / 3))) {
@@ -162,52 +175,68 @@ class Player {
     }
   }
 
-//handleBullet()
-//
-//This function sets angle, velocity and displaying of the bullet based on the set state
-handleBullet(){
-      //if the bullet is active, run the code
-      if (this.bulletIsActive === true) {
-        //create variable for finding distance to reticule
-        let bulletToTarget = dist(this.bullet.x, this.bullet.y, this.targetX, this.targetY);
-        //If the bullet is close enough to the target, reset it as inactive
-        if (bulletToTarget < 10) {
-          this.bulletIsActive = false;
-          this.bullet.x = this.x;
-          this.bullet.y = this.y;
-          this.bulletSize = 10;
-        } else {
-          //We use three vectors to find distance, angle and speed
-          //and then display the bullet there
+  //handleBullet()
+  //
+  //This function sets angle, velocity and displaying of the bullet based on the set state
+  handleBullet() {
+    //if the bullet is active, run the code
+    if (this.bulletIsActive === true) {
+      //create variable for finding distance to reticule
+      let bulletToTarget = dist(this.bullet.x, this.bullet.y, this.targetX, this.targetY);
+      //If the bullet is close enough to the target, reset it as inactive
+      if (bulletToTarget < 10) {
+        this.bulletIsActive = false;
+        this.bullet.x = this.x;
+        this.bullet.y = this.y;
+        this.bulletSize = 10;
+      } else {
+        //We use three vectors to find distance, angle and speed
+        //and then display the bullet there
 
-          //Create a variable for the distance from ship to reticle
-          let d = dist(this.x, this.y, this.targetX, this.targetY);
-          //Create vectors for bullet, reticule, and the velocity we want
-          let vecBullet = createVector(this.bullet.x, this.bullet.y);
-          let vecTarget = createVector(this.targetX, this.targetY);
-          let vecDesiredVel = vecTarget.sub(vecBullet);
-          //Create velocity for the bullet based on the desired velocity vector
-          //limited by the distance between ship and reticule, to achieve
-          //the effect of the bullet traveling at the same speed no matter angle
-          let frameVel = vecDesiredVel.limit(d / 10);
-          //actually update position of bullet
-          this.bullet.x += frameVel.x;
-          this.bullet.y += frameVel.y;
+        //Create a variable for the distance from ship to reticle
+        let d = dist(this.x, this.y, this.targetX, this.targetY);
+        //Create vectors for bullet, reticule, and the velocity we want
+        let vecBullet = createVector(this.bullet.x, this.bullet.y);
+        let vecTarget = createVector(this.targetX, this.targetY);
+        let vecDesiredVel = vecTarget.sub(vecBullet);
+        //Create velocity for the bullet based on the desired velocity vector
+        //limited by the distance between ship and reticule, to achieve
+        //the effect of the bullet traveling at the same speed no matter angle
+        let frameVel = vecDesiredVel.limit(d / 10);
+        //actually update position of bullet
+        this.bullet.x += frameVel.x;
+        this.bullet.y += frameVel.y;
 
-          //display the bullet
-          push();
-          ellipseMode(CENTER);
-          strokeWeight(1);
-          stroke(255);
-          fill(255, 28, 51);
-          ellipse(this.bullet.x, this.bullet.y, this.bulletSize, this.bulletSize);
-          pop();
+        //display the bullet
+        push();
+        ellipseMode(CENTER);
+        strokeWeight(1);
+        stroke(255);
+        fill(255, 28, 51);
+        ellipse(this.bullet.x, this.bullet.y, this.bulletSize, this.bulletSize);
+        pop();
 
-          //Shrink bullet to seem like it's going further away
-          this.bulletSize -= 1;
-        }
+        //Shrink bullet to make it seem like it's going further away
+        this.bulletSize -= 1;
       }
+    }
 
-}
+    //if player fires gun too much, it overheats and can not be fired until
+    //it has recharged
+    if (this.energy <= 0){
+      this.overHeated = true;
+    }
+    if (this.overHeated === true){
+      this.energy += 0.5;
+    } else if (this.energy < 100){
+      this.energy += 0.2;
+    }
+    if (this.energy >= 100){
+      this.overHeated = false;
+    }
+
+    constrain(this.energy, -10,100);
+
+  }
 
 }

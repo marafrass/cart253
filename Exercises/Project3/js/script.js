@@ -9,12 +9,13 @@
 let popup;
 
 
-//Create debris variables
-let star;
-let stars = [];
+//Create debris array
+let debris = [];
 //create player and reticule variable
 let player;
 let reticule;
+
+let enemyBullet;
 
 //create backgrounds
 let earth;
@@ -72,17 +73,20 @@ function setup() {
   backgroundSprite = new Background();
   //create your evil opponent
   enemy = new Enemy();
-  //Create stars based on amount set in loop
+  //Create debris based on amount set in loop
   for (let i = 0; i < 100; i++) {
     //randomize location
     let x = floor(random(0, windowWidth));
     let y = floor(random(0, windowHeight));
-    //Create star based on the variable
+    //Create debris based on the variable
     let newStar = new Debris(x, y, 4);
-    //place the new star in the stars array
-    stars.push(newStar);
-
+    //place the new piece of debris in the debris array
+    debris.push(newStar);
   }
+  let x = floor(random(0, windowWidth));
+  let y = floor(random(0, windowHeight));
+  enemyBullet = new EnemyBullet(x,y,20);
+      debris.push(enemyBullet);
 }
 
 //draw()
@@ -99,18 +103,24 @@ function handleGameplay(){
     //Handle background functions
     backgroundSprite.display();
     backgroundSprite.handleInput();
+
     //Handle enemy functions
     enemy.display();
     enemy.update();
-    //handle star debris
-    for (let i = 0; i < stars.length; i++) {
-      stars[i].update();
+
+    //handle debris and enemyBullet
+    for (let i = 0; i < debris.length; i++) {
+      debris[i].update();
     }
+    //handle enemyBullet collisions
+    enemyBullet.handleCollisions();
+
     //update all player functions
     player.update();
     player.display();
     player.handleInput();
     player.handleShooting();
+    
     //add WIP instructions to the screen
     push();
     text("Use the arrow keys to fly \nand shift to fire lasers!",50,50);
