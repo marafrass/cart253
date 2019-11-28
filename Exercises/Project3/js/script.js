@@ -151,7 +151,7 @@ function handleGameIntro() {
   push();
   background(255);
   fill(0);
-  text("Dont hit the enemy ship, hit the red missile! Click to begin", 50, 50);
+  text("Dont hit the enemy ship, hit the red missile! \n Use arrow keys to steer ship and left shift to fire lasers. \n Don't get hit by the red missile! Click to begin", 50, 50);
   pop();
 }
 
@@ -163,7 +163,7 @@ function handleGameOver() {
   push();
   background(255);
   fill(0);
-  text("you ded lol", 50, 50);
+  text("You died! Click to try again!", 50, 50);
   pop();
 }
 
@@ -175,7 +175,7 @@ function handleVictory() {
   push();
   background(255);
   fill(0);
-  text("You win!", 50, 50);
+  text("You win! Click to start over ", 50, 50);
   pop();
 }
 
