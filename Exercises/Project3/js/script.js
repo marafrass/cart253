@@ -40,6 +40,12 @@ let imgPlayerBottom;
 //TESTING
 let imgSpeakerPortrait;
 
+//create audio variables
+let audLaser;
+let audPlayerHit;
+let audEnemyExplosion;
+let audOverheat;
+
 //preload()
 //
 //Preload images and sounds
@@ -59,6 +65,13 @@ function preload() {
 
   //TESTING PURPOSES PLACEHOLDER PORTRAIT
   imgSpeakerPortrait = loadImage('assets/images/portraitPlaceholder.png')
+
+  //Load all audio files
+  audLaser = loadSound('assets/sounds/laser.wav');
+  audPlayerHit = loadSound('assets/sounds/hit.wav');
+  audEnemyExplosion = loadSound('assets/sounds/explosion.wav');
+  audOverheat =loadSound('assets/sounds/overheat.wav');
+
 }
 
 //setup()
@@ -77,8 +90,9 @@ function setup() {
     //randomize location
     let x = floor(random(0, windowWidth));
     let y = floor(random(0, windowHeight));
+    let size = floor(random(1, 1));
     //Create debris based on the variable
-    let newStar = new Debris(x, y, 4);
+    let newStar = new Debris(x, y, size);
     //place the new piece of debris in the debris array
     debris.push(newStar);
   }

@@ -104,6 +104,7 @@ class EnemyBullet extends Debris {
     if ((d < this.exitSize / 2) && this.size >= (this.exitSize - this.exitSize / 6)) {
       //take damage
       player.health -= 20;
+      audPlayerHit.play();
       this.reset();
     }
 

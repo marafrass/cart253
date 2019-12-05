@@ -25,10 +25,19 @@ update(){
   this.x = width * noise(this.tx);
   this.y = height * noise(this.ty);
 
-  this.tx += 0.01;
-  this.ty += 0.01;
+this.tx += 0.003;
+this.ty += 0.003;
+//
+//   this.x += this.vx/1000;
 
-  constrain(this.x, (player.targetX - 20), (player.targetY + 20))
+
+
+
+  // this.x += this.vx;
+  // this.y += this.vy;
+
+  constrain(this.x, (player.targetX - 100), (player.targetX + 100))
+    constrain(this.y, (player.targetY - 100), (player.targetY + 100))
 
 }
 

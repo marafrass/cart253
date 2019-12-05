@@ -7,7 +7,7 @@ class Player {
     this.y = windowHeight / 1.5;
     this.targetX = this.x;
     this.targetY = this.y - 100;
-    this.size = windowWidth/20;
+    this.size = windowWidth / 20;
     this.vx = 0;
     this.vy = 0;
     //create variable for what sprite to display
@@ -83,6 +83,7 @@ class Player {
     if (keyIsDown(SHIFT) && this.bulletIsActive === false && this.overHeated === false) {
       this.bulletIsActive = true;
       this.energy -= 20;
+      audLaser.play();
     }
 
   }
@@ -114,10 +115,11 @@ class Player {
     }
     //check if collides with enemy bullet when at a certain distance (technically size)
     let dBullet = dist(this.bullet.x, this.bullet.y, enemyBullet.x, enemyBullet.y)
-    if ((dBullet < enemyBullet.size / 2) && this.bulletIsActive === true && this.bulletSize <= 5) {
-      //remove one plot point from the enemy
+    if ((dBullet < enemyBullet.size / 2) && this.bulletIsActive === true && this.bulletSize <= 4) {
+      //remove one plot point from the enemy, reset bullet, and play sound effect
       enemy.plotPoints -= 1;
       enemyBullet.reset();
+      audEnemyExplosion.play();
     }
   }
 
@@ -224,18 +226,30 @@ class Player {
         this.bulletSize -= 1;
       }
     }
+    this.handleOverheating();
+  }
 
-    //if player fires gun too much, it overheats and can not be fired until
-    //it has recharged
+  //handleOverheating()
+  //
+  //if player fires gun too much, it overheats and can not be fired until
+  //it has recharged
+  handleOverheating() {
     if (this.energy <= 0) {
       this.energy = 0;
       this.overHeated = true;
     }
+    //when overheated, recharge slowly
     if (this.overHeated === true) {
       this.energy += 0.5;
+      if(audOverheat.isPlaying()){
+        //do nothing
+      } else {
+        audOverheat.play();
+      }
     } else if (this.energy < 100) {
       this.energy += 0.5;
     }
+    //when full recharged, allow the player to shoot again
     if (this.energy >= 100) {
       this.overHeated = false;
     }
@@ -250,5 +264,7 @@ class Player {
     this.health = 100;
     this.energy = 100;
   }
+
+
 
 }
