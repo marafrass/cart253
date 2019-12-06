@@ -13,18 +13,17 @@ let playerHUD;
 
 //Create debris array
 let debris = [];
-//create player and reticule variable
+//create player and reticule variables
 let player;
 let reticule;
 
-let enemyBullet;
-
 //create backgrounds
 let earth;
-let backgroundSprite;
+let backGround;
 
-//create enemy variable
+//create enemy & enemy bullet variable
 let enemy;
+let enemyBullet;
 
 //Create sprite variables for player
 let imgPlayer;
@@ -37,7 +36,14 @@ let imgPlayerLeft;
 let imgPlayerTop;
 let imgPlayerBottom;
 
-//TESTING
+//Create sprite variables for enemy and enemy bullet
+let imgEnemy;
+let imgEnemyBullet;
+
+//create explosion variable for both enemybullet and player
+let imgExplosion;
+
+//create portrait sprite variable
 let imgSpeakerPortrait;
 
 //create audio variables
@@ -51,28 +57,36 @@ let audMusic;
 //
 //Preload images and sounds
 function preload() {
-
+  //load reticule sprite
   reticule = loadImage('assets/images/target.png');
-  earth = loadImage('assets/images/earth.png')
-  imgPlayer = loadImage('assets/images/playerShipCenter.png')
-  imgPlayerBottomLeft = loadImage('assets/images/playerShipBottomLeft.png')
-  imgPlayerBottomRight = loadImage('assets/images/playerShipBottomRight.png')
-  imgPlayerTopLeft = loadImage('assets/images/playerShipTopLeft.png')
-  imgPlayerTopRight = loadImage('assets/images/playerShipTopRight.png')
-  imgPlayerLeft = loadImage('assets/images/playerShipLeft.png')
-  imgPlayerRight = loadImage('assets/images/playerShipRight.png')
-  imgPlayerTop = loadImage('assets/images/playerShipTop.png')
-  imgPlayerBottom = loadImage('assets/images/playerShipBottom.png')
+  //load background
+  earth = loadImage('assets/images/earth.png');
+  //load player sprites
+  imgPlayer = loadImage('assets/images/playerShipCenter.png');
+  imgPlayerBottomLeft = loadImage('assets/images/playerShipBottomLeft.png');
+  imgPlayerBottomRight = loadImage('assets/images/playerShipBottomRight.png');
+  imgPlayerTopLeft = loadImage('assets/images/playerShipTopLeft.png');
+  imgPlayerTopRight = loadImage('assets/images/playerShipTopRight.png');
+  imgPlayerLeft = loadImage('assets/images/playerShipLeft.png');
+  imgPlayerRight = loadImage('assets/images/playerShipRight.png');
+  imgPlayerTop = loadImage('assets/images/playerShipTop.png');
+  imgPlayerBottom = loadImage('assets/images/playerShipBottom.png');
 
-  //TESTING PURPOSES PLACEHOLDER PORTRAIT
-  imgSpeakerPortrait = loadImage('assets/images/portraitPlaceholder.png')
+  //load sprites for enemy ship and bullet
+  imgEnemyShip = loadImage('assets/images/enemyShip.gif')
+  imgEnemyBullet = loadImage('assets/images/enemyBullet.gif');
+
+  imgExplosion = loadImage('assets/images/explosion.gif');
+
+  //Load image for enemy portrait
+  imgSpeakerPortrait = loadImage('assets/images/portraitPlaceholder.gif')
 
   //Load all audio files
   audLaser = loadSound('assets/sounds/laser.wav');
   audPlayerHit = loadSound('assets/sounds/hit.wav');
   audEnemyExplosion = loadSound('assets/sounds/explosion.wav');
-  audOverheat =loadSound('assets/sounds/overheat.wav');
-  audMusic =loadSound('assets/sounds/music.wav');
+  audOverheat = loadSound('assets/sounds/overheat.wav');
+  audMusic = loadSound('assets/sounds/music.wav');
 
 }
 
@@ -81,10 +95,10 @@ function preload() {
 //Set up game window and screen
 function setup() {
 
-  createCanvas(windowWidth - 5 , windowHeight - 5);
+  createCanvas(windowWidth - 5, windowHeight - 5);
   //Set player and background
   player = new Player();
-  backgroundSprite = new Background();
+  backGround = new Background();
   //create your evil opponent
   enemy = new Enemy();
   //Create debris based on amount set in loop
@@ -112,7 +126,7 @@ function setup() {
 function draw() {
   if (player.health <= 0) {
     handleGameOver();
-  } else if (enemy.plotPoints <= 0){
+  } else if (enemy.plotPoints <= 0) {
     gameWon = true;
     handleVictory();
   } else if (gameStarted === true) {
@@ -128,8 +142,8 @@ function draw() {
 function handleGameplay() {
 
   //Handle background functions
-  backgroundSprite.display();
-  backgroundSprite.handleInput();
+  backGround.display();
+  backGround.handleInput();
 
   //Handle enemy functions
   enemy.display();
@@ -141,6 +155,7 @@ function handleGameplay() {
   }
   //handle enemyBullet collisions
   enemyBullet.handleCollisions();
+  enemyBullet.handleExplosion();
 
   //update all player functions
   player.update();
@@ -203,18 +218,18 @@ function mouseClicked() {
   //If game still hasnt started, click to begin and to start playing music
   if (gameStarted === false) {
     gameStarted = true;
-    if (audMusic.isPlaying() === false){
+    if (audMusic.isPlaying() === false) {
       audMusic.loop();
     }
   }
   //if the game is over, click to restart the whole thaang
-if (gameOver === true) {
+  if (gameOver === true) {
     player.reset();
     gameOver = false;
     gameStarted = false;
   }
   //if the player has won, click to restart the game
-  if (gameWon === true){
+  if (gameWon === true) {
     player.reset();
     enemy.reset();
     gameWon = false;

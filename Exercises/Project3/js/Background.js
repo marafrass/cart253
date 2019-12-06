@@ -1,7 +1,7 @@
 class Background {
   //constructor()
   //
-  //set this background up 
+  //set this background up
   constructor() {
     this.x = -50;
     this.y = -50;
@@ -23,17 +23,17 @@ class Background {
   //Handle the movement of the background
   handleInput() {
     if (keyIsDown(LEFT_ARROW)) {
-      this.vx += -0.01;
+      this.vx += -0.03;
     }
     if (keyIsDown(RIGHT_ARROW)) {
-      this.vx += 0.01;
+      this.vx += 0.03;
     }
 
     if (keyIsDown(UP_ARROW)) {
-      this.vy += -0.01;
+      this.vy += -0.03;
     }
     if (keyIsDown(DOWN_ARROW)) {
-      this.vy += 0.01;
+      this.vy += 0.03;
     }
   }
 

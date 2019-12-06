@@ -108,18 +108,18 @@ class Player {
   //
   //Checks if bullet collides with enemy or enemy bullet when shots are fired
   handleShooting() {
-    //check if collides with enemy
-    let d = dist(player.targetX, player.targetY, enemy.x, enemy.y)
-    if (d < 20) {
-      enemy.fillcolor += 20;
-    }
-    //check if collides with enemy bullet when at a certain distance (technically size)
+    //check if laser collides with enemy bullet when at a certain distance (technically size)
     let dBullet = dist(this.bullet.x, this.bullet.y, enemyBullet.x, enemyBullet.y)
     if ((dBullet < enemyBullet.size / 2) && this.bulletIsActive === true && this.bulletSize <= 4) {
       //remove one plot point from the enemy, reset bullet, and play sound effect
       enemy.plotPoints -= 1;
-      enemyBullet.reset();
+      //Additionally, set a location to the bullet to explode, as well as set it's alpha to full
+      enemyBullet.explosionX = this.x;
+      enemyBullet.explosionY = this.y;
+      enemyBullet.explosionSelf = 255;
+      //then, reset bullet and play sound
       audEnemyExplosion.play();
+      enemyBullet.reset();
     }
   }
 
@@ -241,7 +241,7 @@ class Player {
     //when overheated, recharge slowly
     if (this.overHeated === true) {
       this.energy += 0.5;
-      if(audOverheat.isPlaying()){
+      if (audOverheat.isPlaying()) {
         //do nothing
       } else {
         audOverheat.play();
@@ -264,7 +264,4 @@ class Player {
     this.health = 100;
     this.energy = 100;
   }
-
-
-
 }

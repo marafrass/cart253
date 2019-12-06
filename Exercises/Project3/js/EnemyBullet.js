@@ -13,9 +13,16 @@ class EnemyBullet extends Debris {
     this.alpha = 0;
 
     //set variable for what size causes the bullet to leave the screen
-    this.exitSize = windowWidth/10;
+    this.exitSize = windowWidth / 10;
     //set variable for initial increase of size
     this.sizeIncrease = 0;
+
+    //Set time variable (alpha) for handleExplosion
+    this.explosionHit = 0;
+    this.explosionSelf = 0;
+    //Set location variables for when enemy bullet is hit by laser
+    this.explosionX;
+    this.explosionY;
   }
 
   //update()
@@ -72,9 +79,9 @@ class EnemyBullet extends Debris {
     }
     //display the Asteroid
     push();
-    rectMode(CENTER, CENTER);
+    imageMode(CENTER, CENTER);
     fill(255, 0, 0);
-    rect(this.x, this.y, this.size, this.size);
+    image(imgEnemyBullet, this.x, this.y, this.size, this.size);
     console.log("Bullet");
     pop();
   }
@@ -83,6 +90,8 @@ class EnemyBullet extends Debris {
   //
   //reset all variables for the bullet to its starting position
   reset() {
+    this.explosionX = this.x;
+    this.explosionY = this.y;
     this.alpha = 0;
     this.size = 1;
     //this.x = floor(random(player.targetX - (windowWidth/4), player.targetX + (windowWidth/4)));
@@ -105,8 +114,42 @@ class EnemyBullet extends Debris {
       //take damage
       player.health -= 20;
       audPlayerHit.play();
+      this.explosionHit = 255
       this.reset();
     }
+  }
+
+  //handleExplosion()
+  //
+  //Displays an explosion on the player if hit
+  handleExplosion() {
+    this.handleHitAnimation();
+    this.handleExplodeSelf();
+  }
+
+  handleHitAnimation() {
+    push();
+    tint(255, 255, 255, this.explosionHit);
+    imageMode(CENTER, CENTER);
+    image(imgExplosion, player.x, player.y, player.size * 2, player.size * 2);
+    pop();
+    if (this.explosionHit > 0) {
+      this.explosionHit -= 20;
+    }
+  }
+
+  //handleExplodeSelf()
+  //
+  //Handles explosions when the bullet is hit by player laser
+  handleExplodeSelf() {
+    push();
+    tint(255, 255, 255, this.explosionSelf);
+    imageMode(CENTER, CENTER);
+    image(imgExplosion, this.explosionX, this.explosionY, player.size * 2, player.size * 2);
+    if (this.explosionSelf > 0) {
+      this.explosionSelf -= 20;
+    }
+    pop();
 
   }
 

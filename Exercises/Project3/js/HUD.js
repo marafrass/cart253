@@ -18,7 +18,7 @@ class HUD {
     //DISPLAY DIALOGUE BOX
     //display background for box
     push();
-    stroke(255);
+    stroke(0, 255, 0);
     strokeWeight(3);
     fill(0);
     rect(this.x, this.y, this.width, this.height);
@@ -27,14 +27,10 @@ class HUD {
     //display enemy dialogue and "incoming transmission"
     textSize(windowWidth / 80);
     fill(255);
-    text(this.currentDialogue, this.x + this.width / 6, this.y + this.width / 12, this.width - (this.width / 6), this.y + (windowHeight / 10));
-    text("INCOMING TRANSMISSION:", this.x + this.width / 6, this.y + this.width / 23, this.width - (this.width / 6), this.y + (windowHeight / 10));
+    text(this.currentDialogue, this.x + this.width / 5, this.y + this.width / 12, this.width - (this.width / 5), this.y + (windowHeight / 10));
+    text("INCOMING TRANSMISSION:", this.x + this.width / 5, this.y + this.width / 23, this.width - (this.width / 5), this.y + (windowHeight / 10));
 
 
-    //display white background behind portrait
-    fill(255);
-
-    //rect(this.x + this.width/23, this.y + (windowHeight / 30), this.width/8, this.width/8);
     //draw portrait of enemy
     push();
     image(imgSpeakerPortrait, this.x + this.width / 50, this.y + this.width / 50, this.width / 7, this.width / 7);
@@ -44,7 +40,7 @@ class HUD {
     push();
     rectMode(BOTTOM);
     if (player.health <= 50) {
-      fill(255,0,0);
+      fill(255, 0, 0);
     } else {
       fill(0, 255, 0);
     }
@@ -69,12 +65,12 @@ class HUD {
 
     //ENERGY
     push();
-    textSize(this.width/25);
+    textSize(this.width / 25);
     strokeWeight(4);
     stroke(255);
-      fill(0);
-    if (player.overHeated === true){
-    text("LASERS\nOVERHEATED!", this.x + (this.width * 1.01), this.y + (this.height * 0.5));
+    fill(0);
+    if (player.overHeated === true) {
+      text("LASERS\nOVERHEATED!", this.x + (this.width * 1.01), this.y + (this.height * 0.5));
     }
 
     pop();
@@ -83,13 +79,11 @@ class HUD {
     strokeWeight(4);
     stroke(255);
     fill(0);
-    textSize(this.width/38);
-    if (player.health <= 50){
-    text("SHIP INTEGRITY CRITICAL", this.x + (this.width * 1.01), this.y * 1.05);
+    textSize(this.width / 38);
+    if (player.health <= 50) {
+      text("SHIP INTEGRITY CRITICAL", this.x + (this.width * 1.01), this.y * 1.05);
     }
     pop();
-
-
 
   }
 
@@ -120,7 +114,5 @@ class HUD {
     } else {
       this.currentDialogue = "welp i died "
     }
-
   }
-
 }
