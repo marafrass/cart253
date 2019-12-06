@@ -45,6 +45,7 @@ let audLaser;
 let audPlayerHit;
 let audEnemyExplosion;
 let audOverheat;
+let audMusic;
 
 //preload()
 //
@@ -71,6 +72,7 @@ function preload() {
   audPlayerHit = loadSound('assets/sounds/hit.wav');
   audEnemyExplosion = loadSound('assets/sounds/explosion.wav');
   audOverheat =loadSound('assets/sounds/overheat.wav');
+  audMusic =loadSound('assets/sounds/music.wav');
 
 }
 
@@ -198,9 +200,12 @@ function handleVictory() {
 //run whenever we click the mouse
 function mouseClicked() {
 
-  //If game still hasnt started, click to begin
+  //If game still hasnt started, click to begin and to start playing music
   if (gameStarted === false) {
     gameStarted = true;
+    if (audMusic.isPlaying() === false){
+      audMusic.loop();
+    }
   }
   //if the game is over, click to restart the whole thaang
 if (gameOver === true) {
