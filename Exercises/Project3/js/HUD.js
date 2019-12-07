@@ -32,7 +32,7 @@ class HUD {
     textSize(windowWidth / 80);
     fill(255);
     text(this.currentDialogue, this.x + this.width / 5, this.y + this.width / 12, this.width - (this.width / 5), this.y + (windowHeight / 10));
-    text("INCOMING TRANSMISSION:", this.x + this.width / 5, this.y + this.width / 23, this.width - (this.width / 5), this.y + (windowHeight / 10));
+    text("INCOMING TRANSMISSION - SENDER: PVT-ARN2411", this.x + this.width / 5, this.y + this.width / 23, this.width - (this.width / 5), this.y + (windowHeight / 10));
 
 
     //draw portrait of enemy
@@ -96,25 +96,25 @@ class HUD {
   //Sets the current dialogue based on progress
   setDialogue() {
     if (enemy.plotPoints === enemy.maxPlotPoints) {
-      this.currentDialogue = "Please, don't follow me. If you do, I have to deploy more murder missiles. This additional text is here to see if the window works."
+      this.currentDialogue = "Alright, medal boy. Let's see how you handle THIS"
     } else if (enemy.plotPoints >= 9) {
-      this.currentDialogue = "hit this many more to win the game: 9"
+      this.currentDialogue = "That one was a lucky shot. I bet you have no idea what you're doing. You're just mashing buttons."
     } else if (enemy.plotPoints >= 8) {
-      this.currentDialogue = "hit this many more to win the game: 8"
+      this.currentDialogue = 'Eh. That one was easy. I bumped my elbow onto the "set difficulty to easy"-button on the missile.'
     } else if (enemy.plotPoints >= 7) {
-      this.currentDialogue = "hit this many more to win the game: 7"
+      this.currentDialogue = "You think you're soooo cooool, don't you. Psh. To me, you're a tadpole, bud."
     } else if (enemy.plotPoints >= 6) {
-      this.currentDialogue = "hit this many more to win the game: 6"
+      this.currentDialogue = "You didn't actually hit that one. It exploded. It exploded out of embarrassment. Because how how much you suck."
     } else if (enemy.plotPoints >= 5) {
-      this.currentDialogue = "hit this many more to win the game: 5"
+      this.currentDialogue = "Dang, you actually hit that? ...I mean, ANYONE could have hit that one. That was a baby missile. You just shot a baby. You monster."
     } else if (enemy.plotPoints >= 4) {
-      this.currentDialogue = "hit this many more to win the game: 4"
+      this.currentDialogue = "...How?? How are you hitting them?? You're cheating, aren't you? That or you're trying real hard! Tryhard!"
     } else if (enemy.plotPoints >= 3) {
-      this.currentDialogue = "hit this many more to win the game: 3"
+      this.currentDialogue = "ARGH. Running low on missiles. No matter - I still got the best ones. They're extra deadly. They kill you twice."
     } else if (enemy.plotPoints >= 2) {
-      this.currentDialogue = "hit this many more to win the game: 2"
+      this.currentDialogue = "No! There's no way you can beat me, swanky medal or not! Not a chance!! "
     } else if (enemy.plotPoints >= 1) {
-      this.currentDialogue = "hit this many more to win the game: 1"
+      this.currentDialogue = "This is it! Last one! I'm better than you! I'M BETTER THAN YOU!"
     } else {
       this.currentDialogue = "welp i died "
     }
