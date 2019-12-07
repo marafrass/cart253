@@ -13,8 +13,12 @@ class HUD {
 
   //display()
   //
-  //Displays all elements for the popup: background, dialogue and image
+  //Displays all elements for the popup: background, dialogue, flair  and image
   display() {
+
+    //DISPLAY FLAIR
+    image(imgHudFlair,0,0,windowWidth,windowHeight);
+
     //DISPLAY DIALOGUE BOX
     //display background for box
     push();

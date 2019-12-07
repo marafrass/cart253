@@ -42,8 +42,9 @@ let imgEnemy;
 let imgEnemyBullet;
 //create explosion variable for both enemybullet and player
 let imgExplosion;
-//create portrait sprite variable
+//create images for HUD
 let imgSpeakerPortrait;
+let imgHudFlair;
 //create sprites variables for intro, win and end screens
 let imgSplash;
 let imgIntro1;
@@ -87,6 +88,7 @@ function preload() {
 
   //Load image for enemy portrait
   imgSpeakerPortrait = loadImage('assets/images/portraitPlaceholder.gif')
+  imgHudFlair = loadImage('assets/images/hudFlair.png')
 
   imgSplash = loadImage('assets/images/splash.png');
   imgIntro1 = loadImage('assets/images/intro1.png');
@@ -143,7 +145,7 @@ function draw() {
   } else if (enemy.plotPoints <= 0) {
     gameWon = true;
     handleVictory();
-  } else if (introState === 4) {
+  } else if (introState >= 4) {
     handleGameplay();
   } else {
     handleGameIntro();
@@ -176,11 +178,6 @@ function handleGameplay() {
   player.display();
   player.handleInput();
   player.handleShooting();
-
-  //add WIP instructions to the screen
-  push();
-  text("Use the arrow keys to fly \nand shift to fire lasers!", 50, 50);
-  pop();
 
   //display and set playerHUD
   playerHUD.setDialogue();
@@ -244,6 +241,8 @@ function mouseClicked() {
   //If game still hasnt started, click to move forward in the game state (handleGameIntro)
   if (gameStarted === false) {
     introState += 1;
+  } else {
+
   }
   //if the player has lost, click to restart the whole thaang
   if (gameOver === true) {
