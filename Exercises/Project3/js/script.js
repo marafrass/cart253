@@ -64,11 +64,11 @@ let audMusic;
 //
 //Preload images and sounds
 function preload() {
+  //SPRITES
   //load target sprite
   imgTarget = loadImage('assets/images/target.png');
   //load background
   earth = loadImage('assets/images/earth.png');
-
   //load player sprites
   imgPlayer = loadImage('assets/images/playerShipCenter.png');
   imgPlayerBottomLeft = loadImage('assets/images/playerShipBottomLeft.png');
@@ -79,17 +79,14 @@ function preload() {
   imgPlayerRight = loadImage('assets/images/playerShipRight.png');
   imgPlayerTop = loadImage('assets/images/playerShipTop.png');
   imgPlayerBottom = loadImage('assets/images/playerShipBottom.png');
-
   //load sprites for enemy ship and bullet
   imgEnemyShip = loadImage('assets/images/enemyShip.gif')
   imgEnemyBullet = loadImage('assets/images/enemyBullet.gif');
-
+  //load fancy explosion
   imgExplosion = loadImage('assets/images/explosion.gif');
-
-  //Load image for enemy portrait
-  imgSpeakerPortrait = loadImage('assets/images/portraitPlaceholder.gif')
+  //Load image for enemy portrait and HUD assets
+  imgSpeakerPortrait = loadImage('assets/images/hudPortrait.gif')
   imgHudFlair = loadImage('assets/images/hudFlair.png')
-
   imgSplash = loadImage('assets/images/splash.png');
   imgIntro1 = loadImage('assets/images/intro1.png');
   imgIntro2 = loadImage('assets/images/intro2.png');
@@ -97,20 +94,19 @@ function preload() {
   imgWinScreen = loadImage('assets/images/winScreen.PNG');
   imgLoseScreen = loadImage('assets/images/loseScreen.PNG');
 
+  //AUDIO
   //Load all audio files
   audLaser = loadSound('assets/sounds/laser.wav');
   audPlayerHit = loadSound('assets/sounds/hit.wav');
   audEnemyExplosion = loadSound('assets/sounds/explosion.wav');
   audOverheat = loadSound('assets/sounds/overheat.wav');
   audMusic = loadSound('assets/sounds/music.wav');
-
 }
 
 //setup()
 //
 //Set up game window and screen
 function setup() {
-
   createCanvas(windowWidth - 5, windowHeight - 5);
   //Set player and background
   player = new Player();
