@@ -17,7 +17,7 @@ class HUD {
   display() {
 
     //DISPLAY FLAIR
-    image(imgHudFlair,0,0,windowWidth,windowHeight);
+    image(imgHudFlair, 0, 0, windowWidth, windowHeight);
 
     //DISPLAY DIALOGUE BOX
     //display background for box
@@ -33,7 +33,6 @@ class HUD {
     fill(255);
     text(this.currentDialogue, this.x + this.width / 5, this.y + this.width / 12, this.width - (this.width / 5), this.y + (windowHeight / 10));
     text("INCOMING TRANSMISSION - SENDER: PVT-ARN2411", this.x + this.width / 5, this.y + this.width / 23, this.width - (this.width / 5), this.y + (windowHeight / 10));
-
 
     //draw portrait of enemy
     push();
@@ -62,21 +61,21 @@ class HUD {
       fill(255, 200, 20);
     }
     stroke(4);
+    //Display actual energy bar
     rect(windowWidth - (windowWidth / 16), this.y + (this.height * 0.9), windowWidth / 80, -player.energy);
     pop();
 
-    //display status texts for health and energy
-
+    //Display status texts for health and energy:
     //ENERGY
     push();
     textSize(this.width / 25);
     strokeWeight(4);
     stroke(255);
     fill(0);
+    //When lasers are overheated, show this message
     if (player.overHeated === true) {
       text("LASERS\nOVERHEATED!", this.x + (this.width * 1.01), this.y + (this.height * 0.5));
     }
-
     pop();
     //HEALTH
     push();
@@ -84,11 +83,11 @@ class HUD {
     stroke(255);
     fill(0);
     textSize(this.width / 38);
+    //If player health dips below 50, show this message
     if (player.health <= 50) {
       text("SHIP INTEGRITY CRITICAL", this.x + (this.width * 1.01), this.y * 1.05);
     }
     pop();
-
   }
 
   //setDialogue();
@@ -114,7 +113,7 @@ class HUD {
     } else if (enemy.plotPoints >= 2) {
       this.currentDialogue = "No! There's no way you can beat me, swanky medal or not! Not a chance!! "
     } else if (enemy.plotPoints >= 1) {
-      this.currentDialogue = "This is it! Last one! I'm better than you! I'M BETTER THAN YOU!"
+      this.currentDialogue = "This is it! This one WILL hit you! You can't win! I'm better than you! I'M BETTER THAN YOU!"
     } else {
       this.currentDialogue = "welp i died "
     }

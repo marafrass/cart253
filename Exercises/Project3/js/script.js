@@ -1,25 +1,40 @@
-//WIP SPACEGAME
-//by Martin Hanses
+//**************************************************************************************************
+//FROGS IN SPACE
 //
-// Use arrow keys to fly (you control the ship, not the target)
-// Press shift to fire laser
+//all art, music, audio and code by Martin Hanses
+//
+// In this game, you play as Frank Linna, the sickest and coolest
+// frog starpilot in the frog galaxy. After the great wars, he was awarded a
+// swanky medal. This medal proved to induce massive jealousy in his fellow
+// frogs, much to his dismay. This game takes place on a day like any other,
+// except a douchey frog has some douchey things to say to our hero. Regarding
+// his swanky medal.
+//
+// INSTRUCTIONS:
+// Use arrow keys to fly the ship, and as such, move your reticule in an inverted manner.
+// (that's just how the laws of physics work)
+// Press shift to fire laser. Take out those missiles! Don't shoot the enemy, no matter how
+// annoying he is.
+// *************************************************************************************************
 
+//LET'S CRETE VARIABLES
+//Create game state variables
 let introState = 0;
 let gameStarted = false;
 let gameOver = false;
 let gameWon = false;
 
-//TEST FOR playerHUD
-let playerHUD;
-
 //Create debris array
 let debris = [];
+
 //create player and target variables
 let player;
 let imgTarget;
 
-//create backgrounds
-let earth;
+//create player HUD variable
+let playerHUD;
+
+//create background variable
 let backGround;
 
 //create enemy & enemy bullet variable
@@ -42,9 +57,10 @@ let imgEnemy;
 let imgEnemyBullet;
 //create explosion variable for both enemybullet and player
 let imgExplosion;
-//create images for HUD
+//create images for HUD and background
 let imgSpeakerPortrait;
 let imgHudFlair;
+let imgEarth;
 //create sprites variables for intro, win and end screens
 let imgSplash;
 let imgIntro1;
@@ -60,6 +76,7 @@ let audEnemyExplosion;
 let audOverheat;
 let audMusic;
 
+
 //preload()
 //
 //Preload images and sounds
@@ -68,7 +85,7 @@ function preload() {
   //load target sprite
   imgTarget = loadImage('assets/images/target.png');
   //load background
-  earth = loadImage('assets/images/earth.png');
+  imgEarth = loadImage('assets/images/earth.png');
   //load player sprites
   imgPlayer = loadImage('assets/images/playerShipCenter.png');
   imgPlayerBottomLeft = loadImage('assets/images/playerShipBottomLeft.png');
@@ -129,20 +146,24 @@ function setup() {
   //create an enemy bullet at the position of the enemy
   enemyBullet = new EnemyBullet(enemy.x, enemy.y, 20);
   debris.push(enemyBullet);
-
+  //Create a HUD object
   playerHUD = new HUD();
 }
 
 //draw()
 //call all functions we use
 function draw() {
+  //if player health is zero, show game over function
   if (player.health <= 0) {
     handleGameOver();
+    //if enemy health(plotpoints) reach zero, show win function
   } else if (enemy.plotPoints <= 0) {
     gameWon = true;
     handleVictory();
+    //if the intro is over, call gameplay
   } else if (introState >= 4) {
     handleGameplay();
+    //if nothing else matters, show the intro. It's kinda cool I guess
   } else {
     handleGameIntro();
   }
@@ -156,11 +177,9 @@ function handleGameplay() {
   //Handle background functions
   backGround.display();
   backGround.handleInput();
-
   //Handle enemy functions
   enemy.display();
   enemy.update();
-
   //handle debris and enemyBullet
   for (let i = 0; i < debris.length; i++) {
     debris[i].update();
@@ -168,17 +187,14 @@ function handleGameplay() {
   //handle enemyBullet collisions
   enemyBullet.handleCollisions();
   enemyBullet.handleExplosion();
-
-  //update all player functions
+  //handle all player functions
   player.update();
   player.display();
   player.handleInput();
   player.handleShooting();
-
   //display and set playerHUD
   playerHUD.setDialogue();
   playerHUD.display();
-
 }
 
 //handleGameIntro()
@@ -187,6 +203,7 @@ function handleGameplay() {
 //Displays intro images in order and also checks if the music has loaded, and if so, plays it
 function handleGameIntro() {
   if (introState === 0) {
+    //set initial picture to be the splash
     currentIntro = imgSplash;
   } else if (introState === 1) {
     currentIntro = imgIntro1;
@@ -210,6 +227,7 @@ function handleGameIntro() {
     }
     gameStarted = true;
   }
+  //display the currently set intro image
   image(currentIntro, 0, 0, windowWidth, windowHeight);
 }
 
@@ -218,7 +236,7 @@ function handleGameIntro() {
 //Run gameover state when applicable
 function handleGameOver() {
   gameOver = true;
-  image(imgLoseScreen,0,0, windowWidth, windowHeight);
+  image(imgLoseScreen, 0, 0, windowWidth, windowHeight);
 }
 
 //handleVictory()
@@ -226,7 +244,7 @@ function handleGameOver() {
 //Run gameover state when applicable
 function handleVictory() {
   gameOver = true;
-  image(imgWinScreen,0,0, windowWidth, windowHeight);
+  image(imgWinScreen, 0, 0, windowWidth, windowHeight);
 }
 
 //mouseClicked()
@@ -237,12 +255,11 @@ function mouseClicked() {
   //If game still hasnt started, click to move forward in the game state (handleGameIntro)
   if (gameStarted === false) {
     introState += 1;
-  } else {
-
-  }
+  } 
   //if the player has lost, click to restart the whole thaang
   if (gameOver === true) {
     player.reset();
+    enemy.reset();
     gameOver = false;
     gameStarted = false;
     introState = 0;
@@ -256,6 +273,5 @@ function mouseClicked() {
     gameOver = false;
     introState = 0;
   }
-
 
 }

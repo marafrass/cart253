@@ -15,7 +15,7 @@ class Background {
     this.constrainEdges();
     this.x += this.vx;
     this.y += this.vy;
-    image(earth, this.x, this.y, windowWidth * 1.4, windowHeight * 1.4);
+    image(imgEarth, this.x, this.y, windowWidth * 1.4, windowHeight * 1.4);
   }
 
   //handleInput()

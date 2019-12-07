@@ -69,15 +69,15 @@ class EnemyBullet extends Debris {
     this.sizeIncrease += 0.01;
     this.size += this.sizeIncrease;
 
-    //When the debris leaves the screen, reset it
+    //When the bullet leaves the screen, reset it
     if (this.x > windowWidth || this.x < 0 || this.y < 0 || this.y > windowHeight) {
       this.reset();
     }
-    //When the debris gets too close to the camera/too big, reset it
+    //When the bullet gets too close to the camera/too big, reset it
     if (this.size >= this.exitSize) {
       this.reset();
     }
-    //display the Asteroid
+    //display the bullet
     push();
     imageMode(CENTER, CENTER);
     fill(255, 0, 0);
@@ -113,6 +113,7 @@ class EnemyBullet extends Debris {
     if ((d < this.exitSize / 2) && this.size >= (this.exitSize - this.exitSize / 6)) {
       //take damage
       player.health -= 20;
+      //play sound
       audPlayerHit.play();
       this.explosionHit = 255
       this.reset();
@@ -121,11 +122,13 @@ class EnemyBullet extends Debris {
 
   //handleExplosion()
   //
-  //Displays an explosion on the player if hit or the bullet is hit
+  //Displays an explosion on the player if hit or on the bullet if the bullet is hit,
+  //using two separate functions
   handleExplosion() {
     this.handleHitAnimation();
     this.handleExplodeSelf();
   }
+
   //handleHitAnimation
   //
   //Display animation when player is hit by enemy bullet
