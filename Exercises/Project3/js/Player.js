@@ -25,7 +25,7 @@ class Player {
 
   //update()
   //
-  //Update the position of the player, bullet and the reticule
+  //Update the position of the player, bullet and the targete
   update() {
     //If the bullet is not currently being fired, set it to the same location as the player
     if (this.bulletIsActive === false) {
@@ -90,13 +90,13 @@ class Player {
 
   //display()
   //
-  //display images for the player and the reticule
+  //display images for the player and the target
   display() {
     push();
     imageMode(CENTER, CENTER);
     ellipseMode(CENTER);
-    //draw reticule or target
-    image(reticule, this.targetX, this.targetY, this.size, this.size);
+    //draw target
+    image(imgTarget, this.targetX, this.targetY, this.size, this.size);
     //Find the right sprite to display for the ship, depending on location
     this.findSprite();
     //draw ship based on result in findSprite()
@@ -187,7 +187,7 @@ class Player {
   handleBullet() {
     //if the bullet is active, run the code
     if (this.bulletIsActive === true) {
-      //create variable for finding distance to reticule
+      //create variable for finding distance to target
       let bulletToTarget = dist(this.bullet.x, this.bullet.y, this.targetX, this.targetY);
       //If the bullet is close enough to the target, reset it as inactive
       if (bulletToTarget < 10) {
@@ -201,12 +201,12 @@ class Player {
 
         //Create a variable for the distance from ship to reticle
         let d = dist(this.x, this.y, this.targetX, this.targetY);
-        //Create vectors for bullet, reticule, and the velocity we want
+        //Create vectors for bullet, target, and the velocity we want
         let vecBullet = createVector(this.bullet.x, this.bullet.y);
         let vecTarget = createVector(this.targetX, this.targetY);
         let vecDesiredVel = vecTarget.sub(vecBullet);
         //Create velocity for the bullet based on the desired velocity vector
-        //limited by the distance between ship and reticule, to achieve
+        //limited by the distance between ship and target, to achieve
         //the effect of the bullet traveling at the same speed no matter angle
         let frameVel = vecDesiredVel.limit(d / 10);
         //actually update position of bullet

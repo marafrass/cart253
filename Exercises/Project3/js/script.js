@@ -1,9 +1,10 @@
 //WIP SPACEGAME
 //by Martin Hanses
 //
-// Use arrow keys to fly (you control the ship, not the reticule)
+// Use arrow keys to fly (you control the ship, not the target)
 // Press shift to fire laser
 
+let introState = 0;
 let gameStarted = false;
 let gameOver = false;
 let gameWon = false;
@@ -13,9 +14,9 @@ let playerHUD;
 
 //Create debris array
 let debris = [];
-//create player and reticule variables
+//create player and target variables
 let player;
-let reticule;
+let imgTarget;
 
 //create backgrounds
 let earth;
@@ -25,6 +26,7 @@ let backGround;
 let enemy;
 let enemyBullet;
 
+//IMAGE VARIABLES
 //Create sprite variables for player
 let imgPlayer;
 let imgPlayerBottomLeft;
@@ -35,16 +37,20 @@ let imgPlayerRight;
 let imgPlayerLeft;
 let imgPlayerTop;
 let imgPlayerBottom;
-
 //Create sprite variables for enemy and enemy bullet
 let imgEnemy;
 let imgEnemyBullet;
-
 //create explosion variable for both enemybullet and player
 let imgExplosion;
-
 //create portrait sprite variable
 let imgSpeakerPortrait;
+//create sprites variables for intro, win and end screens
+let imgSplash;
+let imgIntro1;
+let imgIntro2;
+let imgIntro3;
+let imgWinScreen;
+let imgLoseScreen;
 
 //create audio variables
 let audLaser;
@@ -57,10 +63,11 @@ let audMusic;
 //
 //Preload images and sounds
 function preload() {
-  //load reticule sprite
-  reticule = loadImage('assets/images/target.png');
+  //load target sprite
+  imgTarget = loadImage('assets/images/target.png');
   //load background
   earth = loadImage('assets/images/earth.png');
+
   //load player sprites
   imgPlayer = loadImage('assets/images/playerShipCenter.png');
   imgPlayerBottomLeft = loadImage('assets/images/playerShipBottomLeft.png');
@@ -80,6 +87,13 @@ function preload() {
 
   //Load image for enemy portrait
   imgSpeakerPortrait = loadImage('assets/images/portraitPlaceholder.gif')
+
+  imgSplash = loadImage('assets/images/splash.png');
+  imgIntro1 = loadImage('assets/images/intro1.png');
+  imgIntro2 = loadImage('assets/images/intro2.png');
+  imgIntro3 = loadImage('assets/images/intro3.png');
+  imgWinScreen = loadImage('assets/images/winScreen.PNG');
+  imgLoseScreen = loadImage('assets/images/loseScreen.PNG');
 
   //Load all audio files
   audLaser = loadSound('assets/sounds/laser.wav');
@@ -129,7 +143,7 @@ function draw() {
   } else if (enemy.plotPoints <= 0) {
     gameWon = true;
     handleVictory();
-  } else if (gameStarted === true) {
+  } else if (introState === 4) {
     handleGameplay();
   } else {
     handleGameIntro();
@@ -172,18 +186,38 @@ function handleGameplay() {
   playerHUD.setDialogue();
   playerHUD.display();
 
-
 }
 
 //handleGameIntro()
 //
-//Run game intro state when applicable
+//Run game intro state when applicable:
+//Displays intro images in order and also checks if the music has loaded, and if so, plays it
 function handleGameIntro() {
-  push();
-  background(255);
-  fill(0);
-  text("Dont hit the enemy ship, hit the red missile! \n Use arrow keys to steer ship and left shift to fire lasers. \n Don't get hit by the red missile! Click to begin", 50, 50);
-  pop();
+  if (introState === 0) {
+    currentIntro = imgSplash;
+  } else if (introState === 1) {
+    currentIntro = imgIntro1;
+    if (audMusic.isPlaying() === false) {
+      audMusic.loop();
+    }
+  } else if (introState === 2) {
+    currentIntro = imgIntro2;
+    if (audMusic.isPlaying() === false) {
+      audMusic.loop();
+    }
+  } else if (introState === 3) {
+    currentIntro = imgIntro3;
+    if (audMusic.isPlaying() === false) {
+      audMusic.loop();
+    }
+  } else if (introState === 4) {
+    currentIntro = imgIntro4;
+    if (audMusic.isPlaying() === false) {
+      audMusic.loop();
+    }
+    gameStarted = true;
+  }
+  image(currentIntro, 0, 0, windowWidth, windowHeight);
 }
 
 //handleGameOver()
@@ -191,11 +225,7 @@ function handleGameIntro() {
 //Run gameover state when applicable
 function handleGameOver() {
   gameOver = true;
-  push();
-  background(255);
-  fill(0);
-  text("You died! Click to try again!", 50, 50);
-  pop();
+  image(imgLoseScreen,0,0, windowWidth, windowHeight);
 }
 
 //handleVictory()
@@ -203,11 +233,7 @@ function handleGameOver() {
 //Run gameover state when applicable
 function handleVictory() {
   gameOver = true;
-  push();
-  background(255);
-  fill(0);
-  text("You win! Click to start over ", 50, 50);
-  pop();
+  image(imgWinScreen,0,0, windowWidth, windowHeight);
 }
 
 //mouseClicked()
@@ -215,18 +241,16 @@ function handleVictory() {
 //run whenever we click the mouse
 function mouseClicked() {
 
-  //If game still hasnt started, click to begin and to start playing music
+  //If game still hasnt started, click to move forward in the game state (handleGameIntro)
   if (gameStarted === false) {
-    gameStarted = true;
-    if (audMusic.isPlaying() === false) {
-      audMusic.loop();
-    }
+    introState += 1;
   }
-  //if the game is over, click to restart the whole thaang
+  //if the player has lost, click to restart the whole thaang
   if (gameOver === true) {
     player.reset();
     gameOver = false;
     gameStarted = false;
+    introState = 0;
   }
   //if the player has won, click to restart the game
   if (gameWon === true) {
@@ -235,6 +259,8 @@ function mouseClicked() {
     gameWon = false;
     gameStarted = false;
     gameOver = false;
+    introState = 0;
   }
+
 
 }

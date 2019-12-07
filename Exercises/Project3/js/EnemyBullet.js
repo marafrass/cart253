@@ -121,12 +121,14 @@ class EnemyBullet extends Debris {
 
   //handleExplosion()
   //
-  //Displays an explosion on the player if hit
+  //Displays an explosion on the player if hit or the bullet is hit
   handleExplosion() {
     this.handleHitAnimation();
     this.handleExplodeSelf();
   }
-
+  //handleHitAnimation
+  //
+  //Display animation when player is hit by enemy bullet
   handleHitAnimation() {
     push();
     tint(255, 255, 255, this.explosionHit);
